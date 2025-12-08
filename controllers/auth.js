@@ -1,6 +1,7 @@
 // const e = require('express')
 const User = require('../models/User')
 const sendCookie = require('../utils/sendCookie')
+const uploadImage = require('../utils/uploadImage')
 
 exports.GetLoginPage = (req,res)=>{
     try{
@@ -44,7 +45,9 @@ exports.Login = async(req,res)=>{
 exports.Register = async (req,res) =>{
     try{
         console.log(req.body)
-        let {name,username,email,phone,role,dp} = req.body
+        let {name,username,email,phone,role} = req.body
+        console.log(req.files)
+        let dp = await uploadImage(req.files.photo,400,400,"dp")
         if(!(req.body.password == req.body.confirmPassword)){
             return res.render('auth/register',{msg:'passwords doesnt match'})
         }
@@ -57,8 +60,7 @@ exports.Register = async (req,res) =>{
             phone:phone,
             role:role,
             password:password,
-            dp:dp
-
+            dp:dp.url
         })
         return res.redirect('/login')
     }catch(e){
