@@ -23,18 +23,31 @@ exports.GetRegisterPage = (req,res)=>{
 exports.Login = async(req,res)=>{
     try{
         const {username,password}=req.body
+        console.log(req.body)
+        console.log(username,password)
 
         const user = await User.findOne({username:username})
         if(!user){
-            return res.render('auth/login',{msg:'Incorrect username'})
+            return res.status(400).json({message:"User not found"})
+            // return res.render('auth/login',{msg:'Incorrect username'})
         }
  
         const validation = await user.isValidatedPassword(password)
 
         if(!validation){
-            return res.render('auth/login',{msg:'Incorrect password'})
+            return res.status(400).json({message:"password is incorrect"})
+            // return res.render('auth/login',{msg:'Incorrect password'})
         }
         req.user = username
+        // return res.status(200).json({
+        //     message:'Login Successful',
+        //     user:{
+        //         id: user.id,
+        //         name: user.name,
+        //         username: user.username,
+        //         role: user.role
+        //     }
+        // })
         return sendCookie(user,res)
        
     }catch(e){
@@ -42,33 +55,40 @@ exports.Login = async(req,res)=>{
         return res.send('error')
     }
 }
-exports.Register = async (req,res) =>{
-    try{
-        console.log(req.body)
-        let {name,username,email,phone,role} = req.body
-        console.log(req.files)
-        let dp = await uploadImage(req.files.photo,400,400,"dp")
-        if(!(req.body.password == req.body.confirmPassword)){
-            return res.render('auth/register',{msg:'passwords doesnt match'})
-        }
-        let password = req.body.password
-        await User.create({
-            id:Date.now(),
-            name:name,
-            username:username,
-            mail:email,
-            phone:phone,
-            role:role,
-            password:password,
-            dp:dp.url
-        })
-        return res.redirect('/login')
-    }catch(e){
-        console.log(e)
-        return res.send('<h3>something went wrong</h3>')
-    }
-}
-exports.Logout = (req,res)=>{
-    return res.cookie('token', null).redirect('/login')
 
+exports.Register = async (req, res) => {
+  try {
+
+    const { name, username, email, phone, role, password, confirmPassword } = req.body;
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+    let dp = null;
+    if (req.files && req.files.photo) {
+      dp = await uploadImage(req.files.photo, 400, 400, "dp");
+    }
+
+    await User.create({
+      id: Date.now(),
+      name,
+      username,
+      mail: email,
+      phone,
+      role,
+      password,
+      dp: dp ? dp.url : null
+    });
+
+    return res.status(200).json({ message: "Registration successful" });
+
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+exports.Logout = (req,res)=>{
+    console.log('logout called')
+
+    return res.clearCookie('token').json({message:'Logout Successful'})
 }
