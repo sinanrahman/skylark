@@ -2,7 +2,13 @@ const User = require('../models/User')
 exports.GetHomePage = async(req,res) =>{
     try{
         let user = await User.findOne({id:req.user.id})
-        return res.render('home/home',{user:user})
+        if(!user || !req.user){
+            return res.status(401).json({message:"User not found"})
+        }
+        return res.status(200).json({
+            message:'Home Page',
+            user:user
+        })
     }catch(e){
         console.log('error while rendering homepage')
         console.log(e)

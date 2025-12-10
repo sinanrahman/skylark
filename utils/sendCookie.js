@@ -3,10 +3,22 @@ const sendCookie = async (user, res) => {
         const token = await user.getJwtToken()
         const options = {
             expires: new Date(Date.now() + (7 * 60 * 60 * 1000)),
-            httpOnly: true
+            httpOnly: true,
+            secure:false,
+            sameSite:'Lax'
         }
-
-        return res.cookie('token', token, options).redirect('/')
+        // return res.status(200).json({
+        //     message:'Login Successful',
+        //     user:{
+        //         id: user.id,
+        //         name: user.name,
+        //         username: user.username,
+        //         role: user.role
+        //     }
+        // })
+        return res.cookie('token', token, options).status(200).json({
+            message: 'Login Successful',
+        })
     } catch (e) {
         console.log('error while generating cookie')
         console.log(e)

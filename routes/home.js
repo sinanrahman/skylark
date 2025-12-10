@@ -3,7 +3,6 @@ const { GetHomePage, GetCarsPage, GetContactPage, GetAboutPage } = require('../c
 const router = express.Router()
 
 
-
 router
     .route('/')
     .get(GetHomePage)
