@@ -2,7 +2,7 @@
   <div>
     <Navbar />
     <router-view />
-    <FooterComponent />
+    <FooterComponent v-if="$route.meta.showFooter" />
   </div>
 </template>
 
@@ -14,3 +14,5 @@ export default {
   components: { Navbar, FooterComponent }
 };
 </script>
+<style scoped>
+</style>

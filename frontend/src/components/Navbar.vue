@@ -1,24 +1,20 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-glass">
+  
+  <nav class="navbar navbar-expand-lg navbar-glass sticky-top">
     <div class="container-fluid">
 
-      <router-link class="navbar-brand" to="/">
-        <img src="/img/logo.png" alt="Logo" class="me-2" />
-        <span>SKYLARK</span>
+      <router-link class="navbar-brand d-flex align-items-center" to="/">
+        <img src="/img/logo.png" alt="Logo" class="me-2" style="height: 35px;" />
+        <span class="fw-bold text-white">SKYLARK</span>
       </router-link>
 
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-      >
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav align-items-lg-center">
+
           <li class="nav-item">
             <router-link class="nav-link" to="/">Home</router-link>
           </li>
@@ -36,10 +32,11 @@
           </li>
 
           <li class="nav-item">
-            <router-link class="btn btn-login ms-3" to="/auth/login">
-              Login / Signup
+            <router-link class="btn btn-login  ms-3" to="">
+             logout
             </router-link>
           </li>
+
         </ul>
       </div>
 
@@ -49,72 +46,79 @@
 
 <script>
 export default {
-  name: "Navbar"
+  name: "Navbar",
 };
 </script>
 
 <style scoped>
+
 .navbar-glass {
+  background: rgba(255, 255, 255, 0.12); 
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0.7rem 2rem;
   position: sticky;
   top: 0;
-  z-index: 999;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  padding: 0.5rem 2rem;
-  transition: 0.3s;
+  z-index: 9999;
 }
 
-.navbar-glass .navbar-brand {
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: #fff;
-  display: flex;
-  align-items: center;
+.navbar-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #587c8d88, #62798588, #728a9688);
+  mix-blend-mode: overlay;
+  pointer-events: none;
 }
 
+/* Brand */
 .navbar-brand img {
-  width: 100px;
+  width: 95px;
   background: linear-gradient(135deg, #000000, #40606f, #000000);
   border-radius: 15px 5px 15px 5px;
 }
 
 .navbar-brand span {
-  width: 120px;
   font-style: italic;
   color: white;
+  font-weight: 700;
 }
 
-.navbar-glass .nav-link {
-  color: #fff;
+/* Nav Links */
+.nav-link {
+  color: white !important;
   font-weight: 500;
   margin-right: 1rem;
-  transition: color 0.3s;
+  transition: 0.3s;
 }
 
-.navbar-glass .nav-link:hover {
-  color: #00b4ff;
+.nav-link:hover {
+  color: #aee6ff !important; /* nice hover */
 }
 
+/* Login Button */
 .btn-login {
   border-radius: 25px;
   padding: 0.4rem 1.2rem;
   font-weight: 600;
   color: #fff;
-  background: linear-gradient(135deg, #15b7d3, #000000);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: linear-gradient(135deg, #db8f90, #4d616b);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   transition: 0.3s;
 }
 
 .btn-login:hover {
-  background: rgba(0, 180, 255, 0.6);
-  color: #fff;
+  background: rgba(247, 4, 101, 0.2);
 }
 
+/* Toggler */
 .navbar-toggler {
   border: none;
-  color: #fff;
 }
+
+.navbar-toggler-icon {
+  filter: invert(1);
+}
+
 </style>
