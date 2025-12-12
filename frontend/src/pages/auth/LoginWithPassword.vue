@@ -24,7 +24,7 @@
         </button>
         <div class="text-center mt-3 text-white">
             Don't have an account?
-            <router-link to="/register" class="text-white underline">
+            <router-link to="/signup" class="text-white underline">
                 Sign up
             </router-link>
         </div>
@@ -34,4 +34,39 @@
 
 <script >
 
+// export default {
+//   data() {
+//     return {
+//       username: "",
+//       password: "",
+//       msg: "",
+//     }
+//   },
+//   methods: {
+//     async login() {
+//       if (!this.username || !this.password) {
+//         this.msg = "All fields are required!";
+//         return;
+//       }
+//       const res = await fetch("http://localhost:3000/login", {
+//         method: "POST",
+//         credentials: "include",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({
+//           username: this.username,
+//           password: this.password,
+//         }),
+//       });
+//       const data = await res.json();
+//       // console.log(res);
+//       if (!res.ok) {
+//         this.msg = data.message || "Login failed";
+//       }else {
+//         this.$router.push("/");
+//       }
+//       console.log(data)
+//       // console.log(this.$router)
+//     }
+//   }
+// }
 </script>
