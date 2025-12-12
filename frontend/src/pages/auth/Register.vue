@@ -1,9 +1,97 @@
-<script setup>
+<template>
+  <!-- Car Background -->
+ <img src="/img/car.png" class="bg-car" />
+
+  <!-- Glass Card -->
+  <form @submit.prevent="submitRegister" class="login-card login-card-scroll">
+
+    <h2 class="text-center mb-4">Signup</h2>
+
+    <!-- Name -->
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control input-glass" id="name" placeholder="Name">
+      <label for="name">Name</label>
+    </div>
+
+    <!-- Username -->
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control input-glass" id="username" placeholder="Username">
+      <label for="username">Username</label>
+    </div>
+
+    <!-- Email -->
+    <div class="form-floating mb-3">
+      <input type="email" class="form-control input-glass" id="email" placeholder="Email" required>
+      <label for="email">Email</label>
+    </div>
+
+    <!-- Password -->
+    <div class="form-floating mb-3">
+      <input type="password" class="form-control input-glass" id="password" placeholder="Password">
+      <label for="password">Password</label>
+    </div>
+
+    <!-- Confirm Password -->
+    <div class="form-floating mb-3">
+      <input type="password" class="form-control input-glass" id="confirmPassword" placeholder="Confirm Password">
+      <label for="confirmPassword">Confirm Password</label>
+    </div>
+
+    <!-- Phone -->
+    <div class="form-floating mb-3">
+      <input
+        type="tel"
+        class="form-control input-glass"
+        id="phone"
+        placeholder="Phone"
+        required
+        pattern="[0-9]{10}"
+      >
+      <label for="phone">Phone</label>
+    </div>
+
+    <!-- Role -->
+    <div class="form-floating mb-3">
+      <select id="role" class="form-select input-glass" required>
+        <option value="">Select role</option>
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+
+    <!-- Profile Picture -->
+    <div class="mb-3">
+      <input
+        type="file"
+        id="profilePic"
+        class="form-control input-glass custom-file"
+        accept="image/*"
+        @change="previewImage"
+      >
+    </div>
+
+    <!-- Preview -->
+    <div class="profile-pic-container">
+      <img :src="previewUrl" alt="profile" id="previewImg">
+    </div>
+
+    <button class="btn login-btn w-100 mt-4 mb-3">Signup</button>
+
+    <!-- Login Redirect -->
+    <div class="text-center mt-3 mb-3 text-white">
+      Already have an account?
+      <router-link to="/login" class="underline text-white">
+        Login
+      </router-link>
+    </div>
+
+  </form>
+</template>
+
+<script >
 
 </script>
-<template>
 
-</template>
 
 <style scoped>
       * {

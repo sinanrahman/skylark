@@ -1,29 +1,10 @@
 <template>
-  <div>
-    <Navbar v-if="route.meta.showNavbar" />
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
-<script>
-import { useRoute } from 'vue-router';
-import Navbar from './components/Navbar.vue'
-
-export default {
-
-  name: 'App',
-  components: {
-    Navbar,
-  },
-  data(){
-    const route = useRoute()
-    return{
-      route
-    }
-  }
-}
+<script setup>
 </script>
 
 <style>
-
 </style>
+
