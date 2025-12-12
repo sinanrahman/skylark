@@ -26,7 +26,7 @@
 
         <div class="text-center mt-3 text-white">
             Don't have an account?
-            <router-link to="/register" class="text-white underline">
+            <router-link to="/signup" class="text-white underline">
                 Sign up
             </router-link>
         </div>
