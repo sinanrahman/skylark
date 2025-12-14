@@ -18,10 +18,10 @@
         <div class="text-center text-white mb-3">— OR —</div>
 
         <div class="d-flex flex-column gap-2 mt-2">
-            <button type="button" class="btn google-btn" @click="router.push('/auth/loginWithOtp')">
+            <router-link to="/auth/login" class="btn google-btn">
                 <i class="fa-brands fa-google me-2"></i>
                 Continue with Username
-            </button>
+            </router-link>
         </div>
 
         <div class="text-center mt-3 text-white">

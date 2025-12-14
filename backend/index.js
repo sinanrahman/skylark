@@ -29,8 +29,8 @@ const home = require('./routes/home')
 const connectCloudinary = require('./config/cloudinary')
 const { isLoggedin } = require('./middlewares/auth')
 
-app.use('/', auth)
-app.use('/',isLoggedin, home)
+app.use('/api', auth)
+app.use('/api',isLoggedin, home)
 
 
 app.use((req, res) => {
