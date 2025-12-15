@@ -352,39 +352,80 @@ export default {
 
 
 /* ===== responsive ===== */
-@media (max-width: 992px) {
+@media (max-width: 1400px) {
 
     .cars-feature {
-        height: 55vh;
+        min-height: 55vh;
+        height: auto;
         padding-top: 40px;
     }
 
     .car-label {
-        font-size: 28px;
-        letter-spacing: 3px;
-        top: 68%;
+        font-size: 43px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        position: absolute; 
+        top: 65%;
     }
 
     .car img {
-        width: 120px !important;
+        width: 120px;
     }
 
     .car2 img {
-        width: 90px !important;
+        width: 70px;
     }
 
     .car1 {
-        bottom: 50px;
+        bottom: 30px;
     }
 
     .car2 {
-        bottom: 45px;
+        bottom: 25px;
     }
 
     .car3 {
-        bottom: 50px;
+        bottom: 30px;
     }
 }
+
+@media (max-width: 992px) {
+
+    .cars-feature {
+        min-height: 55vh;
+        height: auto;
+        padding-top: 40px;
+    }
+
+    .car-label {
+        font-size: 38px;
+        font-weight: 400;
+        letter-spacing: 0px;
+        position: absolute; 
+        top: 65%;
+    }
+
+    .car img {
+        width: 120px;
+    }
+
+    .car2 img {
+        width: 60px;
+    }
+
+    .car1 {
+        bottom: 30px;
+    }
+
+    .car2 {
+        bottom: 25px;
+    }
+
+    .car3 {
+        bottom: 30px;
+    }
+}
+
 
 
 @media (max-width: 768px) {
