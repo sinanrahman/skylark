@@ -72,7 +72,6 @@ export default {
   pointer-events: none;
 }
 
-/* Brand */
 .navbar-brand img {
   width: 95px;
   background: linear-gradient(135deg, #000000, #40606f, #000000);
@@ -85,7 +84,6 @@ export default {
   font-weight: 700;
 }
 
-/* Nav Links */
 .nav-link {
   color: white !important;
   font-weight: 500;
@@ -94,10 +92,9 @@ export default {
 }
 
 .nav-link:hover {
-  color: #aee6ff !important; /* nice hover */
+  color: #aee6ff !important; 
 }
 
-/* Login Button */
 .btn-login {
   border-radius: 25px;
   padding: 0.4rem 1.2rem;
@@ -112,7 +109,7 @@ export default {
   background: rgba(247, 4, 101, 0.2);
 }
 
-/* Toggler */
+
 .navbar-toggler {
   border: none;
 }

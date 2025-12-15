@@ -85,6 +85,7 @@ export default {
 <style scoped>
 .body {
   background-color: #003b73;
+  z-index: 999 !important;
 }
 
 footer {

@@ -43,8 +43,7 @@ export default {
 </script>
 
 <style scoped>
-body,
-html {
+.about-page {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -52,7 +51,7 @@ html {
   overflow-x: hidden;
 }
 
-/* ---- VIDEO BACKGROUND ---- */
+
 .video-bg {
   position: fixed;
   top: 0;
@@ -64,7 +63,6 @@ html {
   opacity: 0.9;
 }
 
-/* ---- OVERLAY ---- */
 .overlay {
   position: fixed;
   top: 0;
@@ -79,7 +77,6 @@ html {
   z-index: 0;
 }
 
-/* ---- CONTENT AREA ---- */
 .about-container {
   position: relative;
   z-index: 2;
@@ -147,7 +144,6 @@ html {
   }
 }
 
-/* Responsive Fix */
 @media (max-width: 768px) {
   .about-card {
     padding: 30px;

@@ -1,17 +1,23 @@
 <template>
     <div class="body">
 
-        <section class="video-banner">
-            <video autoplay muted loop>
-                <source src="/video/BMW M3 Competition - 4K Cinematic Short Video.mp4" type="video/mp4" />
-            </video>
+    <section class="video-banner">
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="/video/BMW M3 Competition - 4K Cinematic Short Video.mp4" type="video/mp4" />
+  </video>
 
-            <div class="video-overlay">
-                <h1>Explore the world’s largest car sharing & <br> rental marketplace</h1>
-                <p>Luxury • Comfort • Affordable Prices</p>
-                <button class="video-btn">Explore Cars</button>
-            </div>
-        </section>
+  <div class="video-overlay">
+    <h1>
+      Explore the world’s largest car sharing & <br />
+      rental marketplace
+    </h1>
+    <p>Luxury • Comfort • Affordable Prices</p>
+
+    <router-link to="/cars" class="video-btn">
+      Explore Cars
+    </router-link>
+  </div>
+</section>
 
         <section class="home-section">
             <div class="container home-box">
@@ -134,59 +140,77 @@ export default {
     background: repeating-linear-gradient(#81939cf1, #0a57a9);
     color: #0a2540;
 }
-
 .video-banner {
-    position: relative;
-    min-height: 70vh;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border-radius: 0 0 40px 40px;
+  position: relative;
+  min-height: 90vh;
+  overflow: hidden;
+  border-radius: 0 0 40px 40px;
+  display: block;
 }
 
-.video-banner video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.6);
+
+.bg-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 90%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  filter: brightness(0.6);
+  z-index: 1;
 }
 
 .video-overlay {
-    position: absolute;
-    text-align: center;
-    color: white;
-    z-index: 2;
-    padding: 20px;
+  position: absolute;
+  bottom: 50px;         
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  text-align: center;
+  color: #fff;
+  width: 90%;           /* use % width for small screens */
+  max-width: 900px;     /* still limit on large screens */
 }
 
 .video-overlay h1 {
-    font-size: clamp(1.6rem, 4vw, 3rem);
-    font-weight: 700;
-    letter-spacing: 1px;
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 0;
+  margin-bottom: 10px;
+  line-height: 1.2;     /* ensure proper line spacing */
 }
 
 .video-overlay p {
-    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-    margin-top: 10px;
-    opacity: 0.9;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  margin-top: 10px;
+  opacity: 0.9;
+  line-height: 1.4;     /* better line spacing */
+  word-wrap: break-word; /* allow text to wrap */
+  white-space: normal;   /* important for small screens */
 }
 
+
 .video-btn {
-    margin-top: 20px;
-    background: white;
-    color: #007adf;
-    padding: 10px 30px;
-    border-radius: 30px;
-    font-weight: 600;
-    border: none;
-    transition: 0.3s ease;
+  margin-top: 20px;
+  background: white;
+  color: #007adf;
+  padding: 10px 30px;
+  border-radius: 30px;
+  font-weight: 600;
+  border: none;
+  transition: 0.3s ease;
+  display: inline-block;
+  text-decoration: none;
 }
 
 .video-btn:hover {
-    background: #dff2ff;
+  background: #dff2ff;
 }
+
 
 .cars-feature {
     position: relative;
@@ -208,7 +232,7 @@ export default {
     background: linear-gradient(to bottom,
             rgba(0, 122, 223, 0.45),
             rgba(0, 0, 0, 0.4));
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(0px);
     z-index: 1;
 }
 
@@ -336,7 +360,6 @@ export default {
     border: 2px solid #00bfff;
 }
 
-/*animation */
 @keyframes fadeSlideUp {
     from {
         opacity: 0;
@@ -349,13 +372,10 @@ export default {
     }
 }
 
-
-
-/* ===== responsive ===== */
 @media (max-width: 1400px) {
 
     .cars-feature {
-        min-height: 55vh;
+        min-height: 75vh;
         height: auto;
         padding-top: 40px;
     }
@@ -365,15 +385,15 @@ export default {
         font-weight: 600;
         letter-spacing: 1px;
         position: absolute; 
-        top: 65%;
+        top: 6%;
     }
 
     .car img {
-        width: 120px;
+        width: 170px;
     }
 
     .car2 img {
-        width: 70px;
+        width: 100px;
     }
 
     .car1 {
@@ -462,6 +482,15 @@ export default {
 
 
 @media (max-width: 576px) {
+
+  .video-overlay h1 {
+    font-size: 1.4rem;   
+  }
+
+  .video-overlay p {
+    font-size: 1rem;    
+  }
+
 
     .cars-feature {
         height: auto !important;

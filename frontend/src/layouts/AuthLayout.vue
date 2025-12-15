@@ -173,7 +173,7 @@
 .input-glass {
   background: rgba(255, 255, 255, 0.3);
   border: none;
-  color: white;
+  color: black;
   border-radius: 10px;
   padding: 12px;
   width: 100%;
