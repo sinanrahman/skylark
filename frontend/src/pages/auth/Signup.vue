@@ -4,7 +4,7 @@
      <img src="/img/car.png" class="bg-car" />
 
     <!-- Glass Card -->
-    <form @submit.prevent="submitRegister" class="login-card">
+    <form @submit.prevent="submitForm" class="login-card">
 
       <h2 class="text-center mb-4">Signup</h2>
 
@@ -62,13 +62,13 @@
             id="profilePic"
             class="form-control custom-file input-glass"
             accept="image/*"
-            @change="previewImage"
+            @change="onImageChange"
           >
         </div>
 
         <!-- Preview -->
         <div class="profile-pic-container">
-          <img :src="previewUrl" alt="">
+          <img :src="previewImg" alt="">
         </div>
 
         <button class="btn login-btn w-100 mt-4 mb-3">Signup</button>
@@ -88,68 +88,75 @@
 
 
 <script>
-// export default {
-//   data() {
-//     return {
-//       previewImg: "",
-//       imageFile: null,
-
-//       name: "",
-//       username: "",
-//       email: "",
-//       phone: "",
-//       role: "student",
-//       password: "",
-//       confirmPassword: ""
-//     };
-//   },
-
-//   methods: {
-//     onImageChange(e) {
-//       const file = e.target.files[0];
-//       this.imageFile = file;
-//       this.previewImg = URL.createObjectURL(file);
-//     },
-
-//     async submitForm() {
-//       // Frontend password check
-//       if (this.password !== this.confirmPassword) {
-//         alert("Passwords do not match!");
-//         return;
-//       }
-
-//       const formData = new FormData();
-//       formData.append("photo", this.imageFile);
-//       formData.append("name", this.name);
-//       formData.append("username", this.username);
-//       formData.append("email", this.email);
-//       formData.append("phone", this.phone);
-//       formData.append("role", this.role);
-//       formData.append("password", this.password);
-//       formData.append("confirmPassword", this.confirmPassword); 
-
-//       let data;
-
-//       const res = await fetch("http://localhost:3000/register", {
-//         method: "POST",
-//         body: formData
-//       });
-//       try {
-//         data = await res.json();
-//       } catch (err) {
-//         alert("Server returned an invalid response (HTML instead of JSON).");
-//         return;
-//       }
-
-//       if (res.ok) {
-//         this.$router.push("/login");
-//       } else {
-//       }
-//     }
-//   }
-// };
-
-</script>
+  import api from '@/services/api'
+  
+  export default {
+    data() {
+      return {
+        msg: '',
+        previewImg: '',
+        imageFile: null,
+  
+        name: '',
+        username: '',
+        email: '',
+        phone: '',
+        role: '',
+        password: '',
+        confirmPassword: ''
+      }
+    },
+  
+    methods: {
+      onImageChange(e) {
+        const file = e.target.files[0]
+        this.imageFile = file
+        this.previewImg = URL.createObjectURL(file)
+      },
+  
+      async submitForm() {
+        if (!this.name || !this.username || !this.email || !this.password) {
+          this.msg = 'All fields are required'
+          return
+        }
+  
+        if (this.password !== this.confirmPassword) {
+          this.msg = 'Passwords do not match!'
+          return
+        }
+  
+        try {
+          const formData = new FormData()
+          formData.append('photo', this.imageFile)
+          formData.append('name', this.name)
+          formData.append('username', this.username)
+          formData.append('email', this.email)
+          formData.append('phone', this.phone)
+          formData.append('role', this.role)
+          formData.append('password', this.password)
+          formData.append('confirmPassword', this.confirmPassword) // ✅ IMPORTANT
+  
+          const res = await api.post('/register', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+  
+          console.log(res.data)
+  
+          // ✅ redirect to login
+          this.$router.push('/auth/login')
+        } catch (err) {
+          this.msg =
+            err.response?.data?.message ||
+            'Registration failed'
+        }
+      }
+    }
+  }
+  </script>
+  
+  
 
 <style scoped>
 * {

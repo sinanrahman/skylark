@@ -9,9 +9,13 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import FooterComponent from "@/components/Footer.vue";
+import axios from "axios";
 
 export default {
-  components: { Navbar, FooterComponent }
+  components: { Navbar, FooterComponent },
+  method:{
+
+  }
 };
 </script>
 <style scoped>

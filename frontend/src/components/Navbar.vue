@@ -30,11 +30,19 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/contact">Contact</router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/profile"><div class="profile">
+              hi
+            </div></router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/contact">Contact</router-link>
+          </li>
 
           <li class="nav-item">
-            <router-link class="btn btn-login  ms-3" to="">
+            <button @click="logout" class="btn btn-login  ms-3" >
              logout
-            </router-link>
+            </button>
           </li>
 
         </ul>
@@ -45,9 +53,21 @@
 </template>
 
 <script>
-export default {
-  name: "Navbar",
-};
+  import api from '@/services/api';
+
+  export default {
+    name: "Navbar",
+        data(){
+            return{}
+        },
+        methods:{
+            async logout(){
+                const res = await api.get('/logout',)
+                console.log(res.data)
+                this.$router.push('/auth/login')
+            }
+        }
+    };
 </script>
 
 <style scoped>
@@ -120,5 +140,9 @@ export default {
 .navbar-toggler-icon {
   filter: invert(1);
 }
-
+.profile{
+  border-radius: 50%;
+  background-color: black;
+  width: 100px;
+}
 </style>

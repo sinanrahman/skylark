@@ -1,8 +1,9 @@
 <template>
     <form @submit.prevent="login" class="login-card">
 
-        <h2 class="text-center mb-4">Login</h2>
 
+        <h2 class="text-center mb-4">Login</h2>
+        <h6 class="text-danger">{{ msg }}</h6>
         <div class="form-floating mb-3">
             <input type="text" v-model="username" class="form-control input-glass" placeholder="Username" required />
             <label>Username</label>
@@ -32,47 +33,45 @@
     </form>
 </template>
 
-<script >
-import api from '@/services/api';
-
-export default {
-  data() {
-    return {
-      username: "",
-      password: "",
-      msg: "",
-    }
-  },
-  methods: {
-    async login() {
-      if (!this.username || !this.password) {
-        this.msg = "All fields are required!";
-        return;
+<script>
+  import api from '@/services/api'
+  
+  export default {
+    data() {
+      return {
+        username: '',
+        password: '',
+        msg: '',
+        loading: false
       }
-    //   const res = await fetch("http://localhost:3000/login", {
-    //     method: "POST",
-    //     credentials: "include",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //       username: this.username,
-    //       password: this.password,
-    //     }),
-    //   });
-
-      const res = await api.post('/login',{
-        username:this.username,
-        password:this.password
-      })
-    
-      // console.log(res);
-      if (!res.status) {
-        this.msg = res.data.message || "Login failed";
-      }else {
-        this.$router.push("/");
+    },
+  
+    methods: {
+      async login() {
+        if (!this.username || !this.password) {
+          this.msg = 'All fields are required!'
+          return
+        }
+  
+        try {
+          this.loading = true
+          this.msg = ''
+  
+          const res = await api.post('/login', {
+            username: this.username,
+            password: this.password
+          })
+  
+          console.log(res.data) 
+  
+          this.$router.push('/')
+        } catch (err) {
+          this.msg =  err.response?.data?.message ||  'Invalid username or password' // when error occurs there will be error resposnse.data.message which will be sent from backend
+        } finally {
+          this.loading = false
+        }
       }
-      console.log(res.data)
-      // console.log(this.$router)
     }
   }
-}
-</script>
+  </script>
+  

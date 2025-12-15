@@ -5,12 +5,6 @@
         data(){
             return{}
         },
-        methods:{
-            async logout(){
-                const res = await api.get('/logout')
-                console.log(res.data)
-            }
-        }
     }
 </script>
 <template >

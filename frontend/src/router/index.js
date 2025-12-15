@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import api from '@/services/api'
 
 import MainLayout from '@/layouts/MainLayout.vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
@@ -9,7 +10,6 @@ import Contact from '@/pages/home/Contacts.vue'
 import Signup from '@/pages/auth/Signup.vue'
 import LoginWithOtp from '@/pages/auth/LoginWithOtp.vue'
 import LoginWithPassword from '@/pages/auth/LoginWithPassword.vue'
-import { comma } from 'postcss/lib/list'
 
 
 
@@ -34,6 +34,7 @@ const routes = [
   {
     path: '/',
     component: MainLayout,
+    meta:{requiresAuth:true},
     children: [
       {
         path: '',
@@ -45,7 +46,7 @@ const routes = [
         path: 'about',
         name: 'About',
         component: About,     
-        meta: { requiresAuth: false,showNavbar: true,showFooter: false}
+        meta: { requiresAuth: true,showNavbar: true,showFooter: false}
       },
       {
         path: 'contact',
@@ -59,12 +60,33 @@ const routes = [
 
 
 
-export default createRouter({
+
+
+const router =  createRouter({
   history: createWebHistory(),
   routes
 })
 
+router.beforeEach(async (to, from, next) => {
+  // check meta from all matched routes (IMPORTANT!)
+  // const requiresAuth = to.matched.some(
+  //   route => route.meta.requiresAuth
+  // )
+  if (!to.meta.requiresAuth) return next();
 
+  // if (!requiresAuth) return next()
+
+  try {
+    const res = await api.get('/profile',)
+    console.log(res.data)
+    console.log(res.status)
+    next()
+  } catch (err) {
+    next('/auth/login') // ✅ correct path
+  }
+})
+
+export default router
 
 
 // router.beforeEach(async (to, from, next) => {
