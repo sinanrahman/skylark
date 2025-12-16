@@ -4,7 +4,7 @@ const router = express.Router()
 
 
 router
-    .route('/')
+    .route('/profile')
     .get(GetHomePage)
 router
     .route('/cars')

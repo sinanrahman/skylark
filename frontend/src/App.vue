@@ -2,9 +2,14 @@
   <router-view />
 </template>
 
-<script setup>
-</script>
-
+<script>
+  export default {
+    created() {
+      this.$store.dispatch('fetchUser')
+    }
+  }
+  </script>
+  
 <style>
 </style>
 

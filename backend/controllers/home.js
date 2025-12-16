@@ -7,12 +7,14 @@ exports.GetHomePage = async(req,res) =>{
         }
         return res.status(200).json({
             message:'Home Page',
-            user:user
+            user:req.user
         })
     }catch(e){
         console.log('error while rendering homepage')
         console.log(e)
-        return res.send("<h1>something is wrong</h1>")
+        return res.status(400).json({
+            message:'Authentication Failed'
+        })
     }
 }
 exports.GetCarsPage = (req,res) =>{

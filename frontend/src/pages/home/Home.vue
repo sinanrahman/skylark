@@ -1,10 +1,631 @@
-<script setup>
-
-</script>
 <template>
-<h1>hello</h1>
+    <div class="body">
+
+        <section class="video-banner">
+            <video autoplay muted loop playsinline class="bg-video">
+                <source src="/video/BMW M3 Competition - 4K Cinematic Short Video.mp4" type="video/mp4" />
+            </video>
+
+            <div class="video-overlay">
+                <h1 class="hero-title">
+                    <span>Explore the world’s largest car sharing</span>
+                    <span>& rental marketplace</span>
+                </h1>
+
+                <p>Luxury • Comfort • Affordable Prices</p>
+
+                <router-link to="/cars" class="video-btn">
+                    Explore Cars
+                </router-link>
+            </div>
+        </section>
+
+        <section class="home-section">
+            <div class="container home-box">
+
+                <section class="cars-feature">
+
+                    <h2 class="cars-heading">Featured Cars</h2>
+
+                    <div class="car-group">
+                        <a href="sedan.html" class="car car1">
+                            <img src="/img/home/sedan.png" alt="Sedan">
+                        </a>
+                        <div class="car-label sedan-text">SEDAN</div>
+                    </div>
+
+                    <div class="car-group">
+                        <a href="suv.html" class="car car2">
+                            <img src="/img/home/suv .png" alt="SUV">
+                        </a>
+                        <div class="car-label suv-text">SUV</div>
+                    </div>
+
+                    <div class="car-group">
+                        <a href="hatchback.html" class="car car3">
+                            <img src="/img/home/hatchback.png" alt="Hatchback">
+                        </a>
+                        <div class="car-label hatch-text">HATCHBACK</div>
+                    </div>
+
+                </section>
+
+
+                <section class="feature-section">
+                    <div class="feature-container">
+
+                        <div class="feature-card">
+                            <div class="media-box">
+
+                                <video src="/video/benz.mp4" muted autoplay loop></video>
+                                <div class="play-btn">▶</div>
+                            </div>
+                            <h3>Engineered to <br> Impress.</h3>
+                            <p>
+                                Precision design meets powerful performance, delivering a driving experience defined by
+                                comfort.
+                            </p>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="media-box">
+                                <video src="/video/bmw.mp4" muted autoplay loop></video>
+                                <div class="play-btn">▶</div>
+                            </div>
+                            <h3>Power Dressed in Elegance.</h3>
+                            <p>
+                                Bold performance wrapped in iconic luxury, built to dominate both city streets and open
+                                highways.
+                            </p>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="media-box">
+                                <video src="/video/lexus.mp4" muted autoplay loop></video>
+                                <div class="play-btn">▶</div>
+                            </div>
+                            <h3>Luxury Redefined on Every Road.</h3>
+                            <p>
+                                An expression of sophistication and strength, created for drivers who value style,
+                                comfort, and performance.
+                            </p>
+                        </div>
+
+                    </div>
+                </section>
+
+            </div>
+            <section class="testimonial-section py-5">
+                <div class="container">
+
+                    <h2 class="text-center fw-bold mb-5 testimonial-title">
+                        What Our Customers Say
+                    </h2>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-4">
+                            <div class="testimonial-card">
+                                <p class="review-text">
+                                    “Skylark provided the best rental experience. Clean cars, smooth ride,
+                                    and quick pickup. Highly recommended!”
+                                </p>
+
+                                <div class="d-flex align-items-center mt-3">
+                                    <img src="https://i.pravatar.cc/90?img=12" class="review-img" alt="">
+                                    <div class="ms-3">
+                                        <h6 class="mb-0 text-white">Rahul Menon</h6>
+                                        <div class="rating text-warning">
+                                            ★★★★★
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="testimonial-card">
+                                <p class="review-text">
+                                    “Affordable prices and professional service.
+                                    The car felt brand-new. Skylark is always my first choice now!”
+                                </p>
+
+                                <div class="d-flex align-items-center mt-3">
+                                    <img src="https://i.pravatar.cc/90?img=30" class="review-img" alt="">
+                                    <div class="ms-3">
+                                        <h6 class="mb-0 text-white">Aisha Kareem</h6>
+                                        <div class="rating text-warning">
+                                            ★★★★★
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="testimonial-card">
+                                <p class="review-text">
+                                    “Excellent customer support and hassle-free booking.
+                                    The airport pickup option saved my time. Loved the experience!”
+                                </p>
+
+                                <div class="d-flex align-items-center mt-3">
+                                    <img src="https://i.pravatar.cc/90?img=56" class="review-img" alt="">
+                                    <div class="ms-3">
+                                        <h6 class="mb-0 text-white">Vignesh P</h6>
+                                        <div class="rating text-warning">
+                                            ★★★★★
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </section>
+
+    </div>
+
 </template>
 
+
+<script>
+export default {
+    name: "HomePage",
+}
+</script>
+
+
 <style scoped>
-    
+.body {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    background: repeating-linear-gradient(#81939cf1, #0a57a9);
+    color: #0a2540;
+}
+
+.video-banner {
+    position: relative;
+    min-height: 90vh;
+    overflow: hidden;
+    border-radius: 0 0 40px 40px;
+    display: block;
+}
+
+
+.bg-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 90%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    filter: brightness(0.6);
+    z-index: 1;
+}
+
+.video-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+    padding: 20px;
+    width: 90%;
+    max-width: 900px;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.hero-title span {
+    display: block;
+}
+
+.video-overlay p {
+    font-size: 1rem;
+    margin-top: 10px;
+    opacity: 0.9;
+
+}
+
+
+.video-btn {
+    margin-top: 20px;
+    background: white;
+    color: #007adf;
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.video-btn:hover {
+    background: #dff2ff;
+}
+
+
+.cars-feature {
+    position: relative;
+    height: 85vh;
+    width: 90%;
+    margin: 50px auto;
+    border-radius: 40px;
+    overflow: hidden;
+    background: url("/img/home/car.jpg") center/cover no-repeat;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.cars-feature::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(to bottom,
+            rgba(0, 122, 223, 0.45),
+            rgba(0, 0, 0, 0.4));
+    backdrop-filter: blur(0px);
+    z-index: 1;
+}
+
+.cars-heading {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-top: 35px;
+    font-size: 2.7rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+    text-shadow: 0px 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.car {
+    position: absolute;
+    z-index: 4;
+    transition: 0.5s ease;
+}
+
+.car img {
+    width: 200px;
+    filter: drop-shadow(0px 20px 25px rgba(0, 0, 0, 0.6));
+    transition: transform 0.35s ease, filter 0.3s ease;
+}
+
+.car2 img {
+    width: 120px;
+    filter: drop-shadow(0px 20px 25px rgba(0, 0, 0, 0.6));
+    transition: transform 0.35s ease, filter 0.3s ease;
+}
+
+.car1 {
+    left: 18%;
+    bottom: 40px;
+}
+
+.car2 {
+    left: 45%;
+    bottom: 30px;
+}
+
+.car3 {
+    right: 15%;
+    bottom: 40px;
+}
+
+.car:hover img {
+    transform: scale(1.1);
+    filter: drop-shadow(0 30px 50px rgba(255, 255, 255, 0.4));
+}
+
+.car-label {
+    position: absolute;
+    top: 72%;
+    font-size: 58px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.15);
+    line-height: 1;
+    letter-spacing: 4px;
+    z-index: 2;
+    pointer-events: none;
+    transition: 0.4s ease;
+}
+
+.sedan-text {
+    left: 16%;
+}
+
+.suv-text {
+    left: 44.5%;
+    top: 68%;
+}
+
+.hatch-text {
+    right: 4%;
+}
+
+.car:hover+.car-label {
+    color: rgba(255, 255, 255, 0.96);
+    text-shadow: 0px 15px 40px rgba(255, 255, 255, 0.4);
+}
+
+.feature-section {
+    border-radius: 20px;
+    background: linear-gradient(135deg, #104980, #1b91eb);
+    padding: 80px 6%;
+    margin-bottom: 40px;
+}
+
+.feature-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+.feature-card h3 {
+    font-size: 28px;
+    font-weight: 500;
+    margin: 20px 0 10px;
+    color: white;
+}
+
+.feature-card p {
+    font-size: 16px;
+    color: rgb(226, 215, 215);
+    line-height: 1.6;
+}
+
+.media-box {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.media-box img,
+.media-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.play-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.play-btn:hover {
+    transform: scale(1.1);
+    background: #000;
+}
+
+
+@media (max-width: 992px) {
+    .feature-container {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-card h3 {
+        font-size: 24px;
+    }
+}
+
+.testimonial-section {
+    background: linear-gradient(135deg, #003b73, #0a7ac1);
+    padding: clamp(40px, 8vw, 150px);
+}
+
+.testimonial-title {
+    color: #fff;
+    font-size: 2.6rem;
+    letter-spacing: 1px;
+}
+
+.testimonial-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 25px;
+    color: #e9e9e9;
+    min-height: 230px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    transition: 0.4s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeSlideUp 1.2s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.35);
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.review-text {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.review-img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: 2px solid #00bfff;
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 1400px) {
+
+    .cars-feature {
+        min-height: 75vh;
+        height: auto;
+        padding-top: 40px;
+    }
+
+    .car-label {
+        font-size: 43px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        position: absolute;
+        top: 65%;
+    }
+
+    .car img {
+        width: 170px;
+    }
+
+    .car2 img {
+        width: 85px;
+    }
+
+    .car1 {
+        bottom: 30px;
+    }
+
+    .car2 {
+        bottom: 25px;
+    }
+
+    .car3 {
+        bottom: 30px;
+    }
+}
+
+@media (max-width: 992px) {
+
+    .cars-feature {
+        min-height: 55vh;
+        height: auto;
+        padding-top: 40px;
+    }
+
+    .car-label {
+        font-size: 38px;
+        font-weight: 400;
+        letter-spacing: 0px;
+        position: absolute;
+        top: 65%;
+    }
+
+    .car img {
+        width: 120px;
+    }
+
+    .car2 img {
+        width: 60px;
+    }
+
+    .car1 {
+        bottom: 30px;
+    }
+
+    .car2 {
+        bottom: 25px;
+    }
+
+    .car3 {
+        bottom: 30px;
+    }
+}
+
+
+
+@media (max-width: 768px) {
+
+    .cars-feature {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+    }
+
+    .car-group {
+        position: relative;
+        margin: 20px 0;
+    }
+
+    .car,
+    .car-label,
+    .car img {
+        display: none !important;
+    }
+
+
+
+    .testimonial-card {
+        min-height: auto;
+    }
+
+    .review-text {
+        font-size: 14px;
+    }
+
+}
+
+
+@media (max-width: 576px) {
+
+    .video-overlay h1 {
+        font-size: 1.4rem;
+    }
+
+    .video-overlay p {
+        font-size: 1rem;
+    }
+
+
+    .cars-feature {
+        height: auto !important;
+        padding: 20px 0;
+    }
+
+    .car,
+    .car-label,
+    .car img {
+        display: none !important;
+    }
+
+    .video-btn {
+        padding: 12px 26px;
+        font-size: 0.95rem;
+    }
+}
 </style>

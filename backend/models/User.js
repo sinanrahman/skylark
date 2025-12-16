@@ -9,21 +9,23 @@ const userSchema = new mongoose.Schema({
     phone:String,
     mail:String,
     role:{
-        type:[String],
-        default:["user"]
+        type:String,
+        default:"user"
     },
     password:String,
     hasbooking:Boolean,
     dp:String,
+    otp:String,
 });
 
-userSchema.pre('save',async function(next){
+userSchema.pre('save',async function(){
 
     if(!(this.isModified('password'))){
-        return next()
+        return
     }
 
     this.password= await bcrypt.hash(this.password,10)
+    return
 
 })
 
