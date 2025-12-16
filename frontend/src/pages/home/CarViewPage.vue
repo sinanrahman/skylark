@@ -127,10 +127,9 @@ export default {
   data() {
     return {
       images: [
-          "/img/home/benz.jpg",
-      "/img/home/benz.jpg",
-      "/img/home/benz.jpg"
-      
+       "/img/cars/suv/bmw/bmwIx-1.jpg",
+  "/img/cars/suv/bmw/bmwIx-2.jpg",
+  "/img/cars/suv/bmw/bmwIx-3.jpg"
       ],
       car: {
         name: "BMW X5",

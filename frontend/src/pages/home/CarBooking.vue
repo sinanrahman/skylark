@@ -17,13 +17,13 @@
           >
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <img src="/img/home/benz.jpg" alt="Car">
+                <img src="/img/cars/suv/bmw/bmw-x5.jpg" alt="Car">
               </div>
               <div class="carousel-item">
-                <img src="/img/home/benz.jpg" alt="Car">
+                <img src="/img/cars/suv/bmw/bmw-x5-2.webp" alt="Car">
               </div>
               <div class="carousel-item">
-                <img src="/img/home/benz.jpg" alt="Car">
+                <img src="/img/cars/suv/bmw/bmw-x5-3.avif" alt="Car">
               </div>
             </div>
 

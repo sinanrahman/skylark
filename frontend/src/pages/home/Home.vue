@@ -93,7 +93,29 @@
 
                     </div>
                 </section>
+                <section class="ev-section">
+                    <div class="ev-overlay"></div>
 
+                    <div class="electric-lines">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <div class="ev-content">
+                        <span class="ev-tag">⚡ Electric Rentals</span>
+                        <h1>Drive the Future.<br>Silently.</h1>
+                        <p>
+                            Discover premium electric cars for rent. Zero emissions, instant power,
+                            and a smooth, quiet driving experience designed for the modern road.
+                        </p>
+
+                        <router-link to="/cars" class="ev-btn">
+                            Explore Electric Cars
+                        </router-link>
+
+                    </div>
+                </section>
             </div>
             <section class="testimonial-section py-5">
                 <div class="container">
@@ -435,6 +457,136 @@ export default {
 
     .feature-card h3 {
         font-size: 24px;
+    }
+}
+
+.ev-section {
+    position: relative;
+    width: 100%;
+    height: 90vh;
+    background: url("/img/home/kiahome.jpg") center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    margin-bottom: 40px;
+    border-radius: 20px;
+}
+
+.ev-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center,
+            rgba(0, 0, 0, 0.274),
+            rgba(0, 0, 0, 0.377));
+    z-index: 1;
+}
+
+.electric-lines {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.electric-lines span {
+    position: absolute;
+    width: 2px;
+    height: 120%;
+    background: linear-gradient(to bottom,
+            transparent,
+            rgba(0, 191, 255, 0.8),
+            transparent);
+    animation: electricMove 6s linear infinite;
+    opacity: 0.6;
+}
+
+.electric-lines span:nth-child(1) {
+    left: 30%;
+    animation-delay: 0s;
+}
+
+.electric-lines span:nth-child(2) {
+    left: 50%;
+    animation-delay: 2s;
+}
+
+.electric-lines span:nth-child(3) {
+    left: 70%;
+    animation-delay: 4s;
+}
+
+@keyframes electricMove {
+    from {
+        transform: translateY(-120%);
+    }
+
+    to {
+        transform: translateY(120%);
+    }
+}
+
+.ev-content {
+    position: relative;
+    z-index: 3;
+    max-width: 720px;
+    color: #fff;
+    padding: 0 20px;
+
+}
+
+.ev-tag {
+    display: inline-block;
+    margin-bottom: 16px;
+    padding: 6px 16px;
+    border-radius: 30px;
+    background: rgba(0, 0, 0, 0.468);
+    color: #00bfff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.ev-content h1 {
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+.ev-content p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #dcdcdc;
+    margin-bottom: 36px;
+}
+
+
+.ev-btn {
+    display: inline-block;
+    padding: 14px 40px;
+    border-radius: 40px;
+    background: linear-gradient(135deg, #00bfff, #007adf);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+.ev-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(0, 191, 255, 0.45);
+}
+
+
+@media (max-width: 768px) {
+    .ev-content h1 {
+        font-size: 40px;
+    }
+
+    .ev-content p {
+        font-size: 16px;
     }
 }
 
