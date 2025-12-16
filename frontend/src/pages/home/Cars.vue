@@ -28,12 +28,14 @@
               </div>
 
               <div class="car-actions">
-                <button class="btn btn-view">
-                  <i class="bi bi-eye"></i> View
-                </button>
-                <button class="btn btn-book">
-                  <i class="bi bi-calendar-check"></i> Book
-                </button>
+                <router-link to="/car/:id" class="btn btn-view">
+  <i class="bi bi-eye"></i> View
+</router-link>
+
+               <RouterLink to="/car-booking/1" class="btn btn-book">
+  <i class="bi bi-calendar-check"></i> Book
+</RouterLink>
+
               </div>
             </div>
           </div>
@@ -113,7 +115,6 @@ export default {
   min-width: 220px;
 }
 
-/* CAR CARD */
 .car-card {
   background: #fff;
   border-radius: 24px;
@@ -180,7 +181,6 @@ export default {
   color: #fd7e14;
 }
 
-/* ACTIONS */
 .car-actions {
   margin-top: 18px;
   display: flex;

@@ -6,7 +6,6 @@
       <p class="mb-0 text-muted">View and analyze Skylark platform performance</p>
     </div>
 
-    <!-- SUMMARY -->
     <div class="row g-4">
 
       <div class="col-md-3">
@@ -59,7 +58,6 @@
 
     </div>
 
-    <!-- REPORT TABLE -->
     <div class="table-box">
       <h5 class="mb-3">Generated Reports</h5>
 

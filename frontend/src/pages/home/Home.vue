@@ -1,23 +1,24 @@
 <template>
     <div class="body">
 
-    <section class="video-banner">
-  <video autoplay muted loop playsinline class="bg-video">
-    <source src="/video/BMW M3 Competition - 4K Cinematic Short Video.mp4" type="video/mp4" />
-  </video>
+        <section class="video-banner">
+            <video autoplay muted loop playsinline class="bg-video">
+                <source src="/video/BMW M3 Competition - 4K Cinematic Short Video.mp4" type="video/mp4" />
+            </video>
 
-  <div class="video-overlay">
-    <h1>
-      Explore the world’s largest car sharing & <br />
-      rental marketplace
-    </h1>
-    <p>Luxury • Comfort • Affordable Prices</p>
+            <div class="video-overlay">
+                <h1 class="hero-title">
+                    <span>Explore the world’s largest car sharing</span>
+                    <span>& rental marketplace</span>
+                </h1>
 
-    <router-link to="/cars" class="video-btn">
-      Explore Cars
-    </router-link>
-  </div>
-</section>
+                <p>Luxury • Comfort • Affordable Prices</p>
+
+                <router-link to="/cars" class="video-btn">
+                    Explore Cars
+                </router-link>
+            </div>
+        </section>
 
         <section class="home-section">
             <div class="container home-box">
@@ -47,6 +48,50 @@
                         <div class="car-label hatch-text">HATCHBACK</div>
                     </div>
 
+                </section>
+
+
+                <section class="feature-section">
+                    <div class="feature-container">
+
+                        <div class="feature-card">
+                            <div class="media-box">
+
+                                <video src="/video/benz.mp4" muted autoplay loop></video>
+                                <div class="play-btn">▶</div>
+                            </div>
+                            <h3>Engineered to <br> Impress.</h3>
+                            <p>
+                                Precision design meets powerful performance, delivering a driving experience defined by
+                                comfort.
+                            </p>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="media-box">
+                                <video src="/video/bmw.mp4" muted autoplay loop></video>
+                                <div class="play-btn">▶</div>
+                            </div>
+                            <h3>Power Dressed in Elegance.</h3>
+                            <p>
+                                Bold performance wrapped in iconic luxury, built to dominate both city streets and open
+                                highways.
+                            </p>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="media-box">
+                                <video src="/video/lexus.mp4" muted autoplay loop></video>
+                                <div class="play-btn">▶</div>
+                            </div>
+                            <h3>Luxury Redefined on Every Road.</h3>
+                            <p>
+                                An expression of sophistication and strength, created for drivers who value style,
+                                comfort, and performance.
+                            </p>
+                        </div>
+
+                    </div>
                 </section>
 
             </div>
@@ -140,75 +185,77 @@ export default {
     background: repeating-linear-gradient(#81939cf1, #0a57a9);
     color: #0a2540;
 }
+
 .video-banner {
-  position: relative;
-  min-height: 90vh;
-  overflow: hidden;
-  border-radius: 0 0 40px 40px;
-  display: block;
+    position: relative;
+    min-height: 90vh;
+    overflow: hidden;
+    border-radius: 0 0 40px 40px;
+    display: block;
 }
 
 
 .bg-video {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 90%;
-  width: auto;
-  height: auto;
-  transform: translate(-50%, -50%);
-  object-fit: cover;
-  filter: brightness(0.6);
-  z-index: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 90%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    filter: brightness(0.6);
+    z-index: 1;
 }
 
 .video-overlay {
-  position: absolute;
-  bottom: 50px;         
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  text-align: center;
-  color: #fff;
-  width: 90%;           /* use % width for small screens */
-  max-width: 900px;     /* still limit on large screens */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+    padding: 20px;
+    width: 90%;
+    max-width: 900px;
 }
 
-.video-overlay h1 {
-  font-size: clamp(1.6rem, 4vw, 3rem);
-  font-weight: 700;
-  letter-spacing: 1px;
-  margin-top: 0;
-  margin-bottom: 10px;
-  line-height: 1.2;     /* ensure proper line spacing */
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.hero-title span {
+    display: block;
 }
 
 .video-overlay p {
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-  margin-top: 10px;
-  opacity: 0.9;
-  line-height: 1.4;     /* better line spacing */
-  word-wrap: break-word; /* allow text to wrap */
-  white-space: normal;   /* important for small screens */
+    font-size: 1rem;
+    margin-top: 10px;
+    opacity: 0.9;
+
 }
 
 
 .video-btn {
-  margin-top: 20px;
-  background: white;
-  color: #007adf;
-  padding: 10px 30px;
-  border-radius: 30px;
-  font-weight: 600;
-  border: none;
-  transition: 0.3s ease;
-  display: inline-block;
-  text-decoration: none;
+    margin-top: 20px;
+    background: white;
+    color: #007adf;
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
 }
 
 .video-btn:hover {
-  background: #dff2ff;
+    background: #dff2ff;
 }
 
 
@@ -219,7 +266,7 @@ export default {
     margin: 50px auto;
     border-radius: 40px;
     overflow: hidden;
-    background: url("public/img/home/car.jpg") center/cover no-repeat;
+    background: url("/img/home/car.jpg") center/cover no-repeat;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
     border: 2px solid rgba(255, 255, 255, 0.25);
 }
@@ -318,6 +365,79 @@ export default {
     text-shadow: 0px 15px 40px rgba(255, 255, 255, 0.4);
 }
 
+.feature-section {
+    border-radius: 20px;
+    background: linear-gradient(135deg, #104980, #1b91eb);
+    padding: 80px 6%;
+    margin-bottom: 40px;
+}
+
+.feature-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+.feature-card h3 {
+    font-size: 28px;
+    font-weight: 500;
+    margin: 20px 0 10px;
+    color: white;
+}
+
+.feature-card p {
+    font-size: 16px;
+    color: rgb(226, 215, 215);
+    line-height: 1.6;
+}
+
+.media-box {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.media-box img,
+.media-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.play-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.play-btn:hover {
+    transform: scale(1.1);
+    background: #000;
+}
+
+
+@media (max-width: 992px) {
+    .feature-container {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-card h3 {
+        font-size: 24px;
+    }
+}
+
 .testimonial-section {
     background: linear-gradient(135deg, #003b73, #0a7ac1);
     padding: clamp(40px, 8vw, 150px);
@@ -382,10 +502,10 @@ export default {
 
     .car-label {
         font-size: 43px;
-        font-weight: 600;
-        letter-spacing: 1px;
-        position: absolute; 
-        top: 6%;
+        font-weight: 700;
+        letter-spacing: 2px;
+        position: absolute;
+        top: 65%;
     }
 
     .car img {
@@ -393,7 +513,7 @@ export default {
     }
 
     .car2 img {
-        width: 100px;
+        width: 85px;
     }
 
     .car1 {
@@ -421,7 +541,7 @@ export default {
         font-size: 38px;
         font-weight: 400;
         letter-spacing: 0px;
-        position: absolute; 
+        position: absolute;
         top: 65%;
     }
 
@@ -468,7 +588,7 @@ export default {
         display: none !important;
     }
 
-   
+
 
     .testimonial-card {
         min-height: auto;
@@ -483,13 +603,13 @@ export default {
 
 @media (max-width: 576px) {
 
-  .video-overlay h1 {
-    font-size: 1.4rem;   
-  }
+    .video-overlay h1 {
+        font-size: 1.4rem;
+    }
 
-  .video-overlay p {
-    font-size: 1rem;    
-  }
+    .video-overlay p {
+        font-size: 1rem;
+    }
 
 
     .cars-feature {

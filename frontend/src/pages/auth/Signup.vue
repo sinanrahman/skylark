@@ -19,31 +19,28 @@
           <label for="username">Username</label>
         </div>
 
-        <!-- Email -->
+    
         <div class="form-floating mb-3">
           <input v-model="email" id="email" type="email" class="form-control input-glass" placeholder=" ">
           <label for="email">Email</label>
         </div>
 
-        <!-- Password -->
         <div class="form-floating mb-3">
           <input v-model="password" id="password" type="password" class="form-control input-glass" placeholder=" ">
           <label for="password">Password</label>
         </div>
 
-        <!-- Confirm Password -->
         <div class="form-floating mb-3">
           <input v-model="confirmPassword" id="confirmPassword" type="password" class="form-control input-glass" placeholder=" ">
           <label for="confirmPassword">Confirm Password</label>
         </div>
 
-        <!-- Phone -->
+
         <div class="form-floating mb-3">
           <input v-model="phone" id="phone" type="tel" class="form-control input-glass" placeholder=" ">
           <label for="phone">Phone</label>
         </div>
 
-        <!-- Role -->
         <div class="form-floating mb-3">
       <select id="role" class="form-select input-glass" name="role" required>
         <option value="">Select role</option>
@@ -52,7 +49,6 @@
       </select>
     </div>
 
-        <!-- Profile Pic -->
         <div class="mb-3">
           <input
             type="file"
@@ -63,7 +59,7 @@
           >
         </div>
 
-        <!-- Preview -->
+  
         <div class="profile-pic-container">
           <img :src="previewUrl" alt="">
         </div>
@@ -85,66 +81,6 @@
 
 
 <script>
-// export default {
-//   data() {
-//     return {
-//       previewImg: "",
-//       imageFile: null,
-
-//       name: "",
-//       username: "",
-//       email: "",
-//       phone: "",
-//       role: "student",
-//       password: "",
-//       confirmPassword: ""
-//     };
-//   },
-
-//   methods: {
-//     onImageChange(e) {
-//       const file = e.target.files[0];
-//       this.imageFile = file;
-//       this.previewImg = URL.createObjectURL(file);
-//     },
-
-//     async submitForm() {
-//       // Frontend password check
-//       if (this.password !== this.confirmPassword) {
-//         alert("Passwords do not match!");
-//         return;
-//       }
-
-//       const formData = new FormData();
-//       formData.append("photo", this.imageFile);
-//       formData.append("name", this.name);
-//       formData.append("username", this.username);
-//       formData.append("email", this.email);
-//       formData.append("phone", this.phone);
-//       formData.append("role", this.role);
-//       formData.append("password", this.password);
-//       formData.append("confirmPassword", this.confirmPassword); 
-
-//       let data;
-
-//       const res = await fetch("http://localhost:3000/register", {
-//         method: "POST",
-//         body: formData
-//       });
-//       try {
-//         data = await res.json();
-//       } catch (err) {
-//         alert("Server returned an invalid response (HTML instead of JSON).");
-//         return;
-//       }
-
-//       if (res.ok) {
-//         this.$router.push("/login");
-//       } else {
-//       }
-//     }
-//   }
-// };
 
 </script>
 
@@ -270,8 +206,6 @@
 }
 
 
-
-/* File input */
 .custom-file {
   background-color: rgba(255, 255, 255, 0.5) !important;
   border: 1px solid #ccc !important;

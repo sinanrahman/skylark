@@ -1,24 +1,16 @@
-import { createApp } from 'vue'
+
+
+  import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 
-// router.beforeEach(async (to, from, next) => {
-//   if (!to.meta.requiresAuth) return next();
-
-//   const res = await fetch("http://localhost:3000/profile", {
-//     credentials: "include"
-//   });
-
-//   if (res.status === 401) {
-//     return next("/login");
-//   }
-
-//   next();
-// });
-
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 
 createApp(App)
   .use(router)
   .mount('#app')
+
 
 

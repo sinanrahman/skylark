@@ -1,13 +1,11 @@
 <template>
   <div class="container-fluid px-4">
 
-    <!-- PAGE HEADER -->
     <div class="page-header">
       <h4>Reported Issues</h4>
       <p class="mb-0 text-muted">Manage and resolve issues reported by users.</p>
     </div>
 
-    <!-- ISSUES TABLE -->
     <div class="table-box table-responsive">
       <table class="table table-hover align-middle">
         <thead>

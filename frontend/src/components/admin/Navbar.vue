@@ -1,6 +1,5 @@
 <template>
   <nav class="navbar-glass">
-    <!-- LEFT -->
     <div class="left">
   <img 
     src="/img/logo.png" 
@@ -9,8 +8,6 @@
   />
 </div>
 
-
-    <!-- RIGHT -->
     <div class="right">
       <div class="admin-profile">
         <span>Admin</span>
@@ -22,7 +19,7 @@
 </template>
 
 <style scoped>
-/* ================= NAVBAR ================= */
+
 .navbar-glass{
   position:sticky;
   top:0;
@@ -43,7 +40,6 @@
   box-shadow:0 10px 30px rgba(0,0,0,0.12);
 }
 
-/* ================= LEFT ================= */
 .left{
   display:flex;
   align-items:center;
@@ -52,20 +48,17 @@
 }
 
 .logo-img{
-  height:42px;          /* perfect for 72px navbar */
+  height:42px;         
   object-fit:contain;
   cursor:pointer;
 }
 
-
-/* ================= RIGHT ================= */
 .right{
   display:flex;
   align-items:center;
   gap:20px;
 }
 
-/* ================= ADMIN PROFILE ================= */
 .admin-profile{
   display:flex;
   align-items:center;
@@ -90,7 +83,7 @@
   box-shadow:0 0 22px rgba(0,180,255,0.9);
 }
 
-/* ================= LOGOUT ================= */
+
 .logout{
   padding:8px 20px;
   border-radius:22px;

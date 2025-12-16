@@ -8,6 +8,8 @@ import Home from '@/pages/home/Home.vue'
 import Cars from '@/pages/home/Cars.vue'
 import About from '@/pages/home/About.vue'
 import Contact from '@/pages/home/Contacts.vue'
+import CarBooking from '@/pages/home/CarBooking.vue'
+import CarViewPage from '@/pages/home/CarViewPage.vue'
 
 import Signup from '@/pages/auth/Signup.vue'
 import LoginWithOtp from '@/pages/auth/LoginWithOtp.vue'
@@ -64,6 +66,18 @@ const routes = [
         path: 'contact',
         name: 'ContactPage',
         component: Contact,
+        meta: { requiresAuth: true, showNavbar: true, showFooter: true }
+      },
+      {
+        path: 'car-booking/:id',
+        name: 'CarBooking',
+        component: CarBooking,
+        meta: { requiresAuth: true, showNavbar: true, showFooter: true }
+      },
+      {
+        path: 'car/:id',
+        name: 'CarViewPage',
+        component: CarViewPage,
         meta: { requiresAuth: true, showNavbar: true, showFooter: true }
       }
     ]
@@ -129,19 +143,6 @@ export default createRouter({
 
 
 
-// router.beforeEach(async (to, from, next) => {
-//   if (!to.meta.requiresAuth) return next();
-
-//   const res = await fetch("http://localhost:3000/profile", {
-//     credentials: "include"
-//   });
-
-//   if (res.status === 401) {
-//     return next("/login");
-//   }
-
-//   next();
-// });
 
 
 

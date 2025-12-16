@@ -35,7 +35,6 @@
         </div>
       </div>
 
-      <!-- FIRST CHART ROW -->
       <div class="row g-4 mt-4">
         <div class="col-lg-4">
           <div class="graph-card">
@@ -59,7 +58,6 @@
         </div>
       </div>
 
-      <!-- SECOND CHART ROW -->
       <div class="row g-4 mt-4">
         <div class="col-lg-6">
           <div class="graph-card">

@@ -72,7 +72,7 @@
                   </div>
 
                   <div class="col-12">
-                   <button type="submit" class="btn submit-btn">Submit Message</button>
+                    <button type="submit" class="btn submit-btn">Submit Message</button>
 
                   </div>
 
@@ -129,9 +129,9 @@
                   </div>
 
                   <div class="col-12">
-                  <button type="submit" class="btn submit-issue-btn">
-  Submit Issue
-</button>
+                    <button type="submit" class="btn submit-issue-btn">
+                      Submit Issue
+                    </button>
 
                   </div>
 
@@ -212,7 +212,7 @@ export default {
 
 
 
-<style scoped >
+<style scoped>
 .page-root {
   --skylark-blue: #0a57a9;
   --glass-bg: rgba(255, 255, 255, 0.14);

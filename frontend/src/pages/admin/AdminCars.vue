@@ -1,7 +1,6 @@
 <template>
   <div class="container-fluid px-4">
 
-    <!-- PAGE HEADER -->
     <div class="page-header">
       <h4>Cars Management</h4>
 
@@ -15,7 +14,6 @@
       </div>
     </div>
 
-    <!-- TABLE -->
     <div class="table-box">
       <div class="table-responsive">
         <table class="table table-borderless align-middle">
@@ -93,7 +91,7 @@
 </template>
 
 <script setup>
-// No logic added yet
+
 </script>
 
 <style scoped>

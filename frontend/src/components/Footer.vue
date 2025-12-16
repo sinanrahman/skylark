@@ -4,7 +4,6 @@
       <div class="container">
         <div class="row">
 
-          <!-- Logo + About -->
           <div class="col-lg-4 col-md-6 mb-4">
             <router-link to="/">
               <img src="/img/logo.png" alt="Skylark" />
@@ -16,7 +15,6 @@
             </p>
           </div>
 
-          <!-- Quick Links -->
           <div class="col-lg-2 col-md-6 mb-4">
             <h5>Quick Links</h5>
             <ul class="list-unstyled">
@@ -27,7 +25,7 @@
             </ul>
           </div>
 
-          <!-- Services -->
+
           <div class="col-lg-3 col-md-6 mb-4">
             <h5>Services</h5>
             <ul class="list-unstyled">
@@ -38,7 +36,6 @@
             </ul>
           </div>
 
-          <!-- Contact -->
           <div class="col-lg-3 col-md-6 mb-4">
             <h5>Contact Us</h5>
 

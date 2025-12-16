@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid px-4">
 
-    <!-- PAGE HEADER -->
+
     <div class="page-header">
       <h4>Add New Car</h4>
       <p class="form-note mb-0">
@@ -12,7 +12,6 @@
     <div class="form-box">
       <form>
 
-        <!-- BASIC INFO -->
         <div class="form-section">
           <h6 class="section-title">Basic Information</h6>
 
@@ -34,7 +33,6 @@
           </div>
         </div>
 
-        <!-- SPECIFICATIONS -->
         <div class="form-section">
           <h6 class="section-title">Specifications</h6>
 
@@ -90,7 +88,6 @@
           </div>
         </div>
 
-        <!-- FEATURES & TRANSMISSION -->
         <div class="form-section">
           <h6 class="section-title">Features & Transmission</h6>
 
@@ -137,14 +134,13 @@
           </div>
         </div>
 
-        <!-- MEDIA & DESCRIPTION -->
         <div class="form-section">
           <h6 class="section-title">Media & Description</h6>
 
           <div class="row g-4">
             <div class="col-md-6">
               <label>Car Image</label>
-              <input type="file" class="form-control" accept="image/*">
+              <input type="file" class="form-control" accept="image/*" multiple>
             </div>
 
             <div class="col-12">
@@ -158,7 +154,6 @@
           </div>
         </div>
 
-        <!-- ACTIONS -->
         <div class="d-flex gap-3 justify-content-end mt-4">
           <button type="reset" class="btn btn-cancel">Cancel</button>
           <button type="submit" class="btn btn-sky">
@@ -173,7 +168,7 @@
 </template>
 
 <script setup>
-// Logic can be added later (API, v-model, submit handler)
+
 </script>
 
 <style scoped>

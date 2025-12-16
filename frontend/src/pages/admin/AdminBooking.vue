@@ -1,7 +1,6 @@
 <template>
   <div class="container-fluid px-4">
 
-    <!-- PAGE HEADER -->
     <div class="page-header d-flex justify-content-between align-items-center">
       <div>
         <h4>Booking Details</h4>
@@ -9,7 +8,6 @@
       </div>
     </div>
 
-    <!-- BOOKINGS TABLE -->
     <div class="table-box">
       <div class="table-responsive">
         <table class="table table-hover align-middle">
