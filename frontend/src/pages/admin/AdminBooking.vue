@@ -18,7 +18,7 @@
               <th>#</th>
               <th>Booking ID</th>
               <th>User</th>
-              <th>Car</th>
+              <th>Car Name</th>
               <th>Pickup Date</th>
               <th>Return Date</th>
               <th>Total Days</th>
@@ -47,8 +47,8 @@
             <tr v-else v-for="(booking, index) in bookings" :key="booking._id">
               <td>{{ index + 1 }}</td>
               <td>#{{ booking.bookingId }}</td>
-              <td>{{ booking.userId }}</td>
-              <td>{{ booking.carId }}</td>
+              <td>{{ booking.userId?.name || booking.userId }}</td>
+              <td>{{ carNames[booking.carId] || 'Loading...' }}</td>
               <td>{{ formatDate(booking.pickupDate) }}</td>
               <td>{{ formatDate(booking.returnDate) }}</td>
               <td>{{ booking.totalDays }}</td>
@@ -59,7 +59,11 @@
               </td>
 
               <td class="text-center">
-                <button class="action-btn" title="View">
+                <button
+                  class="action-btn"
+                  title="View"
+                  @click="openBookingModal(booking)"
+                >
                   <i class="bi bi-eye"></i>
                 </button>
               </td>
@@ -67,6 +71,70 @@
 
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- BOOKING DETAILS MODAL -->
+    <div class="modal fade" id="bookingModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title">Booking Details</h5>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body" v-if="selectedBooking">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <strong>Booking ID</strong>
+                <p>#{{ selectedBooking.bookingId }}</p>
+              </div>
+
+              <div class="col-md-6">
+                <strong>User</strong>
+                <p>{{ selectedBooking.userId?.name || selectedBooking.userId }}</p>
+              </div>
+
+              <div class="col-md-6">
+                <strong>Car</strong>
+                <p>{{ carNames[selectedBooking.carId] }}</p>
+              </div>
+
+              <div class="col-md-6">
+                <strong>Total Amount</strong>
+                <p>₹{{ selectedBooking.totalAmount }}</p>
+              </div>
+
+              <div class="col-md-6">
+                <strong>Pickup Date</strong>
+                <p>{{ formatDate(selectedBooking.pickupDate) }}</p>
+              </div>
+
+              <div class="col-md-6">
+                <strong>Return Date</strong>
+                <p>{{ formatDate(selectedBooking.returnDate) }}</p>
+              </div>
+
+              <div class="col-md-6">
+                <strong>Total Days</strong>
+                <p>{{ selectedBooking.totalDays }}</p>
+              </div>
+
+              <div class="col-md-6">
+                <strong>Status</strong>
+                <p class="text-success fw-semibold">Confirmed</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+          </div>
+
+        </div>
       </div>
     </div>
 
@@ -82,6 +150,8 @@ export default {
   data() {
     return {
       bookings: [],
+      carNames: {},      // ✅ cached car names
+      selectedBooking: null,
       loading: false
     };
   },
@@ -96,11 +166,35 @@ export default {
         this.loading = true;
         const res = await api.get("/bookings");
         this.bookings = res.data.bookings || [];
-      } catch (error) {
-        console.error("Error fetching bookings:", error);
+
+        // Fetch all car names once
+        this.bookings.forEach(b => {
+          if (b.carId && !this.carNames[b.carId]) {
+            this.fetchCarName(b.carId);
+          }
+        });
+
+      } catch (err) {
+        console.error("Error fetching bookings:", err);
       } finally {
         this.loading = false;
       }
+    },
+
+    async fetchCarName(carId) {
+      try {
+        const res = await api.get(`/getcar/${carId}`);
+        this.carNames[carId] = res.data.data.name;
+      } catch (err) {
+        this.carNames[carId] = "Unknown";
+      }
+    },
+
+    openBookingModal(booking) {
+      this.selectedBooking = booking;
+      window.bootstrap.Modal.getOrCreateInstance(
+        document.getElementById("bookingModal")
+      ).show();
     },
 
     formatDate(date) {
@@ -124,30 +218,11 @@ export default {
   margin-bottom: 25px;
 }
 
-.page-header h4 {
-  font-weight: 700;
-  color: #0a2540;
-}
-
 .table-box {
   background: #fff;
   border-radius: 22px;
   padding: 25px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-}
-
-table th {
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #0a2540;
-  background: #f1f4f9;
-}
-
-table td {
-  vertical-align: middle;
-  font-weight: 500;
-  color: #333;
 }
 
 .status {

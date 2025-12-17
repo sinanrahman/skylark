@@ -27,12 +27,16 @@ app.use(fileUpload({
 const auth = require('./routes/auth')
 const home = require('./routes/home')
 const admin = require('./routes/admin')
+const maintenance  = require('./routes/maintenance')
+const review  = require('./routes/review')
 const connectCloudinary = require('./config/cloudinary')
 const { isLoggedin, isAdmin } = require('./middlewares/auth')
 
 app.use('/api', auth)
 app.use('/api',isLoggedin, home)
+app.use('/api',isLoggedin, review)
 app.use('/api',isLoggedin,isAdmin, admin)
+app.use('/api',isLoggedin,isAdmin,maintenance)
 
 
 

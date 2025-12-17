@@ -40,13 +40,15 @@
                 </span>
               </td>
               <td class="text-center action-btns">
-                <button class="btn btn-view">
+                <button class="btn btn-view" @click="openViewCarModal(car)">
                   <i class="bi bi-eye"></i>
                 </button>
 
-                <button class="btn btn-edit">
+
+                <button class="btn btn-edit" @click="openCarModal(car)">
                   <i class="bi bi-pencil"></i>
                 </button>
+
 
                 <button class="btn btn-delete" @click="deleteCar(car._id)">
                   <i class="bi bi-trash"></i>
@@ -64,6 +66,153 @@
 
         </table>
       </div>
+      <!-- CAR MODAL -->
+      <div class="modal fade" id="carModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title">Car Details</h5>
+              <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label>Name</label>
+                  <input v-model="selectedCar.name" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                  <label>Price / Day</label>
+                  <input v-model="selectedCar.price" type="number" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                  <label>Fuel</label>
+                  <input v-model="selectedCar.fuel" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                  <label>Status</label>
+                  <select v-model="selectedCar.status" class="form-select">
+                    <option>Available</option>
+                    <option>Booked</option>
+                    <option>Maintenance</option>
+                  </select>
+                </div>
+              </div>
+
+              <hr />
+
+              <button class="btn btn-info w-100 mb-2" @click="openMaintenanceList">
+                📋 View Maintenance
+              </button>
+
+              <button class="btn btn-warning w-100" @click="openMaintenanceModal">
+                ➕ Add Maintenance
+              </button>
+
+            </div>
+
+            <div class="modal-footer">
+              <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button class="btn btn-primary" @click="updateCar">Update Car</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- MAINTENANCE MODAL -->
+       <!-- ADD MAINTENANCE MODAL -->
+<div class="modal fade" id="maintenanceModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Add Maintenance</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <input
+          v-model="maintenance.Maintenencetype"
+          class="form-control mb-2"
+          placeholder="Maintenance Type"
+        />
+
+        <textarea
+          v-model="maintenance.Maintenencedescription"
+          class="form-control mb-2"
+          placeholder="Description"
+        ></textarea>
+
+        <input
+          v-model="maintenance.price"
+          type="number"
+          class="form-control"
+          placeholder="Cost"
+        />
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button class="btn btn-success" @click="addMaintenance">
+          Save
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+      <!-- MAINTENANCE LIST MODAL -->
+      <div class="modal fade" id="maintenanceListModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title">
+                Maintenance History – {{ selectedCar.name }}
+              </h5>
+              <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              <table class="table table-striped" v-if="maintenanceList.length">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Cost</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(m, i) in maintenanceList" :key="m._id">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ m.Maintenencetype }}</td>
+                    <td>{{ m.Maintenencedescription }}</td>
+                    <td>₹{{ m.price }}</td>
+                    <td>{{ new Date(m.createdAt).toLocaleDateString() }}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div v-else class="text-center text-muted">
+                No maintenance records found
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
     </div>
 
   </div>
@@ -79,7 +228,14 @@ export default {
     return {
       cars: [],
       search: "",
-      loading: false
+      loading: false,
+      selectedCar: {},
+      maintenanceList: [],
+      maintenance: {
+        Maintenencetype: "",
+        Maintenencedescription: "",
+        price: ""
+      }
     };
   },
 
@@ -115,13 +271,59 @@ export default {
       } catch (error) {
         console.error("Delete failed", error);
       }
-    }
+    },
+    openCarModal(car) {
+      this.selectedCar = { ...car };
+      new bootstrap.Modal(document.getElementById("carModal")).show();
+    },
+
+    async updateCar() {
+      await api.put(`/cars/${this.selectedCar._id}`, this.selectedCar);
+      this.fetchCars();
+      alert("Car Updated ✅");
+    },
+
+    openMaintenanceModal() {
+      new bootstrap.Modal(
+        document.getElementById("maintenanceModal")
+      ).show();
+    },
+
+    async addMaintenance() {
+      const res = await api.post("/maintenance", {
+        ...this.maintenance,
+        carid: this.selectedCar._id
+      });
+      console.log(res.data)
+      alert("Maintenance Added ✅");
+    },
+    openViewCarModal(car) {
+      this.selectedCar = { ...car };
+      new bootstrap.Modal(document.getElementById("carModal")).show();
+    },
+
+    async openMaintenanceList() {
+      try {
+        const res = await api.get(`/maintenance/${this.selectedCar._id}`);
+        this.maintenanceList = res.data.data;
+
+        new bootstrap.Modal(
+          document.getElementById("maintenanceListModal")
+        ).show();
+
+      } catch (err) {
+        console.error("Failed to load maintenance", err);
+      }
+    },
+
   },
 
   mounted() {
     this.fetchCars();
   }
 };
+
+
 </script>
 
 

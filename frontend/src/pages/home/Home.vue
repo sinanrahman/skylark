@@ -25,30 +25,43 @@
 
                 <section class="cars-feature">
 
-                    <h2 class="cars-heading">Featured Cars</h2>
+  <h2 class="cars-heading">Featured Cars</h2>
 
-                    <div class="car-group">
-                        <a href="sedan.html" class="car car1">
-                            <img src="/img/home/sedan.png" alt="Sedan">
-                        </a>
-                        <div class="car-label sedan-text">SEDAN</div>
-                    </div>
+  <!-- SEDAN -->
+  <div class="car-group">
+    <router-link
+      :to="{ name: 'Cars', query: { category: 'Sedan' } }"
+      class="car car1"
+    >
+      <img src="/img/home/sedan.png" alt="Sedan">
+    </router-link>
+    <div class="car-label sedan-text">SEDAN</div>
+  </div>
 
-                    <div class="car-group">
-                        <a href="suv.html" class="car car2">
-                            <img src="/img/home/suv .png" alt="SUV">
-                        </a>
-                        <div class="car-label suv-text">SUV</div>
-                    </div>
+  <!-- SUV -->
+  <div class="car-group">
+    <router-link
+      :to="{ name: 'Cars', query: { category: 'SUV' } }"
+      class="car car2"
+    >
+      <img src="/img/home/suv .png" alt="SUV">
+    </router-link>
+    <div class="car-label suv-text">SUV</div>
+  </div>
 
-                    <div class="car-group">
-                        <a href="hatchback.html" class="car car3">
-                            <img src="/img/home/hatchback.png" alt="Hatchback">
-                        </a>
-                        <div class="car-label hatch-text">HATCHBACK</div>
-                    </div>
+  <!-- HATCHBACK -->
+  <div class="car-group">
+    <router-link
+      :to="{ name: 'Cars', query: { category: 'Hatchback' } }"
+      class="car car3"
+    >
+      <img src="../../../public/img/home/hatchback.png" alt="Hatchback">
+    </router-link>
+    <div class="car-label hatch-text">HATCHBACK</div>
+  </div>
 
-                </section>
+</section>
+
 
 
                 <section class="feature-section">
@@ -110,9 +123,13 @@
                             and a smooth, quiet driving experience designed for the modern road.
                         </p>
 
-                        <router-link to="/cars" class="ev-btn">
-                            Explore Electric Cars
-                        </router-link>
+                        <router-link
+  :to="{ name: 'Cars', query: { fuel: 'Electric' } }"
+  class="ev-btn"
+>
+  Explore Electric Cars
+</router-link>
+
 
                     </div>
                 </section>

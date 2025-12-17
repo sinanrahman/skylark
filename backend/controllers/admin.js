@@ -2,6 +2,7 @@ const uploadImage = require('../utils/uploadImage')
 const Car = require('../models/Car')
 const User = require('../models/User')
 
+
 exports.Dashboard = async (req, res) => {
   try {
     return res.status(200).json({
@@ -36,6 +37,70 @@ exports.GetAllUsers = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Failed to fetch users'
+    })
+  }
+}
+
+exports.UpdateUser = async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      {
+        name: req.body.name,
+        role: req.body.role,
+      },
+      { new: true, runValidators: true }
+    ).select('-password -otp')
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully',
+      user: updatedUser
+    })
+
+  } catch (error) {
+    console.error('UpdateUser error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update user'
+    })
+  }
+}
+/**
+ * DELETE USER
+ */
+exports.DeleteUser = async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const user = await User.findByIdAndDelete(id)
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully'
+    })
+
+  } catch (error) {
+    console.error('DeleteUser error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete user'
     })
   }
 }
@@ -118,31 +183,49 @@ exports.GetAllCars = async (req, res) => {
   }
 };
 
-exports.DeleteCar = async (req, res) => {
-  try {
-    console.log('delete request came')
-    const { id } = req.params;
+// exports.DeleteCar = async (req, res) => {
+//   try {
+//     console.log('delete request came')
+//     const { id } = req.params;
 
-    const car = await Car.findById(id);
+//     const car = await Car.findById(id);
 
-    if (!car) {
-      return res.status(404).json({
-        success: false,
-        message: "Car not found"
-      });
-    }
+//     if (!car) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Car not found"
+//       });
+//     }
 
-    await car.deleteOne();
+//     await car.deleteOne();
 
-    res.status(200).json({
-      success: true,
-      message: "Car deleted successfully"
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to delete car",
-      error: error.message
-    });
-  }
+//     res.status(200).json({
+//       success: true,
+//       message: "Car deleted successfully"
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: "Failed to delete car",
+//       error: error.message
+//     });
+//   }
+// };
+
+exports.GetCars = async (req, res) => {
+  const cars = await Car.find();
+  res.json({ data: cars });
 };
+
+exports.UpdateCar = async (req, res) => {
+  await Car.findByIdAndUpdate(req.params.id, req.body);
+  res.json({ message: "Car updated" });
+};
+
+exports.DeleteCar = async (req, res) => {
+  await Car.findByIdAndDelete(req.params.id);
+  res.json({ message: "Car deleted" });
+};
+
+
+

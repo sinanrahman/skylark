@@ -31,7 +31,7 @@
             <router-link class="nav-link" to="/contact">Contact</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/profile">
+            <router-link class="nav-link" to="/user-profile">
               <div class="profile">
                 <img :src="user.dp" alt="">
               </div>

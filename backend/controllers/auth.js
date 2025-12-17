@@ -23,6 +23,10 @@ exports.Login = async (req, res) => {
       return res.status(400).json({ message: "password is incorrect" })
       // return res.render('auth/login',{msg:'Incorrect password'})
     }
+    if (user.role == 'block') {
+      return res.status(400).json({ message: "user is blocked" })
+      // return res.render('auth/login',{msg:'Incorrect password'})
+    }
     req.user = username
     // return res.status(200).json({
     //     message:'Login Successful',

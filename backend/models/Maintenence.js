@@ -7,6 +7,10 @@ const maintenenceSchema = new mongoose.Schema({
     Maintenencedescription:String,
     price:Number,
     
-});
+},
+{
+    timestamps: true   // ✅ THIS IS REQUIRED
+}
+);
 
 module.exports =  mongoose.model('Maintenence', maintenenceSchema);

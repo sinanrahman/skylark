@@ -11,6 +11,8 @@ import About from '@/pages/home/About.vue'
 import Contact from '@/pages/home/Contacts.vue'
 import CarBooking from '@/pages/home/CarBooking.vue'
 import CarViewPage from '@/pages/home/CarViewPage.vue'
+import UserProfile from '@/pages/home/UserProfile.vue'
+
 
 import Signup from '@/pages/auth/Signup.vue'
 import LoginWithOtp from '@/pages/auth/LoginWithOtp.vue'
@@ -75,6 +77,12 @@ const routes = [
         path: 'car/:id',
         name: 'CarViewPage',
         component: CarViewPage,
+        meta: { requiresAuth: true, showNavbar: true, showFooter: true }
+      },
+      {
+        path: 'user-profile',
+        name: 'UserProfile',
+        component: UserProfile,
         meta: { requiresAuth: true, showNavbar: true, showFooter: true }
       }
     ]

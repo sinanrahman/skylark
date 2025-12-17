@@ -67,14 +67,18 @@
                 <i v-for="i in 5" :key="i" class="bi" :class="i <= rating ? 'bi-star-fill' : 'bi-star'"
                   @click="rating = i"></i>
               </div>
-              <textarea class="form-control mt-3" rows="3" placeholder="Write your review..."></textarea>
+              <textarea class="form-control mt-3" rows="3" placeholder="Write your review..."
+                v-model="reviewText"></textarea>
 
-              <button class="btn btn-book w-100 mt-3">Submit</button>
+              <button class="btn btn-book w-100 mt-3" @click="submitReview">
+                Submit
+              </button>
+
             </div>
           </div>
 
           <div class="col-lg-4">
-            <div class="neo-box">
+            <div class="neo-box review-box">
               <h6>User Reviews</h6>
               <div v-for="r in reviews" :key="r.name" class="user-review">
                 <strong>{{ r.name }}</strong>
@@ -86,15 +90,15 @@
           <div class="col-lg-4">
             <div class="neo-box text-center">
               <h6>Total Reviews</h6>
-              <div class="total-rating">4.3 / 5</div>
-              <p class="text-muted">Based on {{ reviews.length }} reviews</p>
+              <div class="total-rating">{{ formattedAverage }} / 5</div>
+              <p class="text-muted">Based on {{ totalReviews }} reviews</p>
             </div>
           </div>
 
         </div>
 
         <div class="action-bar">
-          <button class="btn-book">Book Now</button>
+          <router-link :to="`/car-booking/${$route.params.id}`" class="btn-book" v-if="car.status == `Available`">Book Now </router-link>
           <router-link to="/cars" class="btn-back">
             Back to Cars
           </router-link>
@@ -117,13 +121,35 @@ export default {
       car: {},
       images: [],
       features: [],
+
+      // reviews data
       reviews: [],
+      avgRating: 0,
+      totalReviews: 0,
+
+      // add review
       rating: 0,
-      loading: false
+      reviewText: "",
+
+      loading: false,
+      loadingReviews: false
     };
   },
 
+  computed: {
+    formattedAverage() {
+      return this.totalReviews ? this.avgRating.toFixed(1) : "0.0";
+    },
+
+    ratingStars() {
+      return Math.round(this.avgRating);
+    }
+  },
+
   methods: {
+    // =====================
+    // FETCH CAR DETAILS
+    // =====================
     async fetchCar() {
       try {
         this.loading = true;
@@ -133,28 +159,80 @@ export default {
 
         const carData = res.data.data;
 
-        // MAIN CAR DATA
         this.car = carData;
-
-        // IMAGES (Cloudinary)
-        this.images = carData.images.map(img => img.url);
-
-        // FEATURES
-        this.features = carData.features.map(f => ({
-          icon: "bi bi-check-circle-fill",
-          text: f
-        }));
+        this.images = carData.images?.map(img => img.url) || [];
+        this.features =
+          carData.features?.map(f => ({
+            icon: "bi bi-check-circle-fill",
+            text: f
+          })) || [];
 
       } catch (err) {
         console.error("Failed to load car", err);
       } finally {
         this.loading = false;
       }
+    },
+
+    // =====================
+    // FETCH REVIEWS + AVG
+    // =====================
+    async fetchReviews() {
+      try {
+        this.loadingReviews = true;
+
+        const carId = this.$route.params.id;
+        const res = await api.get(`/reviews-summary/${carId}`);
+
+        this.reviews = res.data.data.reviews;
+        this.avgRating = res.data.data.averageRating;
+        this.totalReviews = res.data.data.totalReviews;
+
+      } catch (err) {
+        console.error("Failed to load reviews", err);
+      } finally {
+        this.loadingReviews = false;
+      }
+    },
+
+    // =====================
+    // SUBMIT REVIEW
+    // =====================
+    async submitReview() {
+      if (!this.rating || !this.reviewText.trim()) {
+        alert("Please give rating and review");
+        return;
+      }
+
+      try {
+        const payload = {
+          userId: this.$store.state.user.id,
+          carId: this.$route.params.id,
+          rating: this.rating,
+          text: this.reviewText
+        };
+
+        await api.post("/addcarreview", payload);
+
+        // reset form
+        this.rating = 0;
+        this.reviewText = "";
+
+        // refresh reviews + average
+        await this.fetchReviews();
+
+        alert("Review submitted ✅");
+
+      } catch (err) {
+        console.error("Review failed", err);
+        alert("Failed to submit review");
+      }
     }
   },
 
   mounted() {
     this.fetchCar();
+    this.fetchReviews();
 
     this.$nextTick(() => {
       if (window.bootstrap) {
@@ -166,6 +244,8 @@ export default {
   }
 };
 </script>
+
+
 
 <style scoped>
 .page-wrapper {
@@ -187,7 +267,7 @@ export default {
   max-width: 1200px;
   margin: 0 auto;
   /* CENTER */
-  background: #eef5ff;
+  background: #ffffffc8;
   border-radius: 30px;
   overflow: hidden;
 
@@ -198,12 +278,12 @@ export default {
 
 .carousel-item img {
   height: 480px;
-  width: 100%;
-  object-fit: cover;
+  width: 60%;
 }
 
 .carousel-indicators {
   bottom: 20px;
+  right: 50%; 
 }
 
 .carousel-indicators [data-bs-target] {
@@ -225,7 +305,7 @@ export default {
 .glass-overlay {
   position: absolute;
   top: 50%;
-  left: 40px;
+  right: 40px;
   transform: translateY(-50%);
   padding: 30px 42px;
   border-radius: 30px;
@@ -336,6 +416,12 @@ export default {
   font-size: 22px;
   margin-right: 4px;
   cursor: pointer;
+}
+
+.review-box{
+  height: 300px;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 .user-review {

@@ -42,7 +42,7 @@
 
     <div class="right">
       <div class="admin-profile">
-        <span>Admin</span>
+        <span>{{ this.$store.state.user.name.toUpperCase() }}</span>
         <!-- <img src="https://i.pravatar.cc/100"  alt="Admin" /> -->
         <img v-if="$store.state.user" :src="$store.state.user.dp || 'https://i.pravatar.cc/100'">
 

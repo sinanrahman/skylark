@@ -4,9 +4,11 @@ const carReviewSchema = new mongoose.Schema({
     id:String,
     userid:String,
     rating:Number,
-    head:String,
+    // head:String,
     text:String,
     carid:String,
-});
+},
+  { timestamps: true }
+);
 
 module.exports =  mongoose.model('carReview', carReviewSchema);
