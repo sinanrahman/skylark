@@ -1,4 +1,6 @@
-import { createApp } from 'vue'
+
+
+  import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './stores/store'
@@ -8,6 +10,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import * as bootstrap from 'bootstrap'  
 
 window.bootstrap = bootstrap            
+// import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+// import 'bootstrap-icons/font/bootstrap-icons.css'
 
 createApp(App)
   .use(store)

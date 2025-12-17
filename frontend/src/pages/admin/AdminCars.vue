@@ -5,12 +5,8 @@
       <h4>Cars Management</h4>
 
       <div class="d-flex gap-3">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Search cars..."
-          style="max-width: 220px;"
-        />
+        <input type="text" class="form-control" placeholder="Search cars..." style="max-width: 220px;"
+          v-model="search" />
       </div>
     </div>
 
@@ -30,58 +26,41 @@
             </tr>
           </thead>
 
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td><strong>BMW X5</strong></td>
-              <td>SUV</td>
-              <td>Automatic</td>
-              <td>Diesel</td>
-              <td>₹6,000</td>
+          <tbody v-if="!loading">
+            <tr v-for="(car, index) in filteredCars" :key="car._id">
+              <td>{{ index + 1 }}</td>
+              <td><strong>{{ car.name }}</strong></td>
+              <td>{{ car.category }}</td>
+              <td>{{ car.transmission }}</td>
+              <td>{{ car.fuel }}</td>
+              <td>₹{{ car.price }}</td>
               <td>
-                <span class="badge-status available">Available</span>
+                <span class="badge-status" :class="car.status.toLowerCase()">
+                  {{ car.status }}
+                </span>
               </td>
               <td class="text-center action-btns">
-                <button class="btn btn-view"><i class="bi bi-eye"></i></button>
-                <button class="btn btn-edit"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-delete"><i class="bi bi-trash"></i></button>
-              </td>
-            </tr>
+                <button class="btn btn-view">
+                  <i class="bi bi-eye"></i>
+                </button>
 
-            <tr>
-              <td>2</td>
-              <td><strong>Audi A4</strong></td>
-              <td>Sedan</td>
-              <td>Manual</td>
-              <td>Petrol</td>
-              <td>₹5,000</td>
-              <td>
-                <span class="badge-status booked">Booked</span>
-              </td>
-              <td class="text-center action-btns">
-                <button class="btn btn-view"><i class="bi bi-eye"></i></button>
-                <button class="btn btn-edit"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-delete"><i class="bi bi-trash"></i></button>
-              </td>
-            </tr>
+                <button class="btn btn-edit">
+                  <i class="bi bi-pencil"></i>
+                </button>
 
-            <tr>
-              <td>3</td>
-              <td><strong>Hyundai i20</strong></td>
-              <td>Hatchback</td>
-              <td>Manual</td>
-              <td>Petrol</td>
-              <td>₹2,200</td>
-              <td>
-                <span class="badge-status maintenance">Maintenance</span>
-              </td>
-              <td class="text-center action-btns">
-                <button class="btn btn-view"><i class="bi bi-eye"></i></button>
-                <button class="btn btn-edit"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-delete"><i class="bi bi-trash"></i></button>
+                <button class="btn btn-delete" @click="deleteCar(car._id)">
+                  <i class="bi bi-trash"></i>
+                </button>
               </td>
             </tr>
           </tbody>
+
+          <tbody v-else>
+            <tr>
+              <td colspan="8" class="text-center">Loading cars...</td>
+            </tr>
+          </tbody>
+
 
         </table>
       </div>
@@ -90,9 +69,61 @@
   </div>
 </template>
 
-<script setup>
+<script>
+import api from '@/services/api';
 
+export default {
+  name: "CarsManagement",
+
+  data() {
+    return {
+      cars: [],
+      search: "",
+      loading: false
+    };
+  },
+
+  computed: {
+    filteredCars() {
+      if (!this.search) return this.cars;
+
+      return this.cars.filter(car =>
+        car.name.toLowerCase().includes(this.search.toLowerCase())
+      );
+    }
+  },
+
+  methods: {
+    async fetchCars() {
+      try {
+        this.loading = true;
+        const res = await api.get("/cars");
+        this.cars = res.data.data;
+      } catch (error) {
+        console.error("Failed to fetch cars", error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async deleteCar(id) {
+      if (!confirm("Are you sure you want to delete this car?")) return;
+
+      try {
+        await api.delete(`/cars/${id}`);
+        this.cars = this.cars.filter(car => car._id !== id);
+      } catch (error) {
+        console.error("Delete failed", error);
+      }
+    }
+  },
+
+  mounted() {
+    this.fetchCars();
+  }
+};
 </script>
+
 
 <style scoped>
 body {

@@ -6,64 +6,65 @@
         <h4>Available Cars</h4>
 
         <div class="search-box">
-          <input type="text" placeholder="Search your car..." />
+          <input
+            type="text"
+            placeholder="Search your car..."
+            v-model="search"
+          />
         </div>
       </div>
 
       <div class="row g-4">
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-          <div class="car-card">
-            <div class="car-image">
-              <img src="/img/home/benz.jpg" alt="BMW X5" />
-            </div>
-
-            <div class="car-body">
-              <h5 class="car-title">BENZ X5</h5>
-              <span class="car-type">SUV • Automatic</span>
-
-              <div class="car-info">
-                <span class="price">₹6,000 / day</span>
-                <span class="badge-status available">Available</span>
-              </div>
-
-              <div class="car-actions">
-                <router-link to="/car/:id" class="btn btn-view">
-  <i class="bi bi-eye"></i> View
-</router-link>
-
-               <RouterLink to="/car-booking/1" class="btn btn-book">
-  <i class="bi bi-calendar-check"></i> Book
-</RouterLink>
-
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
+        <div
+          v-for="car in filteredCars"
+          :key="car._id"
+          class="col-xl-3 col-lg-4 col-md-6"
+        >
           <div class="car-card">
             <div class="car-image">
               <img
-                src="https://images.unsplash.com/photo-1503376780353-7e6692767b70"
-                alt="Audi A4"
+                :src="car.images?.[0]?.url || fallbackImage"
+                :alt="car.name"
               />
             </div>
 
             <div class="car-body">
-              <h5 class="car-title">Audi A4</h5>
-              <span class="car-type">Sedan • Manual</span>
+              <h5 class="car-title">{{ car.name }}</h5>
+              <span class="car-type">
+                {{ car.category }} • {{ car.transmission }}
+              </span>
 
               <div class="car-info">
-                <span class="price">₹5,000 / day</span>
-                <span class="badge-status booked">Booked</span>
+                <span class="price">₹{{ car.price }} / day</span>
+                <span
+                  class="badge-status"
+                  :class="car.status.toLowerCase()"
+                >
+                  {{ car.status }}
+                </span>
               </div>
 
               <div class="car-actions">
-                <button class="btn btn-view">
+                <RouterLink
+                  :to="`/car/${car._id}`"
+                  class="btn btn-view"
+                >
                   <i class="bi bi-eye"></i> View
-                </button>
-                <button class="btn btn-book" disabled>
+                </RouterLink>
+
+                <RouterLink
+                  v-if="car.status === 'Available'"
+                  :to="`/car-booking/${car._id}`"
+                  class="btn btn-book"
+                >
+                  <i class="bi bi-calendar-check"></i> Book
+                </RouterLink>
+
+                <button
+                  v-else
+                  class="btn btn-book"
+                  disabled
+                >
                   <i class="bi bi-lock"></i> Unavailable
                 </button>
               </div>
@@ -71,16 +72,59 @@
           </div>
         </div>
 
+        <div v-if="!loading && filteredCars.length === 0" class="text-center text-white">
+          No cars found
+        </div>
+
       </div>
     </div>
   </div>
 </template>
-
 <script>
+import api from "@/services/api";
+
 export default {
   name: "Cars",
+
+  data() {
+    return {
+      cars: [],
+      search: "",
+      loading: false,
+      fallbackImage: "/img/home/benz.jpg"
+    };
+  },
+
+  computed: {
+    filteredCars() {
+      if (!this.search) return this.cars;
+
+      return this.cars.filter(car =>
+        car.name.toLowerCase().includes(this.search.toLowerCase())
+      );
+    }
+  },
+
+  methods: {
+    async fetchCars() {
+      try {
+        this.loading = true;
+        const res = await api.get("/cars");
+        this.cars = res.data.data;
+      } catch (error) {
+        console.error("Failed to load cars", error);
+      } finally {
+        this.loading = false;
+      }
+    }
+  },
+
+  mounted() {
+    this.fetchCars();
+  }
 };
 </script>
+
 
 <style scoped>
 .page-root {

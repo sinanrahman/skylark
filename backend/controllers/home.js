@@ -1,5 +1,6 @@
 const User = require('../models/User')
 const Booking = require('../models/Booking');
+const Car = require('../models/Car')
 
 exports.GetHomePage = async(req,res) =>{
     try{
@@ -125,3 +126,17 @@ exports.CreateBooking = async (req, res) => {
     });
   }
 };
+exports.GetCar = async (req,res) =>{
+    try{
+       const cars = await Car.findOne({_id:req.params.id});
+       
+           res.status(200).json({
+             success: true,
+             count: cars.length,
+             data: cars
+           })
+    }catch(e){
+        console.log('error while rendering getcar')
+        console.log(e)
+    }
+}
