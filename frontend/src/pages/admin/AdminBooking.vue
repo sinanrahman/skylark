@@ -1,6 +1,7 @@
 <template>
   <div class="container-fluid px-4">
 
+    <!-- Header -->
     <div class="page-header d-flex justify-content-between align-items-center">
       <div>
         <h4>Booking Details</h4>
@@ -8,6 +9,7 @@
       </div>
     </div>
 
+    <!-- Table -->
     <div class="table-box">
       <div class="table-responsive">
         <table class="table table-hover align-middle">
@@ -25,69 +27,37 @@
               <th class="text-center">Action</th>
             </tr>
           </thead>
+
           <tbody>
-
-            <tr>
-              <td>1</td>
-              <td>#BK1023</td>
-              <td>Rahul Sharma</td>
-              <td>BMW X5</td>
-              <td>12 Jan 2025</td>
-              <td>15 Jan 2025</td>
-              <td>3</td>
-              <td>₹18,000</td>
-              <td><span class="status confirmed">Confirmed</span></td>
-              <td class="text-center">
-                <button class="action-btn" title="View">
-                  <i class="bi bi-eye"></i>
-                </button>
+            <!-- Loading -->
+            <tr v-if="loading">
+              <td colspan="10" class="text-center py-4">
+                Loading bookings...
               </td>
             </tr>
 
-            <tr>
-              <td>2</td>
-              <td>#BK1024</td>
-              <td>Amit Verma</td>
-              <td>Audi A4</td>
-              <td>18 Jan 2025</td>
-              <td>20 Jan 2025</td>
-              <td>2</td>
-              <td>₹10,000</td>
-              <td><span class="status pending">Pending</span></td>
-              <td class="text-center">
-                <button class="action-btn" title="View">
-                  <i class="bi bi-eye"></i>
-                </button>
+            <!-- Empty -->
+            <tr v-else-if="bookings.length === 0">
+              <td colspan="10" class="text-center py-4">
+                No bookings found
               </td>
             </tr>
 
-            <tr>
-              <td>3</td>
-              <td>#BK1025</td>
-              <td>Sneha Patel</td>
-              <td>Mercedes C-Class</td>
-              <td>05 Jan 2025</td>
-              <td>08 Jan 2025</td>
-              <td>3</td>
-              <td>₹21,000</td>
-              <td><span class="status completed">Completed</span></td>
-              <td class="text-center">
-                <button class="action-btn" title="View">
-                  <i class="bi bi-eye"></i>
-                </button>
-              </td>
-            </tr>
+            <!-- Data -->
+            <tr v-else v-for="(booking, index) in bookings" :key="booking._id">
+              <td>{{ index + 1 }}</td>
+              <td>#{{ booking.bookingId }}</td>
+              <td>{{ booking.userId }}</td>
+              <td>{{ booking.carId }}</td>
+              <td>{{ formatDate(booking.pickupDate) }}</td>
+              <td>{{ formatDate(booking.returnDate) }}</td>
+              <td>{{ booking.totalDays }}</td>
+              <td>₹{{ booking.totalAmount }}</td>
 
-            <tr>
-              <td>4</td>
-              <td>#BK1026</td>
-              <td>Karan Mehta</td>
-              <td>Hyundai Creta</td>
-              <td>10 Jan 2025</td>
-              <td>12 Jan 2025</td>
-              <td>2</td>
-              <td>₹8,000</td>
-              <td><span class="status cancelled">Cancelled</span></td>
+              <td>
+                <span class="status confirmed">Confirmed</span>
+              </td>
+
               <td class="text-center">
                 <button class="action-btn" title="View">
                   <i class="bi bi-eye"></i>
@@ -103,12 +73,49 @@
   </div>
 </template>
 
-<style scoped>
-body {
-  font-family: 'Poppins', sans-serif;
-  background: #f5f7fb;
-}
+<script>
+import api from "@/services/api";
 
+export default {
+  name: "BookingDetails",
+
+  data() {
+    return {
+      bookings: [],
+      loading: false
+    };
+  },
+
+  mounted() {
+    this.fetchBookings();
+  },
+
+  methods: {
+    async fetchBookings() {
+      try {
+        this.loading = true;
+        const res = await api.get("/bookings");
+        this.bookings = res.data.bookings || [];
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    formatDate(date) {
+      if (!date) return "-";
+      return new Date(date).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
+    }
+  }
+};
+</script>
+
+<style scoped>
 .page-header {
   background: #fff;
   padding: 25px 30px;
@@ -148,27 +155,11 @@ table td {
   border-radius: 20px;
   font-size: 13px;
   font-weight: 600;
-  display: inline-block;
-}
-
-.status.pending {
-  background: rgba(255,193,7,0.15);
-  color: #ffc107;
 }
 
 .status.confirmed {
   background: rgba(32,201,151,0.15);
   color: #20c997;
-}
-
-.status.completed {
-  background: rgba(13,110,253,0.15);
-  color: #0d6efd;
-}
-
-.status.cancelled {
-  background: rgba(220,53,69,0.15);
-  color: #dc3545;
 }
 
 .action-btn {

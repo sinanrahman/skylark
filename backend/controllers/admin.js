@@ -1,6 +1,6 @@
 const uploadImage = require('../utils/uploadImage')
 const Car = require('../models/Car')
-
+const User = require('../models/User')
 
 exports.Dashboard = async (req, res) => {
   try {
@@ -19,10 +19,26 @@ exports.Dashboard = async (req, res) => {
   }
 }
 
+exports.GetAllUsers = async (req, res) => {
+  try {
+    const users = await User.find()
+      .select('-password -otp') // 🔒 hide sensitive data
+      .sort({ createdAt: -1 })  // newest first
 
+    return res.status(200).json({
+      success: true,
+      count: users.length,
+      users
+    })
 
-
-
+  } catch (error) {
+    console.error('GetAllUsers error:', error)
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch users'
+    })
+  }
+}
 
 exports.AddCar = async (req, res) => {
   try {

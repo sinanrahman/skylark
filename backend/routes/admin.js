@@ -1,5 +1,5 @@
 const express = require('express')
-const { Dashboard , AddCar, GetAllCars, DeleteCar } = require('../controllers/admin')
+const { Dashboard , AddCar, GetAllCars, DeleteCar, GetAllUsers } = require('../controllers/admin')
 const router = express.Router()
 
 
@@ -16,4 +16,8 @@ router
     .route('/deletecar/:id')
     .get(DeleteCar)
     
+router
+    .route('/users')
+    .get(GetAllUsers)
+
 module.exports = router

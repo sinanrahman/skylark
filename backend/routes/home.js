@@ -1,5 +1,5 @@
 const express = require('express')
-const { GetHomePage, GetCarsPage, GetContactPage, GetAboutPage, GetCar } = require('../controllers/home')
+const { GetHomePage, GetCarsPage, GetContactPage, GetAboutPage, GetCar, GetBookingsPage, CreateBooking } = require('../controllers/home')
 const { route } = require('./admin')
 const router = express.Router()
 
@@ -19,5 +19,10 @@ router
 router
     .route('/getcar/:id')
     .get(GetCar)
+
+router
+   .route('/bookings')
+   .get(GetBookingsPage)
+   .post(CreateBooking)    
 
 module.exports = router

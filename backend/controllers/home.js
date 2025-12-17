@@ -1,5 +1,6 @@
-const User = require('../models/User')
-const Car = require('../models/Car')
+const User = require('../models/User');
+const Car = require('../models/Car');
+const Booking = require('../models/Booking');
 
 exports.GetHomePage = async(req,res) =>{
     try{
@@ -60,3 +61,81 @@ exports.GetCar = async (req,res) =>{
         console.log(e)
     }
 }
+
+exports.GetBookingsPage = async (req, res) => {
+  try {
+    const bookings = await Booking.find();
+
+    return res.status(200).json({
+      message: 'Bookings fetched',
+      bookings
+    });
+  } catch (e) {
+    console.error('GetBookingsPage error:', e);
+    return res.status(500).json({
+      message: 'Failed to fetch bookings'
+    });
+  }
+};
+
+exports.CreateBooking = async (req, res) => {
+  try {
+    console.log('Booking request body:', req.body);
+
+    const {
+      userId,
+      carId,
+      pickupDate,
+      returnDate,
+      pickupLocation,
+      dropLocation,
+      driverOption,
+      paymentMethod,
+      totalDays,
+      totalAmount,
+      pricePerDay
+    } = req.body;
+
+    if (
+      !userId ||
+      !carId ||
+      !pickupDate ||
+      !returnDate ||
+      !pickupLocation ||
+      !dropLocation ||
+      !driverOption ||
+      !paymentMethod ||
+      !totalDays ||
+      !totalAmount ||
+      !pricePerDay
+    ) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const booking = await Booking.create({
+      bookingId: Date.now().toString(), 
+      userId,
+      carId,
+      pickupDate,
+      returnDate,
+      pickupLocation,
+      dropLocation,
+      driverOption,
+      paymentMethod,
+      totalDays,
+      totalAmount,
+      pricePerDay
+    });
+
+    return res.status(201).json({
+      message: 'Booking created successfully',
+      booking
+    });
+
+  } catch (error) {
+    console.error('CreateBooking error:', error);
+    return res.status(500).json({
+      message: 'Failed to create booking'
+    });
+  }
+};
