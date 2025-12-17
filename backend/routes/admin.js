@@ -1,6 +1,7 @@
 const express = require('express')
-const { Dashboard , AddCar, GetAllCars, DeleteCar, GetAllUsers } = require('../controllers/admin')
+const { Dashboard , AddCar, GetAllCars, DeleteCar, GetAllUsers ,UpdateUser,DeleteUser } = require('../controllers/admin')
 const router = express.Router()
+
 
 
 router
@@ -11,7 +12,7 @@ router
     .post(AddCar)
 router
     .route('/cars')
-    .get(GetAllCars) // change this route and controller form admin to home
+    .get(GetAllCars) 
 router
     .route('/deletecar/:id')
     .get(DeleteCar)
@@ -19,5 +20,7 @@ router
 router
     .route('/users')
     .get(GetAllUsers)
+router.put('/users/:id', UpdateUser)
+router.delete('/users/:id', DeleteUser)
 
 module.exports = router

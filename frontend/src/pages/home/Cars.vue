@@ -1,19 +1,98 @@
 <template>
-  <div class="page-root">
+  <div class="page-root" @click="closeFilters">
     <div class="container-fluid px-4">
 
+      <!-- Header -->
       <div class="page-header">
         <h4>Available Cars</h4>
 
-        <div class="search-box">
+        <div class="search-actions" @click.stop>
+          <!-- SEARCH -->
           <input
             type="text"
+            class="search-input"
             placeholder="Search your car..."
             v-model="search"
           />
+
+          <!-- FILTER -->
+          <div class="filter-dropdown">
+            <button class="filter-btn" @click="toggleFilters">
+              <i class="bi bi-sliders"></i> Filters
+            </button>
+
+            <transition name="fade-slide">
+              <div v-if="showFilters" class="filter-menu">
+
+                <div class="filter-group">
+                  <label>Category</label>
+                  <select v-model="filters.category">
+                    <option value="">All</option>
+                    <option v-for="c in categories" :key="c" :value="c">
+                      {{ c }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="filter-group">
+                  <label>Transmission</label>
+                  <select v-model="filters.transmission">
+                    <option value="">All</option>
+                    <option value="manual">Manual</option>
+                    <option value="automatic">Automatic</option>
+                  </select>
+                </div>
+
+                <div class="filter-group">
+                  <label>Fuel</label>
+                  <select v-model="filters.fuel">
+                    <option value="">All</option>
+                    <option>Petrol</option>
+                    <option>Diesel</option>
+                    <option>Electric</option>
+                    <option>Hybrid</option>
+                  </select>
+                </div>
+
+                <div class="filter-group">
+                  <label>Seats</label>
+                  <select v-model="filters.seats">
+                    <option value="">All</option>
+                    <option v-for="s in seatOptions" :key="s" :value="s">
+                      {{ s }} Seats
+                    </option>
+                  </select>
+                </div>
+
+                <div class="filter-group">
+                  <label>Status</label>
+                  <select v-model="filters.status">
+                    <option value="">All</option>
+                    <option>Available</option>
+                    <option>Booked</option>
+                    <option>Maintenance</option>
+                  </select>
+                </div>
+
+                <div class="filter-group">
+                  <label>Max Price (₹)</label>
+                  <input
+                    type="range"
+                    min="500"
+                    max="10000"
+                    step="500"
+                    v-model.number="filters.price"
+                  />
+                  <div class="price-value">₹{{ filters.price }}</div>
+                </div>
+
+              </div>
+            </transition>
+          </div>
         </div>
       </div>
 
+      <!-- CARS -->
       <div class="row g-4">
         <div
           v-for="car in filteredCars"
@@ -22,10 +101,7 @@
         >
           <div class="car-card">
             <div class="car-image">
-              <img
-                :src="car.images?.[0]?.url || fallbackImage"
-                :alt="car.name"
-              />
+              <img :src="car.images?.[0]?.url || fallbackImage" />
             </div>
 
             <div class="car-body">
@@ -36,20 +112,14 @@
 
               <div class="car-info">
                 <span class="price">₹{{ car.price }} / day</span>
-                <span
-                  class="badge-status"
-                  :class="car.status.toLowerCase()"
-                >
+                <span class="badge-status" :class="car.status.toLowerCase()">
                   {{ car.status }}
                 </span>
               </div>
 
               <div class="car-actions">
-                <RouterLink
-                  :to="`/car/${car._id}`"
-                  class="btn btn-view"
-                >
-                  <i class="bi bi-eye"></i> View
+                <RouterLink :to="`/car/${car._id}`" class="btn btn-view">
+                  View
                 </RouterLink>
 
                 <RouterLink
@@ -57,29 +127,28 @@
                   :to="`/car-booking/${car._id}`"
                   class="btn btn-book"
                 >
-                  <i class="bi bi-calendar-check"></i> Book
+                  Book
                 </RouterLink>
 
-                <button
-                  v-else
-                  class="btn btn-book"
-                  disabled
-                >
-                  <i class="bi bi-lock"></i> Unavailable
+                <button v-else class="btn btn-book" disabled>
+                  Unavailable
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        <div v-if="!loading && filteredCars.length === 0" class="text-center text-white">
+        <div
+          v-if="!loading && filteredCars.length === 0"
+          class="text-center text-white"
+        >
           No cars found
         </div>
-
       </div>
     </div>
   </div>
 </template>
+
 <script>
 import api from "@/services/api";
 
@@ -91,31 +160,54 @@ export default {
       cars: [],
       search: "",
       loading: false,
-      fallbackImage: "/img/home/benz.jpg"
+      showFilters: false,
+      fallbackImage: "/img/home/benz.jpg",
+
+      filters: {
+        category: "",
+        transmission: "",
+        fuel: "",
+        seats: "",
+        status: "",
+        price: 10000
+      }
     };
   },
 
   computed: {
+    categories() {
+      return [...new Set(this.cars.map(c => c.category).filter(Boolean))];
+    },
+    seatOptions() {
+      return [...new Set(this.cars.map(c => c.seats).filter(Boolean))];
+    },
     filteredCars() {
-      if (!this.search) return this.cars;
-
-      return this.cars.filter(car =>
-        car.name.toLowerCase().includes(this.search.toLowerCase())
-      );
+      return this.cars.filter(car => {
+        return (
+          (!this.search || car.name.toLowerCase().includes(this.search.toLowerCase())) &&
+          (!this.filters.category || car.category === this.filters.category) &&
+          (!this.filters.transmission || car.transmission === this.filters.transmission) &&
+          (!this.filters.fuel || car.fuel === this.filters.fuel) &&
+          (!this.filters.seats || car.seats === Number(this.filters.seats)) &&
+          (!this.filters.status || car.status === this.filters.status) &&
+          car.price <= this.filters.price
+        );
+      });
     }
   },
 
   methods: {
+    toggleFilters() {
+      this.showFilters = !this.showFilters;
+    },
+    closeFilters() {
+      this.showFilters = false;
+    },
     async fetchCars() {
-      try {
-        this.loading = true;
-        const res = await api.get("/cars");
-        this.cars = res.data.data;
-      } catch (error) {
-        console.error("Failed to load cars", error);
-      } finally {
-        this.loading = false;
-      }
+      this.loading = true;
+      const res = await api.get("/cars");
+      this.cars = res.data.data;
+      this.loading = false;
     }
   },
 
@@ -124,6 +216,8 @@ export default {
   }
 };
 </script>
+
+
 
 
 <style scoped>
@@ -263,4 +357,89 @@ export default {
     align-items: flex-start;
   }
 }
+.search-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.search-input {
+  border-radius: 30px;
+  padding: 10px 18px;
+  border: none;
+  min-width: 220px;
+}
+
+.filter-dropdown {
+  position: relative;
+}
+
+.filter-btn {
+  background: #ffffff;
+  color: #0d6efd;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.filter-menu {
+  position: absolute;
+  right: 0;
+  top: 115%;
+  width: 280px;
+  background: #fff;
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.filter-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.filter-group select,
+.filter-group input[type="range"] {
+  padding: 9px 14px;
+  border-radius: 18px;
+  border: 1px solid #ced4da;
+  font-size: 14px;
+}
+
+.price-value {
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0d6efd;
+}
+
+/* TRANSITION */
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.25s ease;
+}
+
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+
+
 </style>

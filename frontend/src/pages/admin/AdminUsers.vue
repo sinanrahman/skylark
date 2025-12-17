@@ -21,8 +21,6 @@
               <th>Email</th>
               <th>Phone</th>
               <th>Role</th>
-              <th>Status</th>
-              <!-- <th>Joined On</th> -->
               <th class="text-center">Action</th>
             </tr>
           </thead>
@@ -41,23 +39,32 @@
                 </span>
               </td>
 
-              <td>
-                <span class="status active">Active</span>
-              </td>
-
               <!-- <td>
-                {{ user.createdAt ? formatDate(user.createdAt) : '—' }}
+                <span
+                  class="status"
+                  :class="user.isBlocked ? 'blocked' : 'active'"
+                >
+                  {{ user.isBlocked ? 'Blocked' : 'Active' }}
+                </span>
               </td> -->
 
               <td class="text-center">
-                <button class="action-btn" @click="openUserModal(user)">
+                <button class="action-btn view" @click="openUserModal(user)">
                   <i class="bi bi-eye"></i>
+                </button>
+
+                <button class="action-btn edit" @click="openEditModal(user)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+
+                <button class="action-btn delete" @click="openDeleteModal(user)">
+                  <i class="bi bi-trash"></i>
                 </button>
               </td>
             </tr>
 
             <tr v-if="users.length === 0">
-              <td colspan="9" class="text-center text-muted py-4">
+              <td colspan="8" class="text-center text-muted py-4">
                 No users found
               </td>
             </tr>
@@ -70,7 +77,6 @@
     <div class="modal fade" id="userDetailsModal" tabindex="-1">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
-
           <div class="modal-header">
             <h5 class="modal-title">User Details</h5>
             <button class="btn-close" data-bs-dismiss="modal"></button>
@@ -80,32 +86,24 @@
             <div class="row g-3">
               <div class="col-md-6">
                 <strong>User ID</strong>
-                <p>
-                  #{{ selectedUser.id || selectedUser._id.slice(-6) }}
-                </p>
+                <p>#{{ selectedUser.id || selectedUser._id.slice(-6) }}</p>
               </div>
-
-
               <div class="col-md-6">
                 <strong>Name</strong>
                 <p>{{ selectedUser.name }}</p>
               </div>
-
               <div class="col-md-6">
                 <strong>Email</strong>
                 <p>{{ selectedUser.mail }}</p>
               </div>
-
               <div class="col-md-6">
                 <strong>Phone</strong>
                 <p>{{ selectedUser.phone || '—' }}</p>
               </div>
-
               <div class="col-md-6">
                 <strong>Role</strong>
                 <p class="text-capitalize">{{ selectedUser.role }}</p>
               </div>
-
               <div class="col-md-6">
                 <strong>Joined On</strong>
                 <p>{{ formatDate(selectedUser.createdAt) }}</p>
@@ -116,6 +114,78 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" data-bs-dismiss="modal">
               Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDIT USER MODAL -->
+    <div class="modal fade" id="editUserModal" tabindex="-1">
+      <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Update User</h5>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body" v-if="selectedUser">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input class="form-control" v-model="selectedUser.name" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input class="form-control" disabled v-model="selectedUser.mail" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Role</label>
+              <select class="form-select" v-model="selectedUser.role">
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button class="btn btn-primary" @click="updateUser">
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DELETE CONFIRM MODAL -->
+    <div class="modal fade" id="deleteUserModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content delete-modal">
+
+          <div class="modal-header border-0">
+            <h5 class="modal-title text-danger">Delete User</h5>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body text-center">
+            <p class="mb-1">
+              Are you sure you want to delete
+              <strong>{{ selectedUser?.name }}</strong>?
+            </p>
+            <small class="text-muted">This action cannot be undone.</small>
+          </div>
+
+          <div class="modal-footer border-0 justify-content-center">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button class="btn btn-danger" @click="confirmDelete">
+              Delete
             </button>
           </div>
 
@@ -139,50 +209,68 @@ export default {
     }
   },
 
+  mounted() {
+    this.fetchAllUsers()
+  },
+
   methods: {
     async fetchAllUsers() {
       const res = await api.get('/users')
       this.users = res.data.users
     },
 
-    formatDate(date) {
-      return new Date(date).toLocaleDateString('en-IN')
-    },
-
     openUserModal(user) {
       this.selectedUser = user
+      window.bootstrap.Modal.getOrCreateInstance(
+        document.getElementById('userDetailsModal')
+      ).show()
+    },
 
-      const modalEl = document.getElementById('userDetailsModal')
-      const modal = window.bootstrap.Modal.getOrCreateInstance(modalEl)
-      modal.show()
+    openEditModal(user) {
+      this.selectedUser = { ...user }
+      new window.bootstrap.Modal(
+        document.getElementById('editUserModal')
+      ).show()
+    },
+
+    openDeleteModal(user) {
+      this.selectedUser = user
+      new window.bootstrap.Modal(
+        document.getElementById('deleteUserModal')
+      ).show()
+    },
+
+    async updateUser() {
+      await api.put(`/users/${this.selectedUser._id}`, this.selectedUser)
+      this.fetchAllUsers()
+      window.bootstrap.Modal.getInstance(
+        document.getElementById('editUserModal')
+      ).hide()
+    },
+
+
+    async confirmDelete() {
+      await api.delete(`/users/${this.selectedUser._id}`)
+      this.fetchAllUsers()
+      window.bootstrap.Modal.getInstance(
+        document.getElementById('deleteUserModal')
+      ).hide()
+    },
+
+    formatDate(date) {
+      return new Date(date).toLocaleDateString('en-IN')
     }
-  },
-
-  mounted() {
-    this.fetchAllUsers()
   }
 }
 </script>
 
-
-
 <style scoped>
-body {
-  font-family: 'Poppins', sans-serif;
-  background: #f5f7fb;
-}
-
 .page-header {
   background: #fff;
   padding: 25px 30px;
   border-radius: 18px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   margin-bottom: 25px;
-}
-
-.page-header h4 {
-  font-weight: 700;
-  color: #0a2540;
 }
 
 .table-box {
@@ -192,38 +280,11 @@ body {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
-
-.table-responsive {
-  overflow-x: auto;
-  width: 100%;
-}
-
-/* 
-table {
-  width: 100%;
-  table-layout: fixed;
-} */
-
-table th {
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #0a2540;
-  background: #f1f4f9;
-}
-
-table td {
-  vertical-align: middle;
-  font-weight: 500;
-  color: #333;
-}
-
 .role {
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 13px;
   font-weight: 600;
-  display: inline-block;
 }
 
 .role.user {
@@ -241,7 +302,6 @@ table td {
   border-radius: 20px;
   font-size: 13px;
   font-weight: 600;
-  display: inline-block;
 }
 
 .status.active {
@@ -258,11 +318,28 @@ table td {
   border: none;
   background: transparent;
   font-size: 18px;
-  color: #0a2540;
+  margin: 0 6px;
   cursor: pointer;
 }
 
+.action-btn.view { color: #0d6efd; }
+.action-btn.edit { color: #20c997; }
+.action-btn.block { color: #ffc107; }
+.action-btn.delete { color: #dc3545; }
+
 .action-btn:hover {
-  color: #00bfff;
+  transform: scale(1.1);
+}
+
+.modal-content {
+  border-radius: 20px;
+}
+
+.delete-modal {
+  padding: 10px;
+}
+
+.form-label {
+  font-weight: 600;
 }
 </style>

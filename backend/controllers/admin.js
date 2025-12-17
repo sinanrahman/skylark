@@ -40,6 +40,72 @@ exports.GetAllUsers = async (req, res) => {
   }
 }
 
+
+exports.UpdateUser = async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      {
+        name: req.body.name,
+        role: req.body.role,
+      },
+      { new: true, runValidators: true }
+    ).select('-password -otp')
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully',
+      user: updatedUser
+    })
+
+  } catch (error) {
+    console.error('UpdateUser error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update user'
+    })
+  }
+}
+/**
+ * DELETE USER
+ */
+exports.DeleteUser = async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const user = await User.findByIdAndDelete(id)
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully'
+    })
+
+  } catch (error) {
+    console.error('DeleteUser error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete user'
+    })
+  }
+}
+
+
 exports.AddCar = async (req, res) => {
   try {
     const images = req.files?.images;
