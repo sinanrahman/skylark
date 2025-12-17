@@ -34,6 +34,7 @@ import Navbar from '@/components/admin/Navbar.vue'
   padding:0;
   box-sizing:border-box;
   font-family:Inter,Segoe UI,sans-serif;
+  overflow: hidden;
 }
 
 html, body {

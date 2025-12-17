@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '@/stores/store'
 
 import MainLayout from '@/layouts/MainLayout.vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
@@ -24,7 +25,6 @@ import AdminReports from '@/pages/admin/AdminReports.vue'
 import AdminIssues from '@/pages/admin/AdminIssues.vue'
 
 const routes = [
-
   {
     path: '/auth',
     component: AuthLayout,
@@ -34,15 +34,12 @@ const routes = [
     ]
   },
 
-  {
-    path: '/signup',
-    component: Signup
-  },
-
+  { path: '/signup', component: Signup },
 
   {
     path: '/',
     component: MainLayout,
+    meta: { requiresAuth: true},
     children: [
       {
         path: '',
@@ -83,67 +80,64 @@ const routes = [
     ]
   },
 
- 
   {
     path: '/admin',
     component: AdminLayout,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, requiresAdmin: true },
     children: [
-      {
-        path: '',
-        name: 'AdminDashboard',
-        component: AdminDashboard,
-        meta: { showNavbar: true, showFooter: false }
-      },
-      {
-        path: 'cars',
-        name: 'AdminCars',
-        component: AdminCars,
-        meta: { showNavbar: true, showFooter: false }
-      },
-      {
-        path: 'add-cars',
-        name: 'AdminAddCars',
-        component: AdminAddCars,
-        meta: { showNavbar: true, showFooter: false }
-      },
-      {
-        path: 'bookings',
-        name: 'AdminBooking',
-        component: AdminBooking,
-        meta: { showNavbar: true, showFooter: false }
-      },
-      {
-        path: 'users',
-        name: 'AdminUsers',
-        component: AdminUsers,
-        meta: { showNavbar: true, showFooter: false }
-      },
-      {
-        path: 'reports',
-        name: 'AdminReports',
-        component: AdminReports,
-        meta: { showNavbar: true, showFooter: false }
-      },
-      {
-        path: 'issues',
-        name: 'AdminIssues',
-        component: AdminIssues,
-        meta: { showNavbar: true, showFooter: false }
-      }
+      { path: '', component: AdminDashboard },
+      { path: 'cars', component: AdminCars },
+      { path: 'add-cars', component: AdminAddCars },
+      { path: 'bookings', component: AdminBooking },
+      { path: 'users', component: AdminUsers },
+      { path: 'reports', component: AdminReports },
+      { path: 'issues', component: AdminIssues }
     ]
   }
-
 ]
 
-export default createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes
 })
 
+/* ================= ROUTER GUARD ================= */
+
+router.beforeEach(async (to, from, next) => {
+  try {
+    const requiresAuth = to.matched.some(
+      route => route.meta.requiresAuth
+    )
+    const requiresAdmin = to.matched.some(
+      route => route.meta.requiresAdmin
+    )
+
+    // restore user on refresh (ONLY if missing)
+    if (!store.state.user) {
+      await store.dispatch('fetchUser')
+    }
+
+    // user not logged in
+    if (requiresAuth && !store.getters.isLoggedIn) {
+      return next('/auth/login')
+    }
+
+    // user logged in but not admin
+    if (requiresAdmin && !store.getters.isAdmin) {
+      return next('/')
+    }
+
+    next()
+  } catch (err) {
+    console.error('Router auth error:', err)
+
+    // clear broken auth state
+    store.commit('CLEAR_USER')
+
+    // redirect to login
+    return next('/auth/login')
+  }
+})
 
 
-
-
-
-
+export default router

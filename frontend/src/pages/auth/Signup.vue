@@ -3,7 +3,8 @@
 
      <img src="/img/car.png" class="bg-car" />
 
-    <form @submit.prevent="submitRegister" class="login-card">
+    <!-- Glass Card -->
+    <form @submit.prevent="submitForm" class="login-card">
 
       <h2 class="text-center mb-4">Signup</h2>
 
@@ -42,12 +43,19 @@
         </div>
 
         <div class="form-floating mb-3">
-      <select id="role" class="form-select input-glass" name="role" required>
-        <option value="">Select role</option>
-        <option value="user">User</option>
-        <option value="admin">Admin</option>
-      </select>
-    </div>
+  <select
+    id="role"
+    class="form-select input-glass"
+    name="role"
+    v-model="role"
+    required
+  >
+    <option disabled value="">Select role</option>
+    <option value="user">User</option>
+    <option value="admin">Admin</option>
+  </select>
+</div>
+
 
         <div class="mb-3">
           <input
@@ -55,13 +63,13 @@
             id="profilePic"
             class="form-control custom-file input-glass"
             accept="image/*"
-            @change="previewImage"
+            @change="onImageChange"
           >
         </div>
 
   
         <div class="profile-pic-container">
-          <img :src="previewUrl" alt="">
+          <img :src="previewImg" alt="">
         </div>
 
         <button class="btn login-btn w-100 mt-4 mb-3">Signup</button>
@@ -81,8 +89,75 @@
 
 
 <script>
-
-</script>
+  import api from '@/services/api'
+  
+  export default {
+    data() {
+      return {
+        msg: '',
+        previewImg: '',
+        imageFile: null,
+  
+        name: '',
+        username: '',
+        email: '',
+        phone: '',
+        role: '',
+        password: '',
+        confirmPassword: ''
+      }
+    },
+  
+    methods: {
+      onImageChange(e) {
+        const file = e.target.files[0]
+        this.imageFile = file
+        this.previewImg = URL.createObjectURL(file)
+      },
+  
+      async submitForm() {
+        if (!this.name || !this.username || !this.email || !this.password) {
+          this.msg = 'All fields are required'
+          return
+        }
+  
+        if (this.password !== this.confirmPassword) {
+          this.msg = 'Passwords do not match!'
+          return
+        }
+  
+        try {
+          const formData = new FormData()
+          formData.append('photo', this.imageFile)
+          formData.append('name', this.name)
+          formData.append('username', this.username)
+          formData.append('email', this.email)
+          formData.append('phone', this.phone)
+          formData.append('role', this.role)
+          formData.append('password', this.password)
+          formData.append('confirmPassword', this.confirmPassword) // ✅ IMPORTANT
+  
+          const res = await api.post('/register', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+  
+          console.log(res.data)
+  
+          // ✅ redirect to login
+          this.$router.push('/auth/login')
+        } catch (err) {
+          this.msg =
+            err.response?.data?.message ||
+            'Registration failed'
+        }
+      }
+    }
+  }
+  </script>
+  
+  
 
 <style scoped>
 * {

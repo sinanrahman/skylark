@@ -108,7 +108,8 @@
       </div>
 
       <div class="action-bar">
-        <button class="btn-book">Book Now</button>
+        <router-link to="/car-booking/:id" class="btn-book">Book Now</router-link>
+        <!-- <button class="btn-book">Book Now</button> -->
        <router-link to="/cars" class="btn-back">
   Back to Cars
 </router-link>

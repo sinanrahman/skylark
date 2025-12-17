@@ -20,14 +20,18 @@ exports.isLoggedin = (req, res, next) => {
 
 exports.isAdmin = (req, res, next) => {
     try {
-        if (!req.user.role.includes('admin')) {
-            // return res.redirect('/')
-            return res.render('home/home')
-            // return res.render('auth/login',{msg:'not admin'})
-        }
-        return next()
-    } catch (e) {
-        console.log(e)
-        return res.redirect('/login')
+      if (!req.user || req.user.role !== 'admin') {
+        return res.status(403).json({
+          message: 'Access denied: Admins only'
+        })
+      }
+  
+      next()
+    } catch (err) {
+      console.log(err)
+      return res.status(401).json({
+        message: 'Unauthorized'
+      })
     }
-}
+  }
+  

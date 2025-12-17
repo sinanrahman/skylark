@@ -185,28 +185,42 @@
 }
 
 .login-btn {
-  background: #00b4ff;
-  border: none;
+  background-color: #00b4ff !important;
+  color: #ffffff !important;
+  border: none !important;
   border-radius: 25px;
   padding: 12px;
   font-weight: 600;
-  color: white;
   width: 100%;
   margin-bottom: 10px;
+  box-shadow: 0 10px 25px rgba(0, 180, 255, 0.4);
 }
 
+.login-btn:hover {
+  background-color: #0096e6 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(0, 180, 255, 0.55);
+}
+
+.login-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(0, 180, 255, 0.35);
+}
+
+
 .google-btn {
-  background: rgba(255, 255, 255, 0.4);
-  border: none;
+  background-color: rgba(255, 255, 255, 0.35) !important;
+  color: #1a1a1a !important;
+  border: none !important;
   border-radius: 25px;
   padding: 12px;
-  color: #1a1a1a;
   width: 100%;
-  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 600;
 }
+
 
 .google-btn i {
   margin-right: 10px;

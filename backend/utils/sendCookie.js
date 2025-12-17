@@ -18,6 +18,8 @@ const sendCookie = async (user, res) => {
         // })
         return res.cookie('token', token, options).status(200).json({
             message: 'Login Successful',
+            token: token,
+            user:user
         })
     } catch (e) {
         console.log('error while generating cookie')

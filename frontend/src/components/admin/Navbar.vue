@@ -1,3 +1,35 @@
+<script>
+  import api from '@/services/api'
+  
+  export default {
+    name: 'Navbar',
+  
+    computed: {
+      user() {
+        return this.$store.state.user
+      },
+      isLoggedIn() {
+        return this.$store.getters.isLoggedIn
+      }
+    },
+  
+    async eated() {
+      // Restore user ONLY if missing
+      if (!this.$store.state.user) {
+        await this.$store.dispatch('fetchUser')
+      }
+    },
+  
+    methods: {
+      async logout() {
+        await api.get('/logout')
+        this.$store.dispatch('logout')
+        this.$router.push('/auth/login')
+      }
+    }
+  }
+  </script>
+  
 <template>
   <nav class="navbar-glass">
     <div class="left">
@@ -11,9 +43,11 @@
     <div class="right">
       <div class="admin-profile">
         <span>Admin</span>
-        <img src="https://i.pravatar.cc/100" alt="Admin" />
+        <!-- <img src="https://i.pravatar.cc/100"  alt="Admin" /> -->
+        <img v-if="$store.state.user" :src="$store.state.user.dp || 'https://i.pravatar.cc/100'">
+
       </div>
-      <button class="logout">Logout</button>
+      <button class="logout" type="button" @click="logout">Logout</button>
     </div>
   </nav>
 </template>

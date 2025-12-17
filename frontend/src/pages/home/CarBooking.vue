@@ -2,13 +2,17 @@
   <div class="page-wrapper">
     <div class="container">
 
+      <!-- Header -->
       <div class="page-header">
         <h2>Book Your Ride</h2>
-        <p class="text-muted">Choose your dates and enjoy a smooth drive with Skylark</p>
+        <p class="text-muted">
+          Choose your dates and enjoy a smooth drive with Skylark
+        </p>
       </div>
 
       <div class="row booking-card">
 
+        <!-- LEFT : CAR SLIDER -->
         <div class="col-lg-5 p-0 slider-col">
           <div
             id="carSlider"
@@ -17,13 +21,13 @@
           >
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <img src="/img/cars/suv/bmw/bmw-x5.jpg" alt="Car">
+                <img src="/img/cars/suv/bmw/bmw-x5.jpg" />
               </div>
               <div class="carousel-item">
-                <img src="/img/cars/suv/bmw/bmw-x5-2.webp" alt="Car">
+                <img src="/img/cars/suv/bmw/bmw-x5-2.webp" />
               </div>
               <div class="carousel-item">
-                <img src="/img/cars/suv/bmw/bmw-x5-3.avif" alt="Car">
+                <img src="/img/cars/suv/bmw/bmw-x5-3.avif" />
               </div>
             </div>
 
@@ -43,60 +47,70 @@
                 <span>Music</span>
                 <span>Air Bags</span>
               </div>
-              <div class="price-box">₹6,000 / day</div>
+              <div class="price-box">₹{{ pricePerDay }} / day</div>
             </div>
           </div>
         </div>
 
-
+        <!-- RIGHT : BOOKING FORM -->
         <div class="col-lg-7 form-col">
           <div class="booking-form">
-            <form>
+
+            <form @submit.prevent="confirmBooking">
               <div class="row g-4">
+
                 <div class="col-md-6">
                   <label>Pickup Date</label>
-                  <input type="date" class="form-control" />
+                  <input type="date" class="form-control" v-model="booking.pickupDate" />
                 </div>
+
                 <div class="col-md-6">
                   <label>Return Date</label>
-                  <input type="date" class="form-control" />
+                  <input type="date" class="form-control" v-model="booking.returnDate" />
                 </div>
+
                 <div class="col-md-6">
                   <label>Pickup Location</label>
-                  <input type="text" class="form-control" />
+                  <input type="text" class="form-control" v-model="booking.pickupLocation" />
                 </div>
+
                 <div class="col-md-6">
                   <label>Drop Location</label>
-                  <input type="text" class="form-control" />
+                  <input type="text" class="form-control" v-model="booking.dropLocation" />
                 </div>
+
                 <div class="col-md-6">
                   <label>Driver Option</label>
-                  <select class="form-select">
+                  <select class="form-select" v-model="booking.driverOption">
                     <option>No Driver</option>
                     <option>With Driver</option>
                   </select>
                 </div>
+
                 <div class="col-md-6">
                   <label>Payment Method</label>
-                  <select class="form-select">
+                  <select class="form-select" v-model="booking.paymentMethod">
                     <option>Cash</option>
                     <option>UPI</option>
                     <option>Card</option>
                   </select>
                 </div>
+
               </div>
 
+              <!-- SUMMARY -->
               <div class="summary-box mt-4">
-                Duration <span>3 Days</span><br />
-                Driver Fee <span>₹1,500</span>
+                Duration <span>{{ totalDays }} Days</span><br />
+                Driver Fee <span>₹{{ driverFee }}</span>
                 <hr />
-                Total Amount <span>₹19,500</span>
+                Total Amount <span>₹{{ totalAmount }}</span>
               </div>
 
-              <button class="btn-book">
+              <button type="submit" class="btn-book">
                 <i class="bi bi-calendar-check"></i> Confirm Booking
               </button>
             </form>
+
           </div>
         </div>
 
@@ -105,10 +119,84 @@
   </div>
 </template>
 
+
+
 <script>
+  import api from '@/services/api';
 export default {
   name: "CarBooking",
+
+  data() {
+    return {
+       carId: null,
+      pricePerDay: 6000,
+      booking: {
+        pickupDate: "",
+        returnDate: "",
+        pickupLocation: "",
+        dropLocation: "",
+        driverOption: "No Driver",
+        paymentMethod: "Cash"
+      }
+    };
+  },
+
+  computed: {
+    totalDays() {
+      if (!this.booking.pickupDate || !this.booking.returnDate) return 0;
+
+      const start = new Date(this.booking.pickupDate);
+      const end = new Date(this.booking.returnDate);
+      const diff = (end - start) / (1000 * 60 * 60 * 24);
+
+      return diff > 0 ? diff : 0;
+    },
+
+    driverFee() {
+      return this.booking.driverOption === "With Driver" ? 1500 : 0;
+    },
+
+    totalAmount() {
+      return this.totalDays * this.pricePerDay + this.driverFee;
+    }
+  },
+
+methods: {
+  async confirmBooking() {
+    try {
+      const payload = {
+        userId: this.$store.state.user.id,
+        carId: this.carId,
+        pickupDate: this.booking.pickupDate,
+        returnDate: this.booking.returnDate,
+        pickupLocation: this.booking.pickupLocation,
+        dropLocation: this.booking.dropLocation,
+        driverOption: this.booking.driverOption,
+        paymentMethod: this.booking.paymentMethod,
+        totalDays: this.totalDays,
+        totalAmount: this.totalAmount,
+        pricePerDay: this.pricePerDay
+      };
+
+      console.log("Booking Payload:", payload);
+
+      const res = await api.post("/bookings", payload);
+
+      console.log("Backend Response:", res.data);
+      alert("Booking Confirmed ✅");
+
+    } catch (error) {
+      console.error("Booking failed:", error);
+      alert("Booking Failed ❌");
+    }
+  }
+},
+
+
   mounted() {
+    this.carId = this.$route.params.id;
+      console.log("Car ID from URL:", this.carId);
+
     if (window.bootstrap) {
       new window.bootstrap.Carousel(
         document.getElementById("carSlider")
@@ -117,6 +205,8 @@ export default {
   }
 };
 </script>
+
+
 
 <style scoped>
 

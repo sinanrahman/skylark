@@ -7,7 +7,9 @@ const carSchema = new mongoose.Schema({
     transmission:String,
     fuel:String,
     priceforday:Number,
-    images: [String]
+    images: [String],
+    availability:boolean,
+    seat:number
 });
 
 module.exports =  mongoose.model('Car', carSchema);

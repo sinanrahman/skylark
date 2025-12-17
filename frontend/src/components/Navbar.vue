@@ -1,5 +1,5 @@
 <template>
-  
+
   <nav class="navbar navbar-expand-lg navbar-glass sticky-top">
     <div class="container-fluid">
 
@@ -30,11 +30,17 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/contact">Contact</router-link>
           </li>
-
           <li class="nav-item">
-            <router-link class="btn btn-login  ms-3" to="">
-             logout
+            <router-link class="nav-link" to="/profile">
+              <div class="profile">
+                <img :src="user.dp" alt="">
+              </div>
             </router-link>
+          </li>
+          <li class="nav-item">
+            <button @click="logout" class="btn btn-login  ms-3">
+              logout
+            </button>
           </li>
 
         </ul>
@@ -45,15 +51,42 @@
 </template>
 
 <script>
-export default {
-  name: "Navbar",
-};
-</script>
+  import api from '@/services/api'
+  
+  export default {
+    name: 'Navbar',
+  
+    computed: {
+      user() {
+        return this.$store.state.user
+      },
+      isLoggedIn() {
+        return this.$store.getters.isLoggedIn
+      }
+    },
+  
+    async created() {
+      // Restore user ONLY if missing
+      if (!this.$store.state.user) {
+        await this.$store.dispatch('fetchUser')
+      }
+    },
+  
+    methods: {
+      async logout() {
+        await api.get('/logout')
+        this.$store.dispatch('logout')
+        this.$router.push('/auth/login')
+      }
+    }
+  }
+  </script>
+  
+  
 
 <style scoped>
-
 .navbar-glass {
-  background: rgba(255, 255, 255, 0.12); 
+  background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
@@ -92,7 +125,7 @@ export default {
 }
 
 .nav-link:hover {
-  color: #aee6ff !important; 
+  color: #aee6ff !important;
 }
 
 .btn-login {
@@ -116,6 +149,20 @@ export default {
 
 .navbar-toggler-icon {
   filter: invert(1);
+}
+
+.profile {
+  border-radius: 50%;
+  background-color: black;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+    img{
+      width:100%;
+      border-radius:50%;
+    }
 }
 
 </style>
