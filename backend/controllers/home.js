@@ -1,4 +1,6 @@
 const User = require('../models/User')
+const Car = require('../models/Car')
+
 exports.GetHomePage = async(req,res) =>{
     try{
         let user = await User.findOne({id:req.user.id})
@@ -42,5 +44,19 @@ exports.GetAboutPage = (req,res) =>{
         console.log('error while rendering about page')
         console.log(e)
         return res.send("<h1>something is wrong</h1>")
+    }
+}
+exports.GetCar = async (req,res) =>{
+    try{
+       const cars = await Car.findOne({_id:req.params.id});
+       
+           res.status(200).json({
+             success: true,
+             count: cars.length,
+             data: cars
+           })
+    }catch(e){
+        console.log('error while rendering getcar')
+        console.log(e)
     }
 }
