@@ -14,7 +14,7 @@ router
 //     .get(GetAllCars) // change this route and controller form admin to home
 router
     .route('/deletecar/:id')
-    .get(DeleteCar)
+    .delete(DeleteCar)
 
 router
     .route('/users')

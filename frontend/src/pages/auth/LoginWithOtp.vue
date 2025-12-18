@@ -7,7 +7,7 @@
         <div class="form-floating mb-3">
             <input type="email" v-model="email" class="form-control input-glass" placeholder="Mail" required />
             <label>Email</label>
-            <button @click="genOtp" class="btn btn-outline-info" type="button">Send Otp</button>
+            <button @click="genOtp" class="btn btn-outline-info otp-btn" type="button">Send Otp</button>
         </div>
 
         <div class="form-floating mb-3">
@@ -53,14 +53,32 @@
         },
         methods:{
             async genOtp(){
+                    if(this.email){
+                        this.msg.message = 'Please Wait Generating Otp'
+                    this.msg.textColor = "text-warning"
+                    }
                 try{
                     const res = await api.post('/generateotp',{
                     email:this.email
                 })
                 this.loading = true
-                console.log(res.data)
-                this.msg.message = 'Otp Send'
-                this.msg.textColor = "text-success"
+                // console.log(res.data)
+                console.log(this.email)
+                if(!this.email){
+                    this.msg.message = 'Please Enter Email'
+                    this.msg.textColor = "text-danger"
+                    return
+                }
+                if(!res.data.status){
+                    this.msg.message = 'Cannot Generate OTP Now '
+                    this.msg.textColor = "text-danger"
+                    return
+                }
+                if(res.data.status){
+                    this.msg.message = 'Otp Send'
+                    this.msg.textColor = "text-success"
+                    return
+                }
 
                 }catch(err){
                     this.msg.message = err.response?.data?.message || 'error generating otp'

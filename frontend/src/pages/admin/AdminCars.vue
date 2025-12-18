@@ -50,9 +50,10 @@
                 </button>
 
 
-                <button class="btn btn-delete" @click="deleteCar(car._id)">
+                <button class="btn btn-delete" @click="openDeleteCarModal(car)">
                   <i class="bi bi-trash"></i>
                 </button>
+
               </td>
             </tr>
           </tbody>
@@ -125,49 +126,37 @@
       </div>
 
       <!-- MAINTENANCE MODAL -->
-       <!-- ADD MAINTENANCE MODAL -->
-<div class="modal fade" id="maintenanceModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
+      <!-- ADD MAINTENANCE MODAL -->
+      <div class="modal fade" id="maintenanceModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
 
-      <div class="modal-header">
-        <h5 class="modal-title">Add Maintenance</h5>
-        <button class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-header">
+              <h5 class="modal-title">Add Maintenance</h5>
+              <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              <input v-model="maintenance.Maintenencetype" class="form-control mb-2" placeholder="Maintenance Type" />
+
+              <textarea v-model="maintenance.Maintenencedescription" class="form-control mb-2"
+                placeholder="Description"></textarea>
+
+              <input v-model="maintenance.price" type="number" class="form-control" placeholder="Cost" />
+            </div>
+
+            <div class="modal-footer">
+              <button class="btn btn-secondary" data-bs-dismiss="modal">
+                Cancel
+              </button>
+              <button class="btn btn-success" @click="addMaintenance">
+                Save
+              </button>
+            </div>
+
+          </div>
+        </div>
       </div>
-
-      <div class="modal-body">
-        <input
-          v-model="maintenance.Maintenencetype"
-          class="form-control mb-2"
-          placeholder="Maintenance Type"
-        />
-
-        <textarea
-          v-model="maintenance.Maintenencedescription"
-          class="form-control mb-2"
-          placeholder="Description"
-        ></textarea>
-
-        <input
-          v-model="maintenance.price"
-          type="number"
-          class="form-control"
-          placeholder="Cost"
-        />
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">
-          Cancel
-        </button>
-        <button class="btn btn-success" @click="addMaintenance">
-          Save
-        </button>
-      </div>
-
-    </div>
-  </div>
-</div>
 
       <!-- MAINTENANCE LIST MODAL -->
       <div class="modal fade" id="maintenanceListModal" tabindex="-1">
@@ -212,6 +201,38 @@
         </div>
       </div>
 
+      <!-- DELETE CAR MODAL -->
+      <div class="modal fade" id="deleteCarModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content delete-modal">
+
+            <div class="modal-header border-0">
+              <h5 class="modal-title text-danger">Delete Car</h5>
+              <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center">
+              <p class="mb-1">
+                Are you sure you want to delete
+                <strong>{{ selectedCarToDelete?.name }}</strong>?
+              </p>
+              <small class="text-muted">This action cannot be undone.</small>
+            </div>
+
+            <div class="modal-footer border-0 justify-content-center">
+              <button class="btn btn-secondary" data-bs-dismiss="modal">
+                Cancel
+              </button>
+              <button class="btn btn-danger" @click="confirmDeleteCar">
+                Delete
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
 
     </div>
 
@@ -230,6 +251,7 @@ export default {
       search: "",
       loading: false,
       selectedCar: {},
+      selectedCarToDelete: null,
       maintenanceList: [],
       maintenance: {
         Maintenencetype: "",
@@ -266,12 +288,38 @@ export default {
       if (!confirm("Are you sure you want to delete this car?")) return;
 
       try {
-        await api.delete(`/cars/${id}`);
+        await api.delete(`/deletecar/${id}`);
         this.cars = this.cars.filter(car => car._id !== id);
       } catch (error) {
         console.error("Delete failed", error);
       }
     },
+    openDeleteCarModal(car) {
+      this.selectedCarToDelete = car;
+      new bootstrap.Modal(
+        document.getElementById("deleteCarModal")
+      ).show();
+    },
+
+    async confirmDeleteCar() {
+      try {
+        await api.delete(`/deletecar/${this.selectedCarToDelete._id}`);
+
+        // Remove from list instantly
+        this.cars = this.cars.filter(
+          car => car._id !== this.selectedCarToDelete._id
+        );
+
+        bootstrap.Modal.getInstance(
+          document.getElementById("deleteCarModal")
+        ).hide();
+
+        this.selectedCarToDelete = null;
+      } catch (error) {
+        console.error("Delete failed", error);
+      }
+    },
+
     openCarModal(car) {
       this.selectedCar = { ...car };
       new bootstrap.Modal(document.getElementById("carModal")).show();

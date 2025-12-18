@@ -27,11 +27,6 @@
       <span>Users</span>
     </RouterLink>
 
-    <RouterLink to="/admin/reports" class="nav-link" active-class="active">
-      <i class="bi bi-graph-up"></i>
-      <span>Reports</span>
-    </RouterLink>
-
     <RouterLink to="/admin/issues" class="nav-link" active-class="active">
       <i class="bi bi-exclamation-triangle"></i>
       <span>Issues</span>

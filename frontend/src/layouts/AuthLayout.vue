@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script >
+<script>
 </script>
 
 <style>
@@ -184,6 +184,29 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
+.otp-btn {
+  background-color: #00b4ff !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 25px;
+  padding: 12px;
+  font-weight: 600;
+  width: 100%;
+  margin-bottom: 10px;
+  box-shadow: 0 10px 25px rgba(0, 180, 255, 0.4);
+}
+
+.otp-btn:hover {
+  background-color: #0096e6 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(0, 180, 255, 0.55);
+}
+
+.otp-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(0, 180, 255, 0.35);
+}
+
 .login-btn {
   background-color: #00b4ff !important;
   color: #ffffff !important;
@@ -195,6 +218,7 @@
   margin-bottom: 10px;
   box-shadow: 0 10px 25px rgba(0, 180, 255, 0.4);
 }
+
 
 .login-btn:hover {
   background-color: #0096e6 !important;

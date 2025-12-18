@@ -11,6 +11,12 @@
         <div class="row g-4 mb-4">
 
           <div class="col-lg-6">
+            <div class="glass-card glass-card-strong h-100">
+              <img src="/img/home/poster.png" alt="">
+            </div>
+          </div>
+
+          <div class="col-lg-6">
             <div class="glass-card h-100 d-flex flex-column gap-3">
 
               <div class="d-flex align-items-start gap-3">
@@ -39,48 +45,7 @@
             </div>
           </div>
 
-          <div class="col-lg-6">
-            <div class="glass-card glass-card-strong h-100">
 
-              <h3 class="section-title">Contact Form</h3>
-              <p class="muted">Send general enquiries — we'll get back within 24 hours.</p>
-
-              <form @submit.prevent="submitContact">
-
-                <div class="row g-3">
-
-                  <div class="col-12">
-                    <label class="form-label">Full name</label>
-                    <input v-model="contact.name" type="text" class="form-control" placeholder="Full name" required />
-                  </div>
-
-                  <div class="col-md-6">
-                    <label class="form-label">Email</label>
-                    <input v-model="contact.email" type="email" class="form-control" placeholder="skylark@gmail.com"
-                      required />
-                  </div>
-
-                  <div class="col-md-6">
-                    <label class="form-label">Phone</label>
-                    <input v-model="contact.phone" type="tel" class="form-control" placeholder="1234567890" required />
-                  </div>
-
-                  <div class="col-12">
-                    <label class="form-label">Message</label>
-                    <textarea v-model="contact.message" rows="4" class="form-control" placeholder="How can we  help?"
-                      required></textarea>
-                  </div>
-
-                  <div class="col-12">
-                    <button type="submit" class="btn submit-btn">Submit Message</button>
-
-                  </div>
-
-                </div>
-
-              </form>
-            </div>
-          </div>
 
         </div>
 
@@ -178,7 +143,7 @@
 
 
 <script>
-  import api from '@/services/api';
+import api from '@/services/api';
 export default {
   name: "ContactPage",
 
@@ -191,7 +156,7 @@ export default {
         message: "",
       },
       issue: {
-        name:this.$store.state.user.name,
+        name: this.$store.state.user.name,
         email: this.$store.state.user.mail,
         phone: this.$store.state.user.phone,
         issueType: "",
@@ -202,18 +167,18 @@ export default {
 
   methods: {
     async submitIssue() {
-    try {
-      await api.post('/add-issue', this.issue)
-      // alert("Issue submitted successfully ✅")
+      try {
+        await api.post('/add-issue', this.issue)
+        // alert("Issue submitted successfully ✅")
 
-      // Reset form
-      this.issue.bookingId = ""
-      this.issue.description = ""
+        // Reset form
+        this.issue.bookingId = ""
+        this.issue.description = ""
 
-    } catch (err) {
-      console.error("Failed to submit issue ❌",err)
+      } catch (err) {
+        console.error("Failed to submit issue ❌", err)
+      }
     }
-  }
   },
 };
 </script>
@@ -279,6 +244,10 @@ export default {
   box-shadow: 0 10px 30px rgba(6, 30, 60, 0.18);
   border: 1px solid rgba(255, 255, 255, 0.12);
   height: 100%;
+}
+
+.glass-card img {
+  width: 100%;
 }
 
 .glass-card-strong {

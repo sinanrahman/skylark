@@ -23,7 +23,6 @@ import AdminCars from '@/pages/admin/AdminCars.vue'
 import AdminAddCars from '@/pages/admin/AdminAddCars.vue'
 import AdminBooking from '@/pages/admin/AdminBooking.vue'
 import AdminUsers from '@/pages/admin/AdminUsers.vue'
-import AdminReports from '@/pages/admin/AdminReports.vue'
 import AdminIssues from '@/pages/admin/AdminIssues.vue'
 
 const routes = [
@@ -98,7 +97,6 @@ const routes = [
       { path: 'add-cars', component: AdminAddCars },
       { path: 'bookings', component: AdminBooking },
       { path: 'users', component: AdminUsers },
-      { path: 'reports', component: AdminReports },
       { path: 'issues', component: AdminIssues }
     ]
   }

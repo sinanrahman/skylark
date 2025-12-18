@@ -454,6 +454,7 @@ export default {
   border-radius: 40px;
   font-weight: 700;
   border: none;
+  text-decoration: none;
 }
 
 .btn-back {
@@ -462,6 +463,7 @@ export default {
   border-radius: 40px;
   color: #007adf;
   border: none;
+  text-decoration: none;
 }
 
 .hero-slider {

@@ -82,7 +82,7 @@
                   <label>Payment Method</label>
                   <select class="form-select" v-model="booking.paymentMethod">
                     <option>Cash</option>
-<option>Online Payment</option>
+                    <option>Online Payment</option>
 
                   </select>
                 </div>
@@ -98,55 +98,59 @@
               </div>
 
               <button type="button" class="btn-book" @click="openPaymentModal">
-  <i class="bi bi-credit-card"></i> Proceed to Payment
-</button>
+                <i class="bi bi-credit-card"></i> Proceed to Payment
+              </button>
+
+              <router-link type="button" to="/cars" class="btn-book">
+                Back to Cars
+              </router-link>
 
             </form>
             <!-- Payment Modal  -->
             <div class="modal fade" id="paymentModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content payment-modal">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content payment-modal">
 
-      <div class="modal-header border-0">
-        <h5 class="modal-title fw-bold">Payment Summary</h5>
-        <button class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
+                  <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Payment Summary</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
 
-      <div class="modal-body">
+                  <div class="modal-body">
 
-        <div class="summary-row">
-          <span>Car</span>
-          <strong>{{ car.name }}</strong>
-        </div>
+                    <div class="summary-row">
+                      <span>Car</span>
+                      <strong>{{ car.name }}</strong>
+                    </div>
 
-        <div class="summary-row">
-          <span>Days</span>
-          <strong>{{ totalDays }}</strong>
-        </div>
+                    <div class="summary-row">
+                      <span>Days</span>
+                      <strong>{{ totalDays }}</strong>
+                    </div>
 
-        <div class="summary-row">
-          <span>Driver</span>
-          <strong>{{ booking.driverOption }}</strong>
-        </div>
+                    <div class="summary-row">
+                      <span>Driver</span>
+                      <strong>{{ booking.driverOption }}</strong>
+                    </div>
 
-        <hr />
+                    <hr />
 
-        <div class="total-box">
-          <span>Total Payable</span>
-          <h4>₹{{ totalAmount }}</h4>
-        </div>
+                    <div class="total-box">
+                      <span>Total Payable</span>
+                      <h4>₹{{ totalAmount }}</h4>
+                    </div>
 
-      </div>
+                  </div>
 
-      <div class="modal-footer border-0">
-        <button class="btn pay-btn w-100" @click="payNow">
-          Pay Securely
-        </button>
-      </div>
+                  <div class="modal-footer border-0">
+                    <button class="btn pay-btn w-100" @click="payNow">
+                      Pay Securely
+                    </button>
+                  </div>
 
-    </div>
-  </div>
-</div>
+                </div>
+              </div>
+            </div>
 
 
 
@@ -159,156 +163,156 @@
 </template>
 
 <script>
-  import api from '@/services/api'
-  
-  export default {
-    name: 'CarBooking',
-  
-    data() {
-      return {
-        carId: null,
-        car: {
-          images: []
-        },
-        booking: {
-          pickupDate: '',
-          returnDate: '',
-          pickupLocation: '',
-          dropLocation: '',
-          driverOption: 'No Driver',
-          paymentMethod: 'Online'
-        }
-      }
-    },
-  
-    computed: {
-      totalDays() {
-        if (!this.booking.pickupDate || !this.booking.returnDate) return 0
-  
-        const start = new Date(this.booking.pickupDate)
-        const end = new Date(this.booking.returnDate)
-        const diff = (end - start) / (1000 * 60 * 60 * 24)
-  
-        return diff > 0 ? diff : 0
+import api from '@/services/api'
+
+export default {
+  name: 'CarBooking',
+
+  data() {
+    return {
+      carId: null,
+      car: {
+        images: []
       },
-  
-      driverFee() {
-        return this.booking.driverOption === 'With Driver' ? 1500 : 0
-      },
-  
-      totalAmount() {
-        return this.totalDays * (this.car.price || 0) + this.driverFee
-      }
-    },
-  
-    methods: {
-      /* ---------------- FETCH CAR ---------------- */
-      async fetchCar() {
-        try {
-          const res = await api.get(`/getcar/${this.carId}`)
-          this.car = res.data.data
-        } catch (err) {
-          console.error('Failed to fetch car', err)
-        }
-      },
-  
-      /* ---------------- OPEN PAYMENT MODAL ---------------- */
-      openPaymentModal() {
-        if (!this.totalDays) {
-          alert('Please select valid pickup & return dates')
-          return
-        }
-  
-        const modal = new bootstrap.Modal(
-          document.getElementById('paymentModal')
-        )
-        modal.show()
-      },
-  
-      /* ---------------- RAZORPAY PAYMENT ---------------- */
-      async payNow() {
-        try {
-          // 1️⃣ Create Razorpay order
-          const res = await api.post('/create-order', {
-            amount: this.totalAmount
-          })
-  
-          const options = {
-            key: 'rzp_test_RsrQeKYvUzCeYD',
-            amount: res.data.order.amount,
-            currency: 'INR',
-            name: 'Skylark Cars',
-            description: 'Car Booking Payment',
-            order_id: res.data.order.id,
-  
-            handler: async (response) => {
-              await this.saveBooking(response)
-  
-              // Close modal
-              const modalEl = document.getElementById('paymentModal')
-              const modal = bootstrap.Modal.getInstance(modalEl)
-              modal.hide()
-  
-              // alert('Payment Successful ✅')
-              this.$router.push(`/car/${this.car._id}`)
-            },
-  
-            prefill: {
-              name: this.$store.state.user.name,
-              email: this.$store.state.user.mail,
-              contact: this.$store.state.user.phone
-            },
-  
-            theme: {
-              color: '#0a57a9'
-            }
-          }
-  
-          new Razorpay(options).open()
-        } catch (err) {
-          console.error(err)
-          alert('Payment failed ❌')
-        }
-      },
-  
-      /* ---------------- SAVE BOOKING AFTER PAYMENT ---------------- */
-      async saveBooking(paymentResponse) {
-        const payload = {
-          userId: this.$store.state.user.id,
-          carId: this.carId,
-          pickupDate: this.booking.pickupDate,
-          returnDate: this.booking.returnDate,
-          pickupLocation: this.booking.pickupLocation,
-          dropLocation: this.booking.dropLocation,
-          driverOption: this.booking.driverOption,
-          paymentMethod: 'Online',
-          totalDays: this.totalDays,
-          totalAmount: this.totalAmount,
-          pricePerDay: this.car.price,
-  
-          // 💳 Razorpay data
-          paymentId: paymentResponse.razorpay_payment_id,
-          orderId: paymentResponse.razorpay_order_id,
-          paymentStatus: 'Paid'
-        }
-  
-        await api.post('/bookings', payload)
-      }
-    },
-  
-    mounted() {
-      this.carId = this.$route.params.id
-      this.fetchCar()
-  
-      if (window.bootstrap) {
-        new window.bootstrap.Carousel(
-          document.getElementById('carSlider')
-        )
+      booking: {
+        pickupDate: '',
+        returnDate: '',
+        pickupLocation: '',
+        dropLocation: '',
+        driverOption: 'No Driver',
+        paymentMethod: 'Online'
       }
     }
+  },
+
+  computed: {
+    totalDays() {
+      if (!this.booking.pickupDate || !this.booking.returnDate) return 0
+
+      const start = new Date(this.booking.pickupDate)
+      const end = new Date(this.booking.returnDate)
+      const diff = (end - start) / (1000 * 60 * 60 * 24)
+
+      return diff > 0 ? diff : 0
+    },
+
+    driverFee() {
+      return this.booking.driverOption === 'With Driver' ? 1500 : 0
+    },
+
+    totalAmount() {
+      return this.totalDays * (this.car.price || 0) + this.driverFee
+    }
+  },
+
+  methods: {
+    /* ---------------- FETCH CAR ---------------- */
+    async fetchCar() {
+      try {
+        const res = await api.get(`/getcar/${this.carId}`)
+        this.car = res.data.data
+      } catch (err) {
+        console.error('Failed to fetch car', err)
+      }
+    },
+
+    /* ---------------- OPEN PAYMENT MODAL ---------------- */
+    openPaymentModal() {
+      if (!this.totalDays) {
+        alert('Please select valid pickup & return dates')
+        return
+      }
+
+      const modal = new bootstrap.Modal(
+        document.getElementById('paymentModal')
+      )
+      modal.show()
+    },
+
+    /* ---------------- RAZORPAY PAYMENT ---------------- */
+    async payNow() {
+      try {
+        // 1️⃣ Create Razorpay order
+        const res = await api.post('/create-order', {
+          amount: this.totalAmount
+        })
+
+        const options = {
+          key: 'rzp_test_RsrQeKYvUzCeYD',
+          amount: res.data.order.amount,
+          currency: 'INR',
+          name: 'Skylark Cars',
+          description: 'Car Booking Payment',
+          order_id: res.data.order.id,
+
+          handler: async (response) => {
+            await this.saveBooking(response)
+
+            // Close modal
+            const modalEl = document.getElementById('paymentModal')
+            const modal = bootstrap.Modal.getInstance(modalEl)
+            modal.hide()
+
+            // alert('Payment Successful ✅')
+            this.$router.push(`/car/${this.car._id}`)
+          },
+
+          prefill: {
+            name: this.$store.state.user.name,
+            email: this.$store.state.user.mail,
+            contact: this.$store.state.user.phone
+          },
+
+          theme: {
+            color: '#0a57a9'
+          }
+        }
+
+        new Razorpay(options).open()
+      } catch (err) {
+        console.error(err)
+        alert('Payment failed ❌')
+      }
+    },
+
+    /* ---------------- SAVE BOOKING AFTER PAYMENT ---------------- */
+    async saveBooking(paymentResponse) {
+      const payload = {
+        userId: this.$store.state.user.id,
+        carId: this.carId,
+        pickupDate: this.booking.pickupDate,
+        returnDate: this.booking.returnDate,
+        pickupLocation: this.booking.pickupLocation,
+        dropLocation: this.booking.dropLocation,
+        driverOption: this.booking.driverOption,
+        paymentMethod: 'Online',
+        totalDays: this.totalDays,
+        totalAmount: this.totalAmount,
+        pricePerDay: this.car.price,
+
+        // 💳 Razorpay data
+        paymentId: paymentResponse.razorpay_payment_id,
+        orderId: paymentResponse.razorpay_order_id,
+        paymentStatus: 'Paid'
+      }
+
+      await api.post('/bookings', payload)
+    }
+  },
+
+  mounted() {
+    this.carId = this.$route.params.id
+    this.fetchCar()
+
+    if (window.bootstrap) {
+      new window.bootstrap.Carousel(
+        document.getElementById('carSlider')
+      )
+    }
   }
-  </script>
-  
+}
+</script>
+
 
 
 
@@ -446,7 +450,10 @@
   font-weight: 700;
   width: 100%;
   margin-top: 25px;
+  text-align: center;
+  text-decoration: none;
 }
+
 .payment-modal {
   border-radius: 22px;
   padding: 10px;

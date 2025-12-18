@@ -20,7 +20,7 @@
             <ul class="list-unstyled">
               <li><router-link to="/" class="text-secondary">Home</router-link></li>
               <li><router-link to="/cars" class="text-secondary">Our Cars</router-link></li>
-              <li><router-link to="/pricing" class="text-secondary">Pricing</router-link></li>
+              <li><router-link to="/contact" class="text-secondary">Contact</router-link></li>
               <li><router-link to="/about" class="text-secondary">About Us</router-link></li>
             </ul>
           </div>

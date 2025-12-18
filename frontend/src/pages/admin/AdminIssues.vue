@@ -28,14 +28,14 @@
       },
   
       async updateStatus() {
-        await api.patch(`/issues/${this.selectedIssue._id}/status`, {
+        await api.post(`/issues/${this.selectedIssue._id}/status`, {
           status: this.selectedIssue.status
         })
         this.fetchIssues()
       },
   
       async markResolved(id) {
-        await api.patch(`/issues/${id}/status`, {
+        await api.post(`/issues/${id}/status`, {
           status: 'Resolved'
         })
         this.fetchIssues()

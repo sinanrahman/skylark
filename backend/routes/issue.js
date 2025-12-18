@@ -10,7 +10,7 @@ router
     .get(GetAllIssues)
 router
     .route('/issues/:id/status')
-    .patch(UpdateIssueStatus)
+    .post(UpdateIssueStatus)
 
 
 module.exports = router

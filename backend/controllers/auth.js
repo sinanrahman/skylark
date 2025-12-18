@@ -115,7 +115,7 @@ exports.GenerateOtp = async (req, res) => {
   
   }catch(e){
     console.log(e)
-    return res.status(400).json({message:"error while generating otp"})
+    return res.status(400).json({message:"error while generating otp",status:false})
   }
 }
 

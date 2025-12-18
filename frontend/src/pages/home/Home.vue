@@ -25,42 +25,33 @@
 
                 <section class="cars-feature">
 
-  <h2 class="cars-heading">Featured Cars</h2>
+                    <h2 class="cars-heading">Featured Cars</h2>
 
-  <!-- SEDAN -->
-  <div class="car-group">
-    <router-link
-      :to="{ name: 'Cars', query: { category: 'Sedan' } }"
-      class="car car1"
-    >
-      <img src="/img/home/sedan.png" alt="Sedan">
-    </router-link>
-    <div class="car-label sedan-text">SEDAN</div>
-  </div>
+                    <!-- SEDAN -->
+                    <div class="car-group">
+                        <router-link :to="{ name: 'Cars', query: { category: 'Sedan' } }" class="car car1">
+                            <img src="/img/home/sedan.png" alt="Sedan">
+                        </router-link>
+                        <div class="car-label sedan-text">SEDAN</div>
+                    </div>
 
-  <!-- SUV -->
-  <div class="car-group">
-    <router-link
-      :to="{ name: 'Cars', query: { category: 'SUV' } }"
-      class="car car2"
-    >
-      <img src="/img/home/suv .png" alt="SUV">
-    </router-link>
-    <div class="car-label suv-text">SUV</div>
-  </div>
+                    <!-- SUV -->
+                    <div class="car-group">
+                        <router-link :to="{ name: 'Cars', query: { category: 'SUV' } }" class="car car2">
+                            <img src="/img/home/suv .png" alt="SUV">
+                        </router-link>
+                        <div class="car-label suv-text">SUV</div>
+                    </div>
 
-  <!-- HATCHBACK -->
-  <div class="car-group">
-    <router-link
-      :to="{ name: 'Cars', query: { category: 'Hatchback' } }"
-      class="car car3"
-    >
-      <img src="../../../public/img/home/hatchback.png" alt="Hatchback">
-    </router-link>
-    <div class="car-label hatch-text">HATCHBACK</div>
-  </div>
+                    <!-- HATCHBACK -->
+                    <div class="car-group">
+                        <router-link :to="{ name: 'Cars', query: { category: 'Hatchback' } }" class="car car3">
+                            <img src="../../../public/img/home/hatchback.png" alt="Hatchback">
+                        </router-link>
+                        <div class="car-label hatch-text">HATCHBACK</div>
+                    </div>
 
-</section>
+                </section>
 
 
 
@@ -123,12 +114,9 @@
                             and a smooth, quiet driving experience designed for the modern road.
                         </p>
 
-                        <router-link
-  :to="{ name: 'Cars', query: { fuel: 'Electric' } }"
-  class="ev-btn"
->
-  Explore Electric Cars
-</router-link>
+                        <router-link :to="{ name: 'Cars', query: { fuel: 'Electric' } }" class="ev-btn">
+                            Explore Electric Cars
+                        </router-link>
 
 
                     </div>
@@ -199,59 +187,56 @@
                         </div>
                     </div> -->
                     <div class="row g-4">
-  <div class="col-md-4" v-for="review in testimonials" :key="review._id">
-    <div class="testimonial-card">
-      
+                        <div class="col-md-4" v-for="review in testimonials" :key="review._id">
+                            <div class="testimonial-card">
 
-      <div class="d-flex align-items-end justify-content-start mt-3">
-        <img :src="review.avatar" class="review-img" alt="">
-        <div class="ms-3">
-          <h6 class="mb-0 text-white">{{ review.name }}</h6>
-          <div class="rating text-warning" style="font-size:25px;">
-            {{ '★'.repeat(review.rating) }}
-          </div>
-        </div>
-      </div>
-      <div class="review-text mt-3 ml-1">
-        {{ review.message }}
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- SMALL REVIEW SECTION -->
-<div class="review-form mt-5">
-  <h4 class="text-white mb-4 text-center">Write a Review</h4>
+                                <div class="d-flex align-items-end justify-content-start mt-3">
+                                    <img :src="review.avatar" class="review-img" alt="">
+                                    <div class="ms-3">
+                                        <h6 class="mb-0 text-white">{{ review.name }}</h6>
+                                        <div class="rating text-warning" style="font-size:25px;">
+                                            {{ '★'.repeat(review.rating) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="review-text mt-3 ml-1">
+                                    {{ review.message }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-  <div class="review-row">
-    <!-- Avatar -->
-    <!-- <img
+                    <!-- SMALL REVIEW SECTION -->
+                    <div class="review-form mt-5">
+                        <h4 class="text-white mb-4 text-center">Write a Review</h4>
+
+                        <div class="review-row">
+                            <!-- Avatar -->
+                            <!-- <img
       :src="reviewForm.avatar"
       class="review-avatar"
       alt="User"
     /> -->
 
-    <!-- Review Input -->
-    <textarea
-      v-model="reviewForm.message"
-      placeholder="Share your experience..."
-      class="review-input"
-    ></textarea>
+                            <!-- Review Input -->
+                            <textarea v-model="reviewForm.message" placeholder="Share your experience..."
+                                class="review-input"></textarea>
 
-    <!-- Rating -->
-    <select v-model="reviewForm.rating" class="review-select">
-      <option disabled value="">★</option>
-      <option v-for="n in 5" :key="n" :value="n">
-        {{ n }} ★
-      </option>
-    </select>
+                            <!-- Rating -->
+                            <select v-model="reviewForm.rating" class="review-select">
+                                <option disabled value="">★</option>
+                                <option v-for="n in 5" :key="n" :value="n">
+                                    {{ n }} ★
+                                </option>
+                            </select>
 
-    <!-- Button -->
-    <button @click="submitReview" class="review-btn">
-      Submit
-    </button>
-  </div>
-</div>
+                            <!-- Button -->
+                            <button @click="submitReview" class="review-btn">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
 
 
 
@@ -267,67 +252,67 @@
 
 
 <script>
-    import api from '@/services/api'
-    
-    export default {
-      name: "HomePage",
-    
-      data() {
+import api from '@/services/api'
+
+export default {
+    name: "HomePage",
+
+    data() {
         return {
-          testimonials: [],
-          reviewForm: {
-            name: this.$store.state.user.name,
-            avatar: this.$store.state.user.dp,
-            message: '',
-            rating: ''
-          }
+            testimonials: [],
+            reviewForm: {
+                name: this.$store.state.user.name,
+                avatar: this.$store.state.user.dp,
+                message: '',
+                rating: ''
+            }
         }
-      },
+    },
 
-    
-      methods: {
+
+    methods: {
         async fetchTestimonials() {
-          const res = await api.get('/testimonials')
-          this.testimonials = res.data.data
+            const res = await api.get('/testimonials')
+            this.testimonials = res.data.data
         },
-    
+
         async submitReview() {
-  if (!this.reviewForm.message || !this.reviewForm.rating) {
-    alert('All fields required')
-    return
-  }
+            if (!this.reviewForm.message || !this.reviewForm.rating) {
+                alert('All fields required')
+                return
+            }
 
-  await api.post('/testimonials', this.reviewForm)
+            await api.post('/testimonials', this.reviewForm)
 
-  // ✅ reset only form fields
-  this.reviewForm.message = ''
-  this.reviewForm.rating = ''
+            // ✅ reset only form fields
+            this.reviewForm.message = ''
+            this.reviewForm.rating = ''
 
-  this.fetchTestimonials()
-}
+            this.fetchTestimonials()
+        }
 
-      },
-    
-      mounted() {
-  this.fetchTestimonials()
+    },
 
-  // set once on load
-  this.reviewForm.name = this.$store.state.user.name
-  this.reviewForm.avatar = this.$store.state.user.dp
-},
+    mounted() {
+        this.fetchTestimonials()
 
-watch: {
-  '$store.state.user'(user) {
-    if (user) {
-      this.reviewForm.name = user.name
-      this.reviewForm.avatar = user.dp
+        // set once on load
+        this.reviewForm.name = this.$store.state.user.name
+        this.reviewForm.avatar = this.$store.state.user.dp
+    },
+
+    watch: {
+        '$store.state.user'(user) {
+            if (user) {
+                this.reviewForm.name = user.name
+                this.reviewForm.avatar = user.dp
+            }
+        }
     }
-  }
-}
 
-    }
-    </script>
-    
+}
+</script>
+
 
 
 <style scoped>
@@ -543,69 +528,71 @@ watch: {
     color: rgb(226, 215, 215);
     line-height: 1.6;
 }
+
 .review-form {
-  max-width: 900px;
-  margin: auto;
+    max-width: 900px;
+    margin: auto;
 }
 
 .review-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 15px;
-  border-radius: 50px;
-  backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 15px;
+    border-radius: 50px;
+    backdrop-filter: blur(12px);
 }
 
 .review-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 2px solid #00bfff;
+    width: 48px;
+    border-radius: 50%;
+    border: 2px solid #00bfff;
+    overflow: scroll;
+    scrollbar-width: none;
 }
 
 .review-input {
-  flex: 1;
-  resize: none;
-  border-radius: 30px;
-  padding: 10px 16px;
-  border: none;
-  outline: none;
+    flex: 1;
+    resize: none;
+    border-radius: 30px;
+    padding: 10px 16px;
+    border: none;
+    outline: none;
 }
 
 .review-select {
-  width: 80px;
-  border-radius: 30px;
-  border: none;
-  padding: 6px;
+    width: 80px;
+    border-radius: 30px;
+    border: none;
+    padding: 6px;
 }
 
 .review-btn {
-  background: linear-gradient(135deg, #00bfff, #007adf);
-  color: white;
-  border: none;
-  border-radius: 30px;
-  padding: 8px 20px;
-  font-weight: 600;
-  transition: 0.3s ease;
+    background: linear-gradient(135deg, #00bfff, #007adf);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-weight: 600;
+    transition: 0.3s ease;
 }
 
 .review-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 191, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 191, 255, 0.4);
 }
 
 @media (max-width: 768px) {
-  .review-row {
-    flex-direction: column;
-    border-radius: 20px;
-  }
+    .review-row {
+        flex-direction: column;
+        border-radius: 20px;
+    }
 
-  .review-select,
-  .review-btn {
-    width: 100%;
-  }
+    .review-select,
+    .review-btn {
+        width: 100%;
+    }
 }
 
 
@@ -821,8 +808,10 @@ watch: {
     font-weight: 500;
     font-family: monospace;
     line-height: 1.6;
-    width:100%;
-    overflow-x: scroll;
+    width: 100%;
+    height: 80px;
+    overflow: scroll;
+    scrollbar-width: none;
 }
 
 .review-img {

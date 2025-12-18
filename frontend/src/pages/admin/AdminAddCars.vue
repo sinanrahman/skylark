@@ -240,6 +240,18 @@ export default {
     });
     console.log(res.data.message)
     console.log("FORM DATA SENT AS MULTIPART");
+    this.form.name = ""
+    this.form.model = ""
+    this.form.seats = ""
+    this.form.category = ""
+    this.form.fuel = ""
+    this.form.status = ""
+    this.form.price = ""
+    this.form.safetyRating = ""
+    this.form.transmission = "manual"
+    this.form.features = []
+    this.form.description = ""
+    this.form.images = []
   }
 }
 
