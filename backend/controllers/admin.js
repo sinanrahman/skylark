@@ -1,5 +1,6 @@
 const uploadImage = require('../utils/uploadImage')
 const Car = require('../models/Car')
+const Booking = require('../models/Booking')
 const User = require('../models/User')
 
 
@@ -226,6 +227,167 @@ exports.DeleteCar = async (req, res) => {
   await Car.findByIdAndDelete(req.params.id);
   res.json({ message: "Car deleted" });
 };
+
+exports.GetTotalSummary = async (req,res) => {
+  try{
+    // console.log('get total summary is called ')
+    const totalCars = await Car.countDocuments()
+    const totalUsers = await User.countDocuments()
+    const totalBooking = await Booking.countDocuments()
+    const result = await Booking.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$totalAmount" }
+        }
+      }
+    ])
+    
+    const totalRevenue = result[0]?.totalRevenue || 0
+
+    return res.status(200).json({
+      success:true,
+      data:{ totalBooking , totalCars , totalRevenue , totalUsers},
+      message:"total summary send"
+    })    
+
+  }catch(e){
+    return res.status(500).json({
+      success:false,
+      message:"summary not retrived from backend"
+    })
+  }
+}
+
+exports.GetCarCategoryStats = async (req, res) => {
+  try {
+    const result = await Car.aggregate([
+      {
+        $group: {
+          _id: "$category",   // field in Car model
+          count: { $sum: 1 }
+        }
+      }
+    ])
+
+    // Convert to chart-friendly format
+    const labels = result.map(i => i._id)
+    const data = result.map(i => i.count)
+
+    res.status(200).json({
+      success: true,
+      data: { labels, data }
+    })
+
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ success: false })
+  }
+}
+
+exports.GetMonthlyBookings = async (req, res) => {
+  try {
+    const result = await Booking.aggregate([
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { "_id": 1 } }
+    ])
+
+    // Prepare fixed labels (Jan–Dec)
+    const labels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    const data = Array(12).fill(0)
+
+    result.forEach(item => {
+      data[item._id - 1] = item.count
+    })
+
+    res.status(200).json({
+      success: true,
+      data: {
+        labels,
+        data
+      }
+    })
+
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ success: false })
+  }
+}
+
+exports.GetMonthlyRevenue = async (req, res) => {
+  try {
+    const result = await Booking.aggregate([
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          totalRevenue: { $sum: "$totalAmount" }
+        }
+      },
+      { $sort: { "_id": 1 } }
+    ])
+
+    const labels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    const data = Array(12).fill(0)
+
+    result.forEach(item => {
+      data[item._id - 1] = item.totalRevenue
+    })
+
+    res.status(200).json({
+      success: true,
+      data: {
+        labels,
+        data
+      }
+    })
+
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ success: false })
+  }
+}
+
+exports.GetMonthlyUserGrowth = async (req, res) => {
+  try {
+    const result = await User.aggregate([
+      {
+        $project: {
+          effectiveDate: {
+            $ifNull: ["$createdAt", "$updatedAt"]
+          }
+        }
+      },
+      {
+        $group: {
+          _id: { $month: "$effectiveDate" },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { "_id": 1 } }
+    ])
+
+    const labels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    const data = Array(12).fill(0)
+
+    result.forEach(item => {
+      data[item._id - 1] = item.count
+    })
+
+    res.status(200).json({
+      success: true,
+      data: { labels, data }
+    })
+
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ success: false })
+  }
+}
 
 
 

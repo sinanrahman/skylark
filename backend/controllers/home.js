@@ -95,21 +95,27 @@ exports.CreateBooking = async (req, res) => {
       paymentMethod,
       totalDays,
       totalAmount,
-      pricePerDay
+      pricePerDay,
+      paymentId,
+      orderId,
+      paymentStatus,
     } = req.body;
 
     if (
-      !userId ||
-      !carId ||
-      !pickupDate ||
-      !returnDate ||
-      !pickupLocation ||
-      !dropLocation ||
-      !driverOption ||
-      !paymentMethod ||
-      !totalDays ||
-      !totalAmount ||
-      !pricePerDay
+      ! userId ||
+      ! carId ||
+      ! pickupDate ||
+      ! returnDate ||
+      ! pickupLocation ||
+      ! dropLocation ||
+      ! driverOption ||
+      ! paymentMethod ||
+      ! totalDays ||
+      ! totalAmount ||
+      ! pricePerDay ||
+      ! paymentId ||
+      ! orderId ||
+      ! paymentStatus
     ) {
       return res.status(400).json({ message: 'All fields are required' });
     }
@@ -126,7 +132,10 @@ exports.CreateBooking = async (req, res) => {
       paymentMethod,
       totalDays,
       totalAmount,
-      pricePerDay
+      pricePerDay,
+      paymentId,
+      orderId,
+      paymentStatus,
     });
 
     return res.status(201).json({

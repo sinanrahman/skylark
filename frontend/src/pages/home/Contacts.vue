@@ -103,28 +103,28 @@
 
                   <div class="col-12">
                     <label class="form-label">Full name</label>
-                    <input v-model="issue.iname" type="text" class="form-control" placeholder="Full name" required>
+                    <input v-model="issue.name" type="text" class="form-control" placeholder="Full name" required>
                   </div>
 
                   <div class="col-md-6">
                     <label class="form-label">Email</label>
-                    <input v-model="issue.iemail" type="email" class="form-control" placeholder="skylark@gmail.com"
+                    <input v-model="issue.email" type="email" class="form-control" placeholder="skylark@gmail.com"
                       required>
                   </div>
 
                   <div class="col-md-6">
                     <label class="form-label">Phone</label>
-                    <input v-model="issue.iphone" type="tel" class="form-control" placeholder="1234567890" required>
+                    <input v-model="issue.phone" type="tel" class="form-control" placeholder="1234567890" required>
                   </div>
 
                   <div class="col-12">
-                    <label class="form-label">Booking ID (optional)</label>
-                    <input v-model="issue.bookingId" type="text" class="form-control" placeholder="wad2334">
+                    <label class="form-label">Issue Type</label>
+                    <input v-model="issue.issueType" type="text" class="form-control" placeholder="wad2334">
                   </div>
 
                   <div class="col-12">
                     <label class="form-label">Describe the issue</label>
-                    <textarea v-model="issue.idescription" rows="5" class="form-control"
+                    <textarea v-model="issue.description" rows="5" class="form-control"
                       placeholder="What happened ? Provide details...." required></textarea>
                   </div>
 
@@ -178,6 +178,7 @@
 
 
 <script>
+  import api from '@/services/api';
 export default {
   name: "ContactPage",
 
@@ -190,22 +191,29 @@ export default {
         message: "",
       },
       issue: {
-        name: "",
-        email: "",
-        phone: "",
-        bookingId: "",
+        name:this.$store.state.user.name,
+        email: this.$store.state.user.mail,
+        phone: this.$store.state.user.phone,
+        issueType: "",
         description: "",
       },
     };
   },
 
   methods: {
-    submitContact() {
-      alert("Contact form submitted!");
-    },
-    submitIssue() {
-      alert("Issue report submitted!");
-    },
+    async submitIssue() {
+    try {
+      await api.post('/add-issue', this.issue)
+      // alert("Issue submitted successfully ✅")
+
+      // Reset form
+      this.issue.bookingId = ""
+      this.issue.description = ""
+
+    } catch (err) {
+      console.error("Failed to submit issue ❌",err)
+    }
+  }
   },
 };
 </script>

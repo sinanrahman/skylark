@@ -1,5 +1,5 @@
 const express = require('express')
-const { Dashboard, AddCar, DeleteCar, GetAllUsers, UpdateCar, UpdateUser, DeleteUser } = require('../controllers/admin')
+const { Dashboard, AddCar, DeleteCar, GetAllUsers, UpdateCar, UpdateUser, DeleteUser, GetTotalSummary, GetCarCategoryStats, GetMonthlyBookings, GetMonthlyRevenue, GetMonthlyUserGrowth } = require('../controllers/admin')
 const router = express.Router()
 
 
@@ -30,6 +30,21 @@ router
 router
     .route('/admin/users/:id')
     .delete(DeleteUser)
+router
+    .route('/totalsummary')
+    .get(GetTotalSummary)
+router
+    .route('/admin/car-category-stats')
+    .get(GetCarCategoryStats)
+router
+    .route('/admin/monthly-bookings')
+    .get(GetMonthlyBookings)
+router
+    .route('/admin/monthly-revenue')
+    .get(GetMonthlyRevenue)
+router
+    .route('/admin/monthly-users')
+    .get(GetMonthlyUserGrowth)
 
 
 

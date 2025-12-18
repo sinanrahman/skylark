@@ -5,60 +5,84 @@
       <div class="topbar">
       </div>
 
-      <div class="row g-4 mb-4">
-        <div class="col-lg-3 col-md-6">
-          <div class="stat-card cars">
-            <h6>Total Cars</h6>
-            <h2>48</h2>
-          </div>
-        </div>
+      <div class="row g-4">
 
-        <div class="col-lg-3 col-md-6">
-          <div class="stat-card bookings">
-            <h6>Bookings</h6>
-            <h2>312</h2>
-          </div>
-        </div>
+<div class="col-md-3">
+  <div class="summary-card bg-bookings d-flex justify-content-between align-items-center">
+    <div>
+      <h6>Total Bookings</h6>
+      <h3>{{ totalBookings }}</h3>
+    </div>
+    <div class="summary-icon">
+      <i class="bi bi-calendar-check"></i>
+    </div>
+  </div>
+</div>
 
-        <div class="col-lg-3 col-md-6">
-          <div class="stat-card users">
-            <h6>Users</h6>
-            <h2>1,240</h2>
-          </div>
-        </div>
+<div class="col-md-3">
+  <div class="summary-card bg-revenue d-flex justify-content-between align-items-center">
+    <div>
+      <h6>Total Revenue</h6>
+      <h3>{{ formattedRevenue }}</h3>
+    </div>
+    <div class="summary-icon">
+      <i class="bi bi-currency-rupee"></i>
+    </div>
+  </div>
+</div>
 
-        <div class="col-lg-3 col-md-6">
-          <div class="stat-card revenue">
-            <h6>Revenue</h6>
-            <h2>₹4.6L</h2>
-          </div>
-        </div>
-      </div>
+<div class="col-md-3">
+  <div class="summary-card bg-users d-flex justify-content-between align-items-center">
+    <div>
+      <h6>Total Users</h6>
+      <h3>{{ totalUsers }}</h3>
+    </div>
+    <div class="summary-icon">
+      <i class="bi bi-people"></i>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-3">
+  <div class="summary-card bg-cars d-flex justify-content-between align-items-center">
+    <div>
+      <h6>Total Cars</h6>
+      <h3>{{ totalCars }}</h3>
+    </div>
+    <div class="summary-icon">
+      <i class="bi bi-car-front"></i>
+    </div>
+  </div>
+</div>
+
+</div>
 
       <div class="row g-4 mt-4">
-        <div class="col-lg-4">
+        <div class="col-lg-6">
           <div class="graph-card">
             <h6 class="text-center mb-3">Car Distribution</h6>
             <canvas id="carsChart"></canvas>
           </div>
         </div>
 
-        <div class="col-lg-4">
+        <div class="col-lg-6">
           <div class="graph-card">
             <h6 class="text-center mb-3">Monthly Bookings</h6>
             <canvas id="bookingChart"></canvas>
           </div>
         </div>
 
-        <div class="col-lg-4">
-          <div class="graph-card">
-            <h6 class="text-center mb-3">Revenue Growth</h6>
-            <canvas id="revenueChart"></canvas>
-          </div>
-        </div>
+      
       </div>
 
       <div class="row g-4 mt-4">
+        <div class="col-lg-6">
+          <div class="graph-card">
+            <h6 class="text-center mb-3">User Growth</h6>
+            <canvas id="usersChart"></canvas>
+          </div>
+        </div>
+
         <div class="col-lg-6">
           <div class="graph-card">
             <h6 class="text-center mb-3">Revenue Trend</h6>
@@ -66,101 +90,255 @@
           </div>
         </div>
 
-        <div class="col-lg-6">
-          <div class="graph-card">
-            <h6 class="text-center mb-3">User Growth</h6>
-            <canvas id="usersChart"></canvas>
-          </div>
-        </div>
+        
       </div>
 
     </main>
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
-import Chart from 'chart.js/auto'
+<script>
+  import Chart from 'chart.js/auto'
+  import api from '@/services/api';
+  
+  export default {
+    name: 'DashboardCharts',
+  
+    data() {
+      return {
+        // lineChart: null,
+        // barChart: null,
+        // donutChart: null,
 
-const lineChart = ref(null)
-const barChart = ref(null)
-const donutChart = ref(null)
+        //total results
+        totalBookings:0,
+        totalUsers:0,
+        totalRevenue:0,
+        totalCars:0,
 
-onMounted(() => {
+        //cars chart
+        carsChart: null,
+        carChartData: {
+        labels: [],
+        data: []
+        },
 
-  const carsCtx = document.getElementById('carsChart');
-  new Chart(carsCtx, {
-    type: 'doughnut',
-    data: {
-      labels: ['SUV', 'Sedan', 'Hatchback', 'Luxury'],
-      datasets: [{
-        data: [18, 14, 10, 6],
-        backgroundColor: ['#00bfff','#1ecbe1','#4fd1c5','#7fdbff'],
-        borderWidth: 0
-      }]
+        // booking chart 
+        bookingChart: null,
+        bookingChartData: {
+        labels: [],
+        data: []
+        },
+
+        // revenue trend
+        revenueChart: null,
+        revenueChartData: {
+        labels: [],
+        data: []
+        },
+
+        //user growth
+        usersChart: null,
+        usersChartData: {
+        labels: [],
+        data: []
+        }
+      }
+    },
+  
+    mounted() {
+      //Mounting Total Summary
+      this.totalSummary()
+
+      //Load Car Category Chart
+      this.loadCarsChart()
+
+      //Load Booking Category Chart
+      this.loadBookingChart()
+
+      //Load Rvenue Trend
+      this.loadRevenueTrend()
+
+      //Load User Growth
+      this.loadUsersChart()
+
+      //   // Users Bar Chart
+      // new Chart(document.getElementById('usersChart'), {
+      //   type: 'bar',
+      //   data: {
+      //     labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+      //     datasets: [{
+      //       label: 'New Users',
+      //       data: [80,120,150,200,260,310],
+      //       backgroundColor: '#fd7e14',
+      //       borderRadius: 10
+      //     }]
+      //   }
+      // })
+    },
+    methods:{
+      async totalSummary(){
+        try{
+          const res = await api.get('/totalsummary')
+          // console.log(res)
+          this.totalBookings = res.data.data.totalBooking
+          this.totalCars = res.data.data.totalCars
+          this.totalRevenue = res.data.data.totalRevenue
+          this.totalUsers = res.data.data.totalUsers
+        }catch(e){
+          console.log("fetching summary failed:", e)
+        }
+      },
+      async loadCarsChart() {
+    try {
+      const res = await api.get('/admin/car-category-stats')
+      // console.log(res.data)
+      this.carChartData.labels = res.data.data.labels
+      this.carChartData.data = res.data.data.data
+
+      this.renderCarsChart()
+    } catch (e) {
+      console.error('Cars chart error', e)
     }
-  });
+  },
 
-  const bookingCtx = document.getElementById('bookingChart');
-  new Chart(bookingCtx, {
-    type: 'bar',
-    data: {
-      labels: ['Jan','Feb','Mar','Apr','May','Jun'],
-      datasets: [{
-        label: 'Bookings',
-        data: [45,60,52,80,95,120],
-        backgroundColor: '#00bfff',
-        borderRadius: 12
-      }]
+  renderCarsChart() {
+    const ctx = document.getElementById('carsChart')
+
+    if (this.carsChart) {
+      this.carsChart.destroy()
     }
-  });
 
-  const revenueCtx = document.getElementById('revenueChart');
-  new Chart(revenueCtx, {
-    type: 'line',
-    data: {
-      labels: ['Jan','Feb','Mar','Apr','May','Jun'],
-      datasets: [{
-        label: 'Revenue (₹)',
-        data: [120000,150000,140000,180000,210000,260000],
-        borderColor: '#6f42c1',
-        backgroundColor: 'rgba(111,66,193,0.25)',
-        fill: true,
-        tension: 0.4
-      }]
+    this.carsChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: this.carChartData.labels,
+        datasets: [{
+          data: this.carChartData.data,
+          backgroundColor: ['#00bffc','#1ecbec','#1fd1c5','#1cdbff'],
+          borderWidth: 0
+        }]
+      }
+    })
+  },async loadBookingChart() {
+    try {
+      const res = await api.get('/admin/monthly-bookings')
+      console.log(res.data)
+      this.bookingChartData.labels = res.data.data.labels
+      this.bookingChartData.data = res.data.data.data
+
+      this.renderBookingChart()
+    } catch (e) {
+      console.error('Booking chart error', e)
     }
-  });
+  },
 
-  new Chart(document.getElementById('revenueTrend'), {
-    type: 'line',
-    data: {
-      labels: ['Jan','Feb','Mar','Apr','May','Jun'],
-      datasets: [{
-        label: 'Revenue',
-        data: [120000,150000,140000,180000,210000,260000],
-        borderColor: '#20c997',
-        backgroundColor: 'rgba(32,201,151,0.25)',
-        fill: true,
-        tension: 0.4
-      }]
+  renderBookingChart() {
+    const ctx = document.getElementById('bookingChart')
+
+    if (this.bookingChart) {
+      this.bookingChart.destroy()
     }
-  });
 
-  new Chart(document.getElementById('usersChart'), {
-    type: 'bar',
-    data: {
-      labels: ['Jan','Feb','Mar','Apr','May','Jun'],
-      datasets: [{
-        label: 'New Users',
-        data: [80,120,150,200,260,310],
-        backgroundColor: '#fd7e14',
-        borderRadius: 10
-      }]
+    this.bookingChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: this.bookingChartData.labels,
+        datasets: [{
+          label: 'Bookings',
+          data: this.bookingChartData.data,
+          backgroundColor: '#00bfff',
+          borderRadius: 12
+        }]
+      }
+    })
+  },
+  async loadRevenueTrend() {
+    try {
+      const res = await api.get('/admin/monthly-revenue')
+
+      this.revenueChartData.labels = res.data.data.labels
+      this.revenueChartData.data = res.data.data.data
+
+      this.renderRevenueTrend()
+    } catch (e) {
+      console.error('Revenue chart error', e)
     }
-  });
+  },
 
-})
-</script>
+  renderRevenueTrend() {
+    const ctx = document.getElementById('revenueTrend')
+
+    if (this.revenueChart) {
+      this.revenueChart.destroy()
+    }
+
+    this.revenueChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: this.revenueChartData.labels,
+        datasets: [{
+          label: 'Revenue',
+          data: this.revenueChartData.data,
+          borderColor: '#6f42c1',
+          backgroundColor: 'rgba(111,66,193,0.25)',
+          fill: true,
+          tension: 0.4
+        }]
+      }
+    })
+  },
+  async loadUsersChart() {
+    const res = await api.get('/admin/monthly-users')
+
+    this.usersChartData = res.data.data
+    this.renderUsersChart()
+  },
+
+  renderUsersChart() {
+    if (this.usersChart) this.usersChart.destroy()
+
+    this.usersChart = new Chart(
+      document.getElementById('usersChart'),
+      {
+        type: 'bar',
+        data: {
+          labels: this.usersChartData.labels,
+          datasets: [{
+            label: 'New Users',
+            data: this.usersChartData.data,
+            backgroundColor: '#fd7e14',
+            borderRadius: 10
+          }]
+        }
+      }
+    )
+  },
+    },
+    computed: {
+  formattedRevenue() {
+    const value = this.totalRevenue || 0
+
+    if (value >= 10000000) {
+      return '₹ ' + (value / 10000000).toFixed(1) + ' Cr'
+    }
+
+    if (value >= 100000) {
+      return '₹ ' + (value / 100000).toFixed(1) + ' L'
+    }
+
+    if (value >= 1000) {
+      return '₹ ' + (value / 1000).toFixed(1) + ' K'
+    }
+
+    return '₹ ' + value
+  }
+}
+
+
+  }
+  </script>
+  
 
 
 <style scoped>
@@ -177,39 +355,50 @@ onMounted(() => {
 
 
      
-        .stat-card {
-            border-radius: 22px;
-            padding: 25px;
-            color: #ffffff;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-            transition: 0.4s ease;
-        }
+.summary-card {
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
+  color: #fff;
+}
 
-        .stat-card.cars {
-            background: linear-gradient(135deg, #00bfff, #007adf);
-        }
+.summary-card h6 {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
 
-        .stat-card.bookings {
-            background: linear-gradient(135deg, #fd7e14, #ff9f43);
-        }
+.summary-card h3 {
+  font-weight: 800;
+  margin-bottom: 0;
+}
 
-        .stat-card.users {
-            background: linear-gradient(135deg, #20c997, #38ef7d);
-        }
+.bg-bookings {
+  background: linear-gradient(135deg, #0d6efd, #00bfff);
+}
 
-        .stat-card.revenue {
-            background: linear-gradient(135deg, #6f42c1, #9b59b6);
-        }
+.bg-revenue {
+  background: linear-gradient(135deg, #6f42c1, #9b59b6);
+}
 
-        .stat-card h6 {
-            font-size: 14px;
-            opacity: 0.85;
-            letter-spacing: 1px;
-        }
+.bg-users {
+  background: linear-gradient(135deg, #20c997, #38ef7d);
+}
 
-        .stat-card h2 {
-            font-weight: 700;
-        }
+.bg-cars {
+  background: linear-gradient(135deg, #fd7e14, #ff9f43);
+}
+
+.summary-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
 
 
         .glass-box {

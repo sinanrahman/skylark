@@ -8,8 +8,8 @@ const sendMail = require('../utils/otpMailer')
 exports.Login = async (req, res) => {
   try {
     const { username, password } = req.body
-    console.log(req.body)
-    console.log(username, password)
+    // console.log(req.body)
+    // console.log(username, password)
 
     const user = await User.findOne({ username: username })
     if (!user) {
@@ -23,7 +23,8 @@ exports.Login = async (req, res) => {
       return res.status(400).json({ message: "password is incorrect" })
       // return res.render('auth/login',{msg:'Incorrect password'})
     }
-    if (user.role == 'block') {
+    console.log(user)
+    if (!(user.role !== 'block')) {
       return res.status(400).json({ message: "user is blocked" })
       // return res.render('auth/login',{msg:'Incorrect password'})
     }

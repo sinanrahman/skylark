@@ -45,8 +45,26 @@ const bookingSchema = new mongoose.Schema({
 
   paymentMethod: {
     type: String,
-    enum: ['Cash', 'UPI', 'Card'],
+    enum: ['Cash', 'Online'],
     required: true
+  },
+
+  paymentStatus: {
+    type: String,
+    enum: ['Pending', 'Paid', 'Failed'],
+    default: 'Pending'
+  },
+
+  razorpayOrderId: {
+    type: String
+  },
+
+  razorpayPaymentId: {
+    type: String
+  },
+
+  razorpaySignature: {
+    type: String
   },
 
   totalDays: {
@@ -69,15 +87,3 @@ const bookingSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Booking', bookingSchema);
-
-
-//  carId: '1',
-//   pickupDate: '2025-12-07',  
-//   returnDate: '2025-12-29',  
-//   pickupLocation: '3re',     
-//   dropLocation: 'ytr4e3',    
-//   driverOption: 'No Driver', 
-//   paymentMethod: 'Cash',     
-//   totalDays: 22,
-//   totalAmount: 132000,       
-//   pricePerDay: 6000

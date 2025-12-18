@@ -351,6 +351,11 @@ export default {
   color: #fd7e14;
 }
 
+.maintenance{
+  background: rgba(253, 20, 20, 0.15);
+  color: #fd1414;
+}
+
 .car-actions {
   margin-top: 18px;
   display: flex;

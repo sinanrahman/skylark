@@ -9,7 +9,6 @@ exports.isLoggedin = (req, res, next) => {
         }
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         req.user = decoded
-        console.log(req.user)
         return next()
     } catch (e) {
         console.log(e)

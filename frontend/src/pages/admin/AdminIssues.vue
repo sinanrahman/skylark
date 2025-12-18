@@ -1,3 +1,65 @@
+<script>
+  import api from '@/services/api' // axios instance
+  
+  export default {
+    data() {
+      return {
+        issues: [],
+        selectedIssue: null
+      }
+    },
+  
+    mounted() {
+      this.fetchIssues()
+    },
+  
+    methods: {
+      async fetchIssues() {
+        const res = await api.get('/get-all-issues')
+        this.issues = res.data
+      },
+  
+      openModal(issue) {
+        this.selectedIssue = { ...issue }
+        const modal = new bootstrap.Modal(
+          document.getElementById('issueModal')
+        )
+        modal.show()
+      },
+  
+      async updateStatus() {
+        await api.patch(`/issues/${this.selectedIssue._id}/status`, {
+          status: this.selectedIssue.status
+        })
+        this.fetchIssues()
+      },
+  
+      async markResolved(id) {
+        await api.patch(`/issues/${id}/status`, {
+          status: 'Resolved'
+        })
+        this.fetchIssues()
+      },
+  
+      formatDate(date) {
+        return new Date(date).toLocaleDateString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        })
+      },
+  
+      statusClass(status) {
+        return {
+          'badge-open': status === 'Open',
+          'badge-progress': status === 'In Progress',
+          'badge-resolved': status === 'Resolved'
+        }
+      }
+    }
+  }
+  </script>
+  
 <template>
   <div class="container-fluid px-4">
 
@@ -14,7 +76,6 @@
             <th>User Name</th>
             <th>Email</th>
             <th>Issue Type</th>
-            <th>Description</th>
             <th>Date</th>
             <th>Status</th>
             <th>Action</th>
@@ -22,58 +83,81 @@
         </thead>
 
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Rahul Kumar</td>
-            <td>rahul@mail.com</td>
-            <td>Booking Issue</td>
-            <td>Booking confirmation not received</td>
-            <td>12 Sep 2025</td>
-            <td><span class="badge badge-open">Open</span></td>
-            <td>
-              <button class="btn btn-view me-1">
-                <i class="bi bi-eye"></i>
-              </button>
-              <button class="btn btn-resolve">
-                <i class="bi bi-check-circle"></i>
-              </button>
-            </td>
-          </tr>
+  <tr v-for="(issue, index) in issues" :key="issue._id">
+    <td>{{ index + 1 }}</td>
+    <td>{{ issue.name }}</td>
+    <td>{{ issue.email }}</td>
+    <td>{{ issue.issueType }}</td>
+    <td>{{ formatDate(issue.createdAt) }}</td>
+    <td>
+      <span
+        class="badge"
+        :class="statusClass(issue.status)"
+      >
+        {{ issue.status }}
+      </span>
+    </td>
+    <td>
+      <button class="btn btn-view me-1" @click="openModal(issue)">
+        <i class="bi bi-eye"></i>
+      </button>
 
-          <tr>
-            <td>2</td>
-            <td>Ayesha Khan</td>
-            <td>ayesha@mail.com</td>
-            <td>Payment Issue</td>
-            <td>Amount deducted twice</td>
-            <td>11 Sep 2025</td>
-            <td><span class="badge badge-progress">In Progress</span></td>
-            <td>
-              <button class="btn btn-view me-1">
-                <i class="bi bi-eye"></i>
-              </button>
-              <button class="btn btn-resolve">
-                <i class="bi bi-check-circle"></i>
-              </button>
-            </td>
-          </tr>
+      <button
+        v-if="issue.status !== 'Resolved'"
+        class="btn btn-resolve"
+        @click="markResolved(issue._id)"
+      >
+        <i class="bi bi-check-circle"></i>
+      </button>
+    </td>
+  </tr>
+</tbody>
 
-          <tr>
-            <td>3</td>
-            <td>John Mathew</td>
-            <td>john@mail.com</td>
-            <td>Car Issue</td>
-            <td>AC not working in booked car</td>
-            <td>10 Sep 2025</td>
-            <td><span class="badge badge-resolved">Resolved</span></td>
-            <td>
-              <button class="btn btn-view">
-                <i class="bi bi-eye"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
       </table>
+      <div class="modal fade" id="issueModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Issue Details</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body" v-if="selectedIssue">
+        <p><strong>User:</strong> {{ selectedIssue.name }}</p>
+        <p><strong>Email:</strong> {{ selectedIssue.email }}</p>
+        <p><strong>Issue Type:</strong> {{ selectedIssue.issueType }}</p>
+
+        <p class="mt-3"><strong>Description:</strong></p>
+        <p class="text-muted">{{ selectedIssue.description }}</p>
+
+        <div class="mt-3">
+          <label class="form-label">Status</label>
+          <select
+            v-model="selectedIssue.status"
+            class="form-select"
+          >
+            <option>Open</option>
+            <option>In Progress</option>
+            <option>Resolved</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="btn btn-primary"
+          @click="updateStatus"
+          data-bs-dismiss="modal"
+        >
+          Update Status
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
     </div>
 
   </div>
