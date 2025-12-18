@@ -1,4 +1,4 @@
-// const e = require('express')
+
 const User = require('../models/User')
 const sendCookie = require('../utils/sendCookie')
 const uploadImage = require('../utils/uploadImage')
@@ -8,36 +8,27 @@ const sendMail = require('../utils/otpMailer')
 exports.Login = async (req, res) => {
   try {
     const { username, password } = req.body
-    // console.log(req.body)
-    // console.log(username, password)
+  
 
     const user = await User.findOne({ username: username })
     if (!user) {
       return res.status(400).json({ message: "User not found" })
-      // return res.render('auth/login',{msg:'Incorrect username'})
+   
     }
 
     const validation = await user.isValidatedPassword(password)
 
     if (!validation) {
       return res.status(400).json({ message: "password is incorrect" })
-      // return res.render('auth/login',{msg:'Incorrect password'})
+   
     }
     console.log(user)
     if (!(user.role !== 'block')) {
       return res.status(400).json({ message: "user is blocked" })
-      // return res.render('auth/login',{msg:'Incorrect password'})
+    
     }
     req.user = username
-    // return res.status(200).json({
-    //     message:'Login Successful',
-    //     user:{
-    //         id: user.id,
-    //         name: user.name,
-    //         username: user.username,
-    //         role: user.role
-    //     }
-    // })
+
     return sendCookie(user, res)
 
   } catch (e) {
@@ -107,9 +98,12 @@ exports.GenerateOtp = async (req, res) => {
   }
   console.log(result)
   var otp = generateRandomOTP()
+
+  await sendMail(result.mail, otp)
+  
   result.otp = otp
   await result.save()
-  await sendMail(result.mail, otp)
+  
   
   return res.json({ status: true })
   
@@ -127,7 +121,7 @@ exports.VerifyOtp =  async (req,res) => {
   console.log(result)
   result.otp = ""
   await result.save()
-  // return res.status(201).json({message:'otp verification success'})
+  
   return sendCookie(result,res)
   }catch(e){
     console.log(e)
@@ -140,7 +134,7 @@ exports.Logout = (req, res) => {
     console.log('logout called')
     res.clearCookie("token", {
       httpOnly: true,
-      secure: false, // true in HTTPS
+      secure: false, 
       sameSite: "Lax",
       path: "/"
     });
@@ -148,7 +142,7 @@ exports.Logout = (req, res) => {
   }catch(e){
     console.log(e)
   return res.status(400).json({message:'logout failed'})
-  // return res.cookie('token',null).json({message:'Logout Successful'})
+ 
   }
   
 }

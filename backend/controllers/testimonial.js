@@ -1,4 +1,4 @@
-// controllers/testimonial.js
+
 const Testimonial = require('../models/Testimonial')
 
 exports.getTestimonials = async (req, res) => {

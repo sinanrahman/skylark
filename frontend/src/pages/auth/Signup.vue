@@ -1,9 +1,8 @@
 <template>
   <div class="register-wrapper">
 
-     <img src="/img/car.png" class="bg-car" />
+    <img src="/img/car.png" class="bg-car" />
 
-    <!-- Glass Card -->
     <form @submit.prevent="submitForm" class="login-card">
 
       <h2 class="text-center mb-4">Signup</h2>
@@ -20,7 +19,7 @@
           <label for="username">Username</label>
         </div>
 
-    
+
         <div class="form-floating mb-3">
           <input v-model="email" id="email" type="email" class="form-control input-glass" placeholder=" ">
           <label for="email">Email</label>
@@ -32,7 +31,8 @@
         </div>
 
         <div class="form-floating mb-3">
-          <input v-model="confirmPassword" id="confirmPassword" type="password" class="form-control input-glass" placeholder=" ">
+          <input v-model="confirmPassword" id="confirmPassword" type="password" class="form-control input-glass"
+            placeholder=" ">
           <label for="confirmPassword">Confirm Password</label>
         </div>
 
@@ -43,31 +43,19 @@
         </div>
 
         <div class="form-floating mb-3">
-  <select
-    id="role"
-    class="form-select input-glass"
-    name="role"
-    v-model="role"
-    required
-  >
-    <option disabled value="">Select role</option>
-    <option value="user">User</option>
-    <!-- <option value="admin">Admin</option> -->
-  </select>
-</div>
+          <select id="role" class="form-select input-glass" name="role" v-model="role" required>
+            <option disabled value="">Select role</option>
+            <option value="user">User</option>
+          </select>
+        </div>
 
 
         <div class="mb-3">
-          <input
-            type="file"
-            id="profilePic"
-            class="form-control custom-file input-glass"
-            accept="image/*"
-            @change="onImageChange"
-          >
+          <input type="file" id="profilePic" class="form-control custom-file input-glass" accept="image/*"
+            @change="onImageChange">
         </div>
 
-  
+
         <div class="profile-pic-container">
           <img :src="previewImg" alt="">
         </div>
@@ -89,75 +77,73 @@
 
 
 <script>
-  import api from '@/services/api'
-  
-  export default {
-    data() {
-      return {
-        msg: '',
-        previewImg: '',
-        imageFile: null,
-  
-        name: '',
-        username: '',
-        email: '',
-        phone: '',
-        role: '',
-        password: '',
-        confirmPassword: ''
-      }
+import api from '@/services/api'
+
+export default {
+  data() {
+    return {
+      msg: '',
+      previewImg: '',
+      imageFile: null,
+
+      name: '',
+      username: '',
+      email: '',
+      phone: '',
+      role: '',
+      password: '',
+      confirmPassword: ''
+    }
+  },
+
+  methods: {
+    onImageChange(e) {
+      const file = e.target.files[0]
+      this.imageFile = file
+      this.previewImg = URL.createObjectURL(file)
     },
-  
-    methods: {
-      onImageChange(e) {
-        const file = e.target.files[0]
-        this.imageFile = file
-        this.previewImg = URL.createObjectURL(file)
-      },
-  
-      async submitForm() {
-        if (!this.name || !this.username || !this.email || !this.password) {
-          this.msg = 'All fields are required'
-          return
-        }
-  
-        if (this.password !== this.confirmPassword) {
-          this.msg = 'Passwords do not match!'
-          return
-        }
-  
-        try {
-          const formData = new FormData()
-          formData.append('photo', this.imageFile)
-          formData.append('name', this.name)
-          formData.append('username', this.username)
-          formData.append('email', this.email)
-          formData.append('phone', this.phone)
-          formData.append('role', this.role)
-          formData.append('password', this.password)
-          formData.append('confirmPassword', this.confirmPassword) // ✅ IMPORTANT
-  
-          const res = await api.post('/register', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          })
-  
-          console.log(res.data)
-  
-          // ✅ redirect to login
-          this.$router.push('/auth/login')
-        } catch (err) {
-          this.msg =
-            err.response?.data?.message ||
-            'Registration failed'
-        }
+
+    async submitForm() {
+      if (!this.name || !this.username || !this.email || !this.password) {
+        this.msg = 'All fields are required'
+        return
+      }
+
+      if (this.password !== this.confirmPassword) {
+        this.msg = 'Passwords do not match!'
+        return
+      }
+
+      try {
+        const formData = new FormData()
+        formData.append('photo', this.imageFile)
+        formData.append('name', this.name)
+        formData.append('username', this.username)
+        formData.append('email', this.email)
+        formData.append('phone', this.phone)
+        formData.append('role', this.role)
+        formData.append('password', this.password)
+        formData.append('confirmPassword', this.confirmPassword) // ✅ IMPORTANT
+
+        const res = await api.post('/register', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+
+        console.log(res.data)
+        this.$router.push('/auth/login')
+      } catch (err) {
+        this.msg =
+          err.response?.data?.message ||
+          'Registration failed'
       }
     }
   }
-  </script>
-  
-  
+}
+</script>
+
+
 
 <style scoped>
 * {
@@ -209,7 +195,8 @@
   color: #000 !important;
   caret-color: #000;
 }
-.form-floating > .input-glass {
+
+.form-floating>.input-glass {
   height: 56px;
   padding: 1.25rem 0.75rem;
   background: hwb(0 98% 1% / 0.3);
@@ -218,11 +205,11 @@
 }
 
 .input-glass:focus {
- background-color: #d1d5db;
+  background-color: #d1d5db;
   color: #000 !important;
 }
 
-.form-floating > label {
+.form-floating>label {
   padding: 0.75rem;
   color: #333;
 }
@@ -234,7 +221,7 @@
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(15px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   z-index: 3;
   animation: fadeIn 1s ease;
 }
@@ -248,6 +235,7 @@
 .login-card-scroll::-webkit-scrollbar {
   width: 6px;
 }
+
 .login-card-scroll::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.5);
   border-radius: 10px;
@@ -255,8 +243,8 @@
 
 
 
-.form-floating > .input-glass {
-  height: 60px;                     
+.form-floating>.input-glass {
+  height: 60px;
   padding: 1.625rem 0.75rem 0.625rem;
   background: rgba(255, 255, 255, 0.35);
   border: none;
@@ -265,17 +253,17 @@
   font-size: 16px;
   line-height: 1.5;
   caret-color: #000;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: background 0.25s ease, box-shadow 0.25s ease;
 }
 
-.form-floating > .input-glass:focus,
-.form-floating > .input-glass:not(:placeholder-shown) {
+.form-floating>.input-glass:focus,
+.form-floating>.input-glass:not(:placeholder-shown) {
   color: #000;
 }
 
 
-.form-floating > label {
+.form-floating>label {
   padding: 0.75rem;
   color: #333;
 }
@@ -289,9 +277,9 @@
   cursor: pointer;
 }
 
-  .custom-file:hover {
-    background-color: #e0e0e0;
-  }
+.custom-file:hover {
+  background-color: #e0e0e0;
+}
 
 
 .profile-pic-container {
@@ -317,10 +305,11 @@
   padding: 12px;
   font-weight: bold;
 }
+
 .login-btn:hover {
   background: #0088cc;
   transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
   transition: 0.3s ease;
 }
 
@@ -343,10 +332,10 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-
 </style>

@@ -1,133 +1,122 @@
 <template>
-    <div class="profile-page">
+  <div class="profile-page">
 
-        <!-- NAVBAR -->
-        <div class="profile-navbar">
-            <div class="logo">SKYLARK</div>
-            <div class="nav-right">
-                <i class="bi bi-house"></i>
-                <span>{{ this.$store.state.user.username }}</span>
-            </div>
+    <div class="profile-navbar">
+      <div class="logo">SKYLARK</div>
+      <div class="nav-right">
+        <i class="bi bi-house"></i>
+        <span>{{ this.$store.state.user.username }}</span>
+      </div>
+    </div>
+
+    <div class="profile-card">
+
+      <div class="profile-header">
+        <img :src="`${this.$store.state.user.dp}` || defaultDp" class="profile-dp" />
+        <div>
+          <h4>{{ this.$store.state.user.name }}</h4>
+          <p class="username">@{{ this.$store.state.user.username }}</p>
         </div>
 
-        <!-- PROFILE CARD -->
-        <div class="profile-card">
+        <button class="btn-edit" @click="openModal">
+          Edit Profile
+        </button>
+      </div>
 
-            <div class="profile-header">
-                <img :src="`${this.$store.state.user.dp}` || defaultDp" class="profile-dp" />
-                <div>
-                    <h4>{{ this.$store.state.user.name }}</h4>
-                    <p class="username">@{{ this.$store.state.user.username }}</p>
-                </div>
+      <div class="profile-info">
+        <div><strong>User ID:</strong> {{ this.$store.state.user.id }}</div>
+        <div><strong>Email:</strong> {{ this.$store.state.user.mail }}</div>
+        <div><strong>Phone:</strong> {{ this.$store.state.user.phone }}</div>
+        <div><strong>Role:</strong> {{ this.$store.state.user.role }}</div>
+        <div><strong>Has Booking:</strong> {{ this.$store.state.user.hasbooking ? 'Yes' : 'No' }}</div>
+      </div>
+    </div>
 
-                <button class="btn-edit" @click="openModal">
-                    Edit Profile
-                </button>
-            </div>
+    <div class="booking-section">
+      <h5>My Bookings</h5>
 
-            <div class="profile-info">
-                <div><strong>User ID:</strong> {{ this.$store.state.user.id }}</div>
-                <div><strong>Email:</strong> {{ this.$store.state.user.mail }}</div>
-                <div><strong>Phone:</strong> {{ this.$store.state.user.phone }}</div>
-                <div><strong>Role:</strong> {{ this.$store.state.user.role }}</div>
-                <div><strong>Has Booking:</strong> {{ this.$store.state.user.hasbooking ? 'Yes' : 'No' }}</div>
-            </div>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Booking ID</th>
+            <th>Car</th>
+            <th>Pickup Date</th>
+            <th>Return Date</th>
+            <th>Total Days</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr v-for="(b, index) in bookings" :key="b._id">
+            <td>{{ index + 1 }}</td>
+            <td>#{{ b.bookingId }}</td>
+            <td>{{ carNames[b.carId] || "Loading..." }}</td>
+            <td>{{ formatDate(b.pickupDate) }}</td>
+            <td>{{ formatDate(b.returnDate) }}</td>
+            <td>{{ b.totalDays }}</td>
+            <td>₹{{ b.totalAmount }}</td>
+            <td>
+              <span class="status confirmed">Confirmed</span>
+            </td>
+          </tr>
+
+          <tr v-if="bookings.length === 0">
+            <td colspan="8" class="text-center">No bookings found</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
+      <div class="modal-box">
+
+        <h5>Edit Profile</h5>
+
+        <div class="profile-pic-wrapper">
+          <img :src="previewDp || $store.state.user.dp || defaultDp" class="profile-preview" />
+
+          <label class="upload-btn">
+            Change Photo
+            <input type="file" accept="image/*" hidden @change="handleDpChange" />
+          </label>
         </div>
 
-        <!-- BOOKINGS TABLE -->
-        <div class="booking-section">
-            <h5>My Bookings</h5>
-
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Booking ID</th>
-                        <th>Car</th>
-                        <th>Pickup Date</th>
-                        <th>Return Date</th>
-                        <th>Total Days</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr v-for="(b, index) in bookings" :key="b._id">
-                        <td>{{ index + 1 }}</td>
-                        <td>#{{ b.bookingId }}</td>
-                        <td>{{ carNames[b.carId] || "Loading..." }}</td>
-                        <td>{{ formatDate(b.pickupDate) }}</td>
-                        <td>{{ formatDate(b.returnDate) }}</td>
-                        <td>{{ b.totalDays }}</td>
-                        <td>₹{{ b.totalAmount }}</td>
-                        <td>
-                            <span class="status confirmed">Confirmed</span>
-                        </td>
-                    </tr>
-
-                    <tr v-if="bookings.length === 0">
-                        <td colspan="8" class="text-center">No bookings found</td>
-                    </tr>
-                </tbody>
-            </table>
-
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" v-model="form.name" />
         </div>
 
-        <!-- UPDATE MODAL -->
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" v-model="form.username" />
+        </div>
 
-<!-- UPDATE MODAL -->
-<div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
-  <div class="modal-box">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" v-model="form.mail" />
+        </div>
 
-    <h5>Edit Profile</h5>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" v-model="form.phone" />
+        </div>
 
-    <!-- PROFILE IMAGE -->
-    <div class="profile-pic-wrapper">
-      <img
-        :src="previewDp || $store.state.user.dp || defaultDp"
-        class="profile-preview"
-      />
+        <div class="modal-actions">
+          <button class="btn-cancel" @click="closeModal">Cancel</button>
+          <button class="btn-save" @click="updateProfile">
+            Save Changes
+          </button>
+        </div>
 
-      <label class="upload-btn">
-        Change Photo
-        <input type="file" accept="image/*" hidden @change="handleDpChange" />
-      </label>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>Name</label>
-      <input type="text" v-model="form.name" />
-    </div>
 
-    <div class="form-group">
-      <label>Username</label>
-      <input type="text" v-model="form.username" />
-    </div>
-
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" v-model="form.mail" />
-    </div>
-
-    <div class="form-group">
-      <label>Phone</label>
-      <input type="tel" v-model="form.phone" />
-    </div>
-
-    <div class="modal-actions">
-      <button class="btn-cancel" @click="closeModal">Cancel</button>
-      <button class="btn-save" @click="updateProfile">
-        Save Changes
-      </button>
-    </div>
 
   </div>
-</div>
-
-
-
-    </div>
 </template>
 <script>
 import api from "@/services/api";
@@ -142,13 +131,9 @@ export default {
       carNames: {},
 
       showModal: false,
-
-      // 👇 DP handling
       previewDp: null,
       selectedDp: null,
       defaultDp: "/img/user/default.png",
-
-      // 👇 form fields
       form: {
         name: "",
         username: "",
@@ -159,9 +144,6 @@ export default {
   },
 
   methods: {
-    /* ======================
-       PROFILE IMAGE HANDLER
-    ====================== */
     handleDpChange(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -169,16 +151,11 @@ export default {
       this.selectedDp = file;
       this.previewDp = URL.createObjectURL(file);
     },
-
-    /* ======================
-       FETCH USER PROFILE
-    ====================== */
     async fetchProfile() {
       try {
         const res = await api.get("/users/me");
         this.user = res.data.data;
 
-        // preload modal form
         const u = this.$store.state.user;
         this.form = {
           name: u.name || "",
@@ -191,9 +168,6 @@ export default {
       }
     },
 
-    /* ======================
-       FETCH BOOKINGS
-    ====================== */
     async fetchBookings() {
       try {
         const userId = this.$store.state.user.id;
@@ -220,9 +194,6 @@ export default {
       }
     },
 
-    /* ======================
-       MODAL CONTROLS
-    ====================== */
     openModal() {
       const user = this.$store.state.user;
 
@@ -242,9 +213,6 @@ export default {
       this.showModal = false;
     },
 
-    /* ======================
-       UPDATE PROFILE (FORMDATA)
-    ====================== */
     async updateProfile() {
       try {
         const formData = new FormData();
@@ -253,13 +221,9 @@ export default {
         formData.append("username", this.form.username);
         formData.append("mail", this.form.mail);
         formData.append("phone", this.form.phone);
-
-        // if (this.selectedDp) {
-        //   formData.append("dp", this.selectedDp);
-        // }
         if (this.selectedDp) {
-  formData.append("photo", this.selectedDp); // ✅ FIXED
-}
+          formData.append("photo", this.selectedDp);
+        }
 
 
         await api.put(
@@ -279,9 +243,6 @@ export default {
       }
     },
 
-    /* ======================
-       DATE FORMAT
-    ====================== */
     formatDate(date) {
       if (!date) return "-";
       return new Date(date).toLocaleDateString("en-IN", {
@@ -302,120 +263,114 @@ export default {
 
 <style scoped>
 .profile-page {
-    padding: 30px;
-    background: #f4f7fb;
-    min-height: 100vh;
+  padding: 30px;
+  background: #f4f7fb;
+  min-height: 100vh;
 }
 
-/* NAVBAR */
 .profile-navbar {
-    display: flex;
-    justify-content: space-between;
-    padding: 14px 24px;
-    background: #0d6efd;
-    color: #fff;
-    border-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: #0d6efd;
+  color: #fff;
+  border-radius: 14px;
 }
 
-/* PROFILE CARD */
 .profile-card {
-    background: #fff;
-    margin-top: 25px;
-    border-radius: 18px;
-    padding: 25px;
+  background: #fff;
+  margin-top: 25px;
+  border-radius: 18px;
+  padding: 25px;
 }
 
 .profile-header {
-    display: flex;
-    align-items: center;
-    gap: 18px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
 
 .profile-dp {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    object-fit: cover;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .btn-edit {
-    margin-left: auto;
-    padding: 8px 16px;
-    border-radius: 20px;
-    background: #0d6efd;
-    color: #fff;
-    border: none;
+  margin-left: auto;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: #0d6efd;
+  color: #fff;
+  border: none;
 }
 
 .profile-info {
-    margin-top: 20px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 
-/* BOOKINGS */
 .booking-section {
-    margin-top: 30px;
-    background: #fff;
-    padding: 25px;
-    border-radius: 18px;
+  margin-top: 30px;
+  background: #fff;
+  padding: 25px;
+  border-radius: 18px;
 }
 
-/* MODAL */
 .modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, .4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-box {
-    background: #fff;
-    padding: 25px;
-    border-radius: 18px;
-    width: 400px;
+  background: #fff;
+  padding: 25px;
+  border-radius: 18px;
+  width: 400px;
 }
 
 .form-group {
-    margin-bottom: 14px;
+  margin-bottom: 14px;
 }
 
 .modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .btn-save {
-    background: #0d6efd;
-    color: #fff;
-    border: none;
-    padding: 8px 18px;
+  background: #0d6efd;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
 }
 
 .btn-cancel {
-    background: #dee2e6;
-    border: none;
-    padding: 8px 18px;
+  background: #dee2e6;
+  border: none;
+  padding: 8px 18px;
 }
 
-/* STATUS */
 .status.active {
-    color: green;
+  color: green;
 }
 
 .status.completed {
-    color: gray;
+  color: gray;
 }
 
 .status.cancelled {
-    color: red;
+  color: red;
 }
 
-/* MODAL BACKDROP */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -423,17 +378,13 @@ export default {
   backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
-
-  /* 👇 important */
   align-items: flex-start;
-  padding-top: 110px;   /* SPACE FROM NAVBAR */
-  padding-bottom: 40px; /* SPACE FROM BOTTOM */
-
+  padding-top: 110px;
+  padding-bottom: 40px;
   z-index: 999;
   overflow-y: auto;
 }
 
-/* MODAL BOX */
 .modal-box {
   background: #ffffff;
   width: 420px;
@@ -443,7 +394,6 @@ export default {
   animation: modalFade 0.3s ease;
 }
 
-/* TITLE */
 .modal-box h5 {
   font-size: 18px;
   font-weight: 600;
@@ -452,7 +402,6 @@ export default {
   color: #212529;
 }
 
-/* FORM GROUP */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -465,7 +414,6 @@ export default {
   color: #6c757d;
 }
 
-/* INPUT */
 .form-group input {
   padding: 10px 14px;
   border-radius: 12px;
@@ -480,7 +428,6 @@ export default {
   box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
 }
 
-/* ACTION BUTTONS */
 .modal-actions {
   display: flex;
   justify-content: flex-end;
@@ -488,7 +435,6 @@ export default {
   margin-top: 20px;
 }
 
-/* CANCEL BUTTON */
 .btn-cancel {
   padding: 9px 18px;
   border-radius: 20px;
@@ -504,7 +450,6 @@ export default {
   background: #dee2e6;
 }
 
-/* SAVE BUTTON */
 .btn-save {
   padding: 9px 20px;
   border-radius: 20px;
@@ -527,21 +472,13 @@ export default {
     opacity: 0;
     transform: translateY(10px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
 }
 
-/* MOBILE RESPONSIVE */
-@media (max-width: 480px) {
-  .modal-box {
-    width: 90%;
-    padding: 22px;
-  }
-}
-
-/* PROFILE PIC */
 .profile-pic-wrapper {
   display: flex;
   flex-direction: column;
@@ -565,5 +502,105 @@ export default {
   font-weight: 500;
 }
 
+@media (max-width: 768px) {
+  .booking-section {
+    padding: 18px;
+  }
 
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody tr {
+    display: block;
+    margin-bottom: 16px;
+    border: 1px solid #dee2e6;
+    border-radius: 14px;
+    padding: 30px;
+    background: #fff;
+  }
+
+  tbody td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 60px;
+    font-size: 14px;
+  }
+
+  tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6c757d;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .btn-edit {
+    margin-left: 0;
+    margin-top: 12px;
+  }
+
+  .profile-info {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .profile-navbar {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .nav-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .profile-page {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-box {
+    width: 92%;
+    padding: 20px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .btn-save,
+  .btn-cancel {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .profile-dp,
+  .profile-preview {
+    width: 72px;
+    height: 72px;
+  }
+}
 </style>

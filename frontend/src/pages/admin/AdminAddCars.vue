@@ -37,55 +37,55 @@
         <div class="form-section">
           <h6 class="section-title">Specifications</h6>
 
-            <div class="row g-4">
-              <div class="col-md-4">
-                <label>Category</label>
-                <select class="form-select" required v-model="form.category">
-                  <option disabled value="">Select category</option>
-                  <option>SUV</option>
-                  <option>Sedan</option>
-                  <option>Hatchback</option>
-                  <option>Luxury</option>
-                </select>
-              </div>
+          <div class="row g-4">
+            <div class="col-md-4">
+              <label>Category</label>
+              <select class="form-select" required v-model="form.category">
+                <option disabled value="">Select category</option>
+                <option>SUV</option>
+                <option>Sedan</option>
+                <option>Hatchback</option>
+                <option>Luxury</option>
+              </select>
+            </div>
 
-              <div class="col-md-4">
-                <label>Fuel Type</label>
-                <select class="form-select" required v-model="form.fuel">
-                  <option disabled value="">Select fuel</option>
-                  <option>Petrol</option>
-                  <option>Diesel</option>
-                  <option>Electric</option>
-                  <option>Hybrid</option>
-                </select>
-              </div>
+            <div class="col-md-4">
+              <label>Fuel Type</label>
+              <select class="form-select" required v-model="form.fuel">
+                <option disabled value="">Select fuel</option>
+                <option>Petrol</option>
+                <option>Diesel</option>
+                <option>Electric</option>
+                <option>Hybrid</option>
+              </select>
+            </div>
 
-              <div class="col-md-4">
-                <label>Status</label>
-                <select class="form-select" required v-model="form.status">
-                  <option disabled value="">Select status</option>
-                  <option>Available</option>
-                  <option>Booked</option>
-                  <option>Maintenance</option>
-                </select>
-              </div>
+            <div class="col-md-4">
+              <label>Status</label>
+              <select class="form-select" required v-model="form.status">
+                <option disabled value="">Select status</option>
+                <option>Available</option>
+                <option>Booked</option>
+                <option>Maintenance</option>
+              </select>
+            </div>
 
-              <div class="col-md-4">
-                <label>Price / Day (₹)</label>
-                <input type="number" class="form-control" placeholder="4500" required v-model="form.price">
-              </div>
+            <div class="col-md-4">
+              <label>Price / Day (₹)</label>
+              <input type="number" class="form-control" placeholder="4500" required v-model="form.price">
+            </div>
 
-              <div class="col-md-4">
-                <label>Safety Rating</label>
-                <select class="form-select" v-model="form.safetyRating">
-                  <option disabled value="">Select rating</option>
-                  <option>★★★★★ (5)</option>
-                  <option>★★★★ (4)</option>
-                  <option>★★★ (3)</option>
-                  <option>★★ (2)</option>
-                  <option>★ (1)</option>
-                </select>
-              </div>
+            <div class="col-md-4">
+              <label>Safety Rating</label>
+              <select class="form-select" v-model="form.safetyRating">
+                <option disabled value="">Select rating</option>
+                <option>★★★★★ (5)</option>
+                <option>★★★★ (4)</option>
+                <option>★★★ (3)</option>
+                <option>★★ (2)</option>
+                <option>★ (1)</option>
+              </select>
+            </div>
 
           </div>
         </div>
@@ -95,7 +95,6 @@
 
           <div class="row g-4">
 
-            <!-- LEFT : FEATURES -->
             <div class="col-md-6">
               <label>Features</label>
 
@@ -201,59 +200,53 @@ export default {
     };
   },
 
- methods: {
-  handleImages(event) {
-    this.form.images = Array.from(event.target.files);
-  },
+  methods: {
+    handleImages(event) {
+      this.form.images = Array.from(event.target.files);
+    },
 
-  async submitForm() {
-    const formData = new FormData();
+    async submitForm() {
+      const formData = new FormData();
 
-    // Append normal fields
-    Object.keys(this.form).forEach(key => {
-      if (key !== "features" && key !== "images") {
-        formData.append(key, this.form[key]);
-      }
-    });
+      Object.keys(this.form).forEach(key => {
+        if (key !== "features" && key !== "images") {
+          formData.append(key, this.form[key]);
+        }
+      });
 
-    // Append features array
-    this.form.features.forEach(feature => {
-      formData.append("features[]", feature);
-    });
 
-    // Append images
-    this.form.images.forEach(file => {
-      formData.append("images", file);
-    });
+      this.form.features.forEach(feature => {
+        formData.append("features[]", feature);
+      });
 
-    // OPTIONAL: Debug
-    /*
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
+
+      this.form.images.forEach(file => {
+        formData.append("images", file);
+      });
+
+
+
+      let res = await api.post("/addcar", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
+      console.log(res.data.message)
+      console.log("FORM DATA SENT AS MULTIPART");
+      this.form.name = ""
+      this.form.model = ""
+      this.form.seats = ""
+      this.form.category = ""
+      this.form.fuel = ""
+      this.form.status = ""
+      this.form.price = ""
+      this.form.safetyRating = ""
+      this.form.transmission = "manual"
+      this.form.features = []
+      this.form.description = ""
+      this.form.images = []
     }
-    */
-
-    let res = await api.post("/addcar", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data"
-      }
-    });
-    console.log(res.data.message)
-    console.log("FORM DATA SENT AS MULTIPART");
-    this.form.name = ""
-    this.form.model = ""
-    this.form.seats = ""
-    this.form.category = ""
-    this.form.fuel = ""
-    this.form.status = ""
-    this.form.price = ""
-    this.form.safetyRating = ""
-    this.form.transmission = "manual"
-    this.form.features = []
-    this.form.description = ""
-    this.form.images = []
   }
-}
 
 };
 </script>

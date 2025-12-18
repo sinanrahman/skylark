@@ -128,64 +128,6 @@
                     <h2 class="text-center fw-bold mb-5 testimonial-title">
                         What Our Customers Say
                     </h2>
-
-                    <!-- <div class="row g-4">
-
-                        <div class="col-md-4">
-                            <div class="testimonial-card">
-                                <p class="review-text">
-                                    “Skylark provided the best rental experience. Clean cars, smooth ride,
-                                    and quick pickup. Highly recommended!”
-                                </p>
-
-                                <div class="d-flex align-items-center mt-3">
-                                    <img src="https://i.pravatar.cc/90?img=12" class="review-img" alt="">
-                                    <div class="ms-3">
-                                        <h6 class="mb-0 text-white">Rahul Menon</h6>
-                                        <div class="rating text-warning">
-                                            ★★★★★
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="testimonial-card">
-                                <p class="review-text">
-                                    “Affordable prices and professional service.
-                                    The car felt brand-new. Skylark is always my first choice now!”
-                                </p>
-
-                                <div class="d-flex align-items-center mt-3">
-                                    <img src="https://i.pravatar.cc/90?img=30" class="review-img" alt="">
-                                    <div class="ms-3">
-                                        <h6 class="mb-0 text-white">Aisha Kareem</h6>
-                                        <div class="rating text-warning">
-                                            ★★★★★
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="testimonial-card">
-                                <p class="review-text">
-                                    “Excellent customer support and hassle-free booking.
-                                    The airport pickup option saved my time. Loved the experience!”
-                                </p>
-
-                                <div class="d-flex align-items-center mt-3">
-                                    <img src="https://i.pravatar.cc/90?img=56" class="review-img" alt="">
-                                    <div class="ms-3">
-                                        <h6 class="mb-0 text-white">Vignesh P</h6>
-                                        <div class="rating text-warning">
-                                            ★★★★★
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="row g-4">
                         <div class="col-md-4" v-for="review in testimonials" :key="review._id">
                             <div class="testimonial-card">
@@ -207,23 +149,13 @@
                         </div>
                     </div>
 
-                    <!-- SMALL REVIEW SECTION -->
                     <div class="review-form mt-5">
                         <h4 class="text-white mb-4 text-center">Write a Review</h4>
 
                         <div class="review-row">
-                            <!-- Avatar -->
-                            <!-- <img
-      :src="reviewForm.avatar"
-      class="review-avatar"
-      alt="User"
-    /> -->
-
-                            <!-- Review Input -->
                             <textarea v-model="reviewForm.message" placeholder="Share your experience..."
                                 class="review-input"></textarea>
 
-                            <!-- Rating -->
                             <select v-model="reviewForm.rating" class="review-select">
                                 <option disabled value="">★</option>
                                 <option v-for="n in 5" :key="n" :value="n">
@@ -231,7 +163,6 @@
                                 </option>
                             </select>
 
-                            <!-- Button -->
                             <button @click="submitReview" class="review-btn">
                                 Submit
                             </button>
@@ -283,8 +214,6 @@ export default {
             }
 
             await api.post('/testimonials', this.reviewForm)
-
-            // ✅ reset only form fields
             this.reviewForm.message = ''
             this.reviewForm.rating = ''
 
@@ -295,8 +224,6 @@ export default {
 
     mounted() {
         this.fetchTestimonials()
-
-        // set once on load
         this.reviewForm.name = this.$store.state.user.name
         this.reviewForm.avatar = this.$store.state.user.dp
     },

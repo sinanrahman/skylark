@@ -1,5 +1,5 @@
 const express = require('express')
-const { GetHomePage, GetCarsPage, GetContactPage, GetAboutPage, GetCar, GetBookingsPage, CreateBooking, GetBookingsDetails, UpdateUserProfile } = require('../controllers/home')
+const { GetHomePage, GetCarsPage, GetCar, GetBookingsPage, CreateBooking, GetBookingsDetails, UpdateUserProfile } = require('../controllers/home')
 const { GetAllCars } = require('../controllers/admin')
 const { CreateOrder } = require('../controllers/payment')
 const { getTestimonials,addTestimonial } = require('../controllers/testimonial')
@@ -9,15 +9,6 @@ const router = express.Router()
 router
     .route('/profile')
     .get(GetHomePage)
-// router
-//     .route('/cars')
-//     .get(GetCarsPage)
-router
-    .route('/contact')
-    .get(GetContactPage)
-router
-    .route('/about')
-    .get(GetAboutPage)
 router
     .route('/getcar/:id')
     .get(GetCar)

@@ -169,14 +169,11 @@ export default {
     async submitIssue() {
       try {
         await api.post('/add-issue', this.issue)
-        // alert("Issue submitted successfully ✅")
-
-        // Reset form
         this.issue.bookingId = ""
         this.issue.description = ""
 
       } catch (err) {
-        console.error("Failed to submit issue ❌", err)
+        console.error("Failed to submit issue ", err)
       }
     }
   },

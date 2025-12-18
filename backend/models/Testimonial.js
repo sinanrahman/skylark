@@ -1,11 +1,11 @@
-// models/Testimonial.js
+
 const mongoose = require('mongoose')
 
 const testimonialSchema = new mongoose.Schema({
   name: String,
   message: String,
   rating: Number,
-  avatar: String, // image url
+  avatar: String, 
   createdAt: { type: Date, default: Date.now }
 })
 

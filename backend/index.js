@@ -8,8 +8,6 @@ const fileUpload = require('express-fileupload')
 
 const app = express()
 
-app.set('view engine','ejs')
-app.set('views','views')
 
 app.use(cookieParser())
 app.use(cors({
@@ -18,7 +16,6 @@ app.use(cors({
 }));
 app.use(express.urlencoded())
 app.use(express.json())
-app.use(express.static('static'))
 app.use(fileUpload({
     useTempFiles : true,
     tempFileDir : '/tmp/'
@@ -40,10 +37,14 @@ app.use('/api',isLoggedin, issue)
 app.use('/api',isLoggedin,isAdmin, admin)
 app.use('/api',isLoggedin,isAdmin,maintenance)
 
-
+app.get("/run-test-backend",(req,res)=>{
+    return res.send(`<h1 style="text-align:center;font-size:100px;font-weight:700;color:aqua;">backend is running successfully on evenode</h1>`)
+})
 
 app.use((req, res) => {
-    return res.send('<h1 style="text-align:center;">404</h1>')
+    return res.status(500).json({
+        message:"api route failed",
+    })
 })
 const port = process.env.PORT || 3000
 

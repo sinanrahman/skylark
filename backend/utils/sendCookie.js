@@ -7,15 +7,7 @@ const sendCookie = async (user, res) => {
             secure:false,
             sameSite:'Lax'
         }
-        // return res.status(200).json({
-        //     message:'Login Successful',
-        //     user:{
-        //         id: user.id,
-        //         name: user.name,
-        //         username: user.username,
-        //         role: user.role
-        //     }
-        // })
+  
         return res.cookie('token', token, options).status(200).json({
             message: 'Login Successful',
             token: token,

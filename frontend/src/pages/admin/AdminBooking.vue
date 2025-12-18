@@ -1,7 +1,6 @@
 <template>
   <div class="container-fluid px-4">
 
-    <!-- Header -->
     <div class="page-header d-flex justify-content-between align-items-center">
       <div>
         <h4>Booking Details</h4>
@@ -9,7 +8,6 @@
       </div>
     </div>
 
-    <!-- Table -->
     <div class="table-box">
       <div class="table-responsive">
         <table class="table table-hover align-middle">
@@ -29,21 +27,19 @@
           </thead>
 
           <tbody>
-            <!-- Loading -->
+
             <tr v-if="loading">
               <td colspan="10" class="text-center py-4">
                 Loading bookings...
               </td>
             </tr>
 
-            <!-- Empty -->
             <tr v-else-if="bookings.length === 0">
               <td colspan="10" class="text-center py-4">
                 No bookings found
               </td>
             </tr>
 
-            <!-- Data -->
             <tr v-else v-for="(booking, index) in bookings" :key="booking._id">
               <td>{{ index + 1 }}</td>
               <td>#{{ booking.bookingId }}</td>
@@ -59,11 +55,7 @@
               </td>
 
               <td class="text-center">
-                <button
-                  class="action-btn"
-                  title="View"
-                  @click="openBookingModal(booking)"
-                >
+                <button class="action-btn" title="View" @click="openBookingModal(booking)">
                   <i class="bi bi-eye"></i>
                 </button>
               </td>
@@ -74,7 +66,7 @@
       </div>
     </div>
 
-    <!-- BOOKING DETAILS MODAL -->
+
     <div class="modal fade" id="bookingModal" tabindex="-1">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -150,7 +142,7 @@ export default {
   data() {
     return {
       bookings: [],
-      carNames: {},      // ✅ cached car names
+      carNames: {},
       selectedBooking: null,
       loading: false
     };
@@ -166,8 +158,6 @@ export default {
         this.loading = true;
         const res = await api.get("/bookings");
         this.bookings = res.data.bookings || [];
-
-        // Fetch all car names once
         this.bookings.forEach(b => {
           if (b.carId && !this.carNames[b.carId]) {
             this.fetchCarName(b.carId);
@@ -214,7 +204,7 @@ export default {
   background: #fff;
   padding: 25px 30px;
   border-radius: 18px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   margin-bottom: 25px;
 }
 
@@ -222,7 +212,7 @@ export default {
   background: #fff;
   border-radius: 22px;
   padding: 25px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
 .status {
@@ -233,7 +223,7 @@ export default {
 }
 
 .status.confirmed {
-  background: rgba(32,201,151,0.15);
+  background: rgba(32, 201, 151, 0.15);
   color: #20c997;
 }
 

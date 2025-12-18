@@ -9,7 +9,7 @@ const maintenenceSchema = new mongoose.Schema({
     
 },
 {
-    timestamps: true   // ✅ THIS IS REQUIRED
+    timestamps: true   
 }
 );
 

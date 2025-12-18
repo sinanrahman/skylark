@@ -5,7 +5,7 @@ exports.isLoggedin = (req, res, next) => {
         const token = req.cookies.token
         if (!token) {
             return res.clearCookie('token').status(401).json({message:'no token in middleware'})
-            // return res.redirect('/login')
+          
         }
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         req.user = decoded
@@ -13,7 +13,7 @@ exports.isLoggedin = (req, res, next) => {
     } catch (e) {
         console.log(e)
         return res.clearCookie('token').status(401).json({message:'Please login again'})
-        // return res.cookie('token', null).redirect('/login')
+       
     }
 }
 

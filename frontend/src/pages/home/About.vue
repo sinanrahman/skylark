@@ -69,11 +69,9 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    to bottom right,
-    rgba(0, 84, 149, 0.6),
-    rgba(0, 157, 255, 0.4)
-  );
+  background: linear-gradient(to bottom right,
+      rgba(0, 84, 149, 0.6),
+      rgba(0, 157, 255, 0.4));
   z-index: 0;
 }
 
@@ -138,6 +136,7 @@ export default {
     opacity: 0;
     transform: translateY(40px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

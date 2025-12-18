@@ -3,13 +3,11 @@
 </template>
 
 <script>
-  export default {
-    created() {
-      this.$store.dispatch('fetchUser')
-    }
+export default {
+  created() {
+    this.$store.dispatch('fetchUser')
   }
-  </script>
-  
-<style>
-</style>
+}
+</script>
 
+<style></style>

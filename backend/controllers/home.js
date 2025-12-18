@@ -22,33 +22,8 @@ exports.GetHomePage = async(req,res) =>{
         })
     }
 }
-exports.GetCarsPage = (req,res) =>{
-    try{
-        return res.render('home/cars')
-    }catch(e){
-        console.log('error while rendering cars page')
-        console.log(e)
-        return res.send("<h1>something is wrong</h1>")
-    }
-}
-exports.GetContactPage = (req,res) =>{
-    try{
-        return res.render('home/contact')
-    }catch(e){
-        console.log('error while rendering contact page')
-        console.log(e)
-        return res.send("<h1>something is wrong</h1>")
-    }
-}
-exports.GetAboutPage = (req,res) =>{
-    try{
-        return res.render('home/about')
-    }catch(e){
-        console.log('error while rendering about page')
-        console.log(e)
-        return res.send("<h1>something is wrong</h1>")
-    }
-}
+
+
 exports.GetCar = async (req,res) =>{
     try{
        const cars = await Car.findOne({_id:req.params.id});
@@ -167,12 +142,7 @@ exports.GetBookingsDetails = async (req, res) => {
     });
   }
 }
-// your function
 
-/**
- * UPDATE USER PROFILE
- * PUT /users/:id
- */
 exports.UpdateUserProfile = async (req, res) => {
   try {
     let { name, username, mail, phone } = req.body;
@@ -190,9 +160,9 @@ exports.UpdateUserProfile = async (req, res) => {
       });
     }
 
-    let dp = user.dp; // keep old dp by default
+    let dp = user.dp; 
 
-    // 👇 If new profile photo is uploaded
+
     if (req.files?.photo) {
       const uploadedDp = await uploadImage(
         req.files.photo,
@@ -203,7 +173,7 @@ exports.UpdateUserProfile = async (req, res) => {
       dp = uploadedDp.url;
     }
 
-    // Update user fields
+  
     user.name = name ?? user.name;
     user.username = username ?? user.username;
     user.mail = mail ?? user.mail;
@@ -212,7 +182,6 @@ exports.UpdateUserProfile = async (req, res) => {
 
     await user.save();
 
-    // Remove sensitive fields
     const userResponse = user.toObject();
     delete userResponse.password;
     delete userResponse.otp;

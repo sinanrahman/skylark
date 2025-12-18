@@ -24,6 +24,10 @@
           </li>
 
           <li class="nav-item">
+            <router-link class="nav-link" to="/gallery">Gallery</router-link>
+          </li>
+
+          <li class="nav-item">
             <router-link class="nav-link" to="/about">About</router-link>
           </li>
 
@@ -51,38 +55,38 @@
 </template>
 
 <script>
-  import api from '@/services/api'
-  
-  export default {
-    name: 'Navbar',
-  
-    computed: {
-      user() {
-        return this.$store.state.user
-      },
-      isLoggedIn() {
-        return this.$store.getters.isLoggedIn
-      }
+import api from '@/services/api'
+
+export default {
+  name: 'Navbar',
+
+  computed: {
+    user() {
+      return this.$store.state.user
     },
-  
-    async created() {
-      // Restore user ONLY if missing
-      if (!this.$store.state.user) {
-        await this.$store.dispatch('fetchUser')
-      }
-    },
-  
-    methods: {
-      async logout() {
-        await api.get('/logout')
-        this.$store.dispatch('logout')
-        this.$router.push('/auth/login')
-      }
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn
+    }
+  },
+
+  async created() {
+
+    if (!this.$store.state.user) {
+      await this.$store.dispatch('fetchUser')
+    }
+  },
+
+  methods: {
+    async logout() {
+      await api.get('/logout')
+      this.$store.dispatch('logout')
+      this.$router.push('/auth/login')
     }
   }
-  </script>
-  
-  
+}
+</script>
+
+
 
 <style scoped>
 .navbar-glass {
@@ -159,10 +163,44 @@
   display: flex;
   justify-content: center;
   align-items: center;
-    img{
-      width:100%;
-      border-radius:50%;
-    }
+
+  img {
+    width: 100%;
+    border-radius: 50%;
+  }
 }
 
+@media (max-width: 991px) {
+  .navbar-collapse {
+    margin-top: 14px;
+    padding: 16px 18px;
+    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.85);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+
+  .navbar-nav {
+    gap: 10px;
+  }
+
+  .nav-link {
+    padding: 10px 14px;
+    border-radius: 12px;
+    margin-right: 0;
+  }
+
+  .nav-link:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .btn-login {
+    width: 100%;
+    margin: 10px 0 0;
+    text-align: center;
+  }
+
+  .profile {
+    margin: 8px auto;
+  }
+}
 </style>

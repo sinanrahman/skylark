@@ -24,8 +24,8 @@ exports.Dashboard = async (req, res) => {
 exports.GetAllUsers = async (req, res) => {
   try {
     const users = await User.find()
-      .select('-password -otp') // 🔒 hide sensitive data
-      .sort({ createdAt: -1 })  // newest first
+      .select('-password -otp') 
+      .sort({ createdAt: -1 })  
 
     return res.status(200).json({
       success: true,
@@ -76,9 +76,7 @@ exports.UpdateUser = async (req, res) => {
     })
   }
 }
-/**
- * DELETE USER
- */
+
 exports.DeleteUser = async (req, res) => {
   try {
     const { id } = req.params
@@ -114,10 +112,8 @@ exports.AddCar = async (req, res) => {
       return res.status(400).json({ message: "Images are required" });
     }
 
-    // Normalize images to array
     const files = Array.isArray(images) ? images : [images];
 
-    // Upload images
     let uploadedImages = [];
     for (const file of files) {
       const result = await uploadImage(
@@ -130,13 +126,12 @@ exports.AddCar = async (req, res) => {
       uploadedImages.push(result);
     }
 
-    // FIX features[] -> features
     let features = req.body["features[]"] || [];
     if (!Array.isArray(features)) {
       features = [features];
     }
 
-    // CREATE CAR
+
     const car = await Car.create({
       name: req.body.name,
       model: req.body.model,
@@ -184,34 +179,7 @@ exports.GetAllCars = async (req, res) => {
   }
 };
 
-// exports.DeleteCar = async (req, res) => {
-//   try {
-//     console.log('delete request came')
-//     const { id } = req.params;
 
-//     const car = await Car.findById(id);
-
-//     if (!car) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Car not found"
-//       });
-//     }
-
-//     await car.deleteOne();
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Car deleted successfully"
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       message: "Failed to delete car",
-//       error: error.message
-//     });
-//   }
-// };
 
 exports.GetCars = async (req, res) => {
   const cars = await Car.find();
@@ -230,7 +198,7 @@ exports.DeleteCar = async (req, res) => {
 
 exports.GetTotalSummary = async (req,res) => {
   try{
-    // console.log('get total summary is called ')
+ 
     const totalCars = await Car.countDocuments()
     const totalUsers = await User.countDocuments()
     const totalBooking = await Booking.countDocuments()
@@ -264,13 +232,12 @@ exports.GetCarCategoryStats = async (req, res) => {
     const result = await Car.aggregate([
       {
         $group: {
-          _id: "$category",   // field in Car model
+          _id: "$category",   
           count: { $sum: 1 }
         }
       }
     ])
 
-    // Convert to chart-friendly format
     const labels = result.map(i => i._id)
     const data = result.map(i => i.count)
 
@@ -297,7 +264,7 @@ exports.GetMonthlyBookings = async (req, res) => {
       { $sort: { "_id": 1 } }
     ])
 
-    // Prepare fixed labels (Jan–Dec)
+
     const labels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
     const data = Array(12).fill(0)
 

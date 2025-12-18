@@ -31,12 +31,12 @@ userSchema.pre('save',async function(){
 
 })
 
-//validate the password with passedon userpassword
+
 userSchema.methods.isValidatedPassword = async function(userSendPassword){
     return await bcrypt.compare(userSendPassword,this.password)
 }
 
-//create and return jwt_token
+
 userSchema.methods.getJwtToken = function(){
     return jwt.sign(
         {    

@@ -98,7 +98,8 @@
         </div>
 
         <div class="action-bar">
-          <router-link :to="`/car-booking/${$route.params.id}`" class="btn-book" v-if="car.status == `Available`">Book Now </router-link>
+          <router-link :to="`/car-booking/${$route.params.id}`" class="btn-book" v-if="car.status == `Available`">Book
+            Now </router-link>
           <router-link to="/cars" class="btn-back">
             Back to Cars
           </router-link>
@@ -121,16 +122,11 @@ export default {
       car: {},
       images: [],
       features: [],
-
-      // reviews data
       reviews: [],
       avgRating: 0,
       totalReviews: 0,
-
-      // add review
       rating: 0,
       reviewText: "",
-
       loading: false,
       loadingReviews: false
     };
@@ -147,9 +143,6 @@ export default {
   },
 
   methods: {
-    // =====================
-    // FETCH CAR DETAILS
-    // =====================
     async fetchCar() {
       try {
         this.loading = true;
@@ -174,9 +167,7 @@ export default {
       }
     },
 
-    // =====================
-    // FETCH REVIEWS + AVG
-    // =====================
+
     async fetchReviews() {
       try {
         this.loadingReviews = true;
@@ -195,9 +186,6 @@ export default {
       }
     },
 
-    // =====================
-    // SUBMIT REVIEW
-    // =====================
     async submitReview() {
       if (!this.rating || !this.reviewText.trim()) {
         alert("Please give rating and review");
@@ -214,18 +202,13 @@ export default {
 
         await api.post("/addcarreview", payload);
 
-        // reset form
         this.rating = 0;
         this.reviewText = "";
-
-        // refresh reviews + average
         await this.fetchReviews();
-
-        alert("Review submitted ✅");
-
+        // alert("Review submitted ");
       } catch (err) {
         console.error("Review failed", err);
-        alert("Failed to submit review");
+        // alert("Failed to submit review");
       }
     }
   },
@@ -252,12 +235,9 @@ export default {
   font-family: 'Poppins', sans-serif;
   background: repeating-linear-gradient(#0a57a9, #81939cf1);
   min-height: 100vh;
-
   display: flex;
   justify-content: center;
-  /* CENTER horizontally */
   align-items: flex-start;
-
   padding: 20px;
 }
 
@@ -266,11 +246,9 @@ export default {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  /* CENTER */
   background: #ffffffc8;
   border-radius: 30px;
   overflow: hidden;
-
   box-shadow:
     10px 10px 50px rgba(0, 122, 223, 0.15),
     -10px -10px 50px #ffffff;
@@ -283,7 +261,7 @@ export default {
 
 .carousel-indicators {
   bottom: 20px;
-  right: 50%; 
+  right: 50%;
 }
 
 .carousel-indicators [data-bs-target] {
@@ -418,7 +396,7 @@ export default {
   cursor: pointer;
 }
 
-.review-box{
+.review-box {
   height: 300px;
   overflow-y: scroll;
   scrollbar-width: none;

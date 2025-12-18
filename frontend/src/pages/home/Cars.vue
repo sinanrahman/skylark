@@ -2,18 +2,12 @@
   <div class="page-root" @click="closeFilters">
     <div class="container-fluid px-4">
 
-      <!-- Header -->
       <div class="page-header">
         <h4>Available Cars</h4>
 
         <div class="search-actions" @click.stop>
           <!-- SEARCH -->
-          <input
-            type="text"
-            class="search-input"
-            placeholder="Search your car..."
-            v-model="search"
-          />
+          <input type="text" class="search-input" placeholder="Search your car..." v-model="search" />
 
           <!-- FILTER -->
           <div class="filter-dropdown">
@@ -76,13 +70,7 @@
 
                 <div class="filter-group">
                   <label>Max Price (₹)</label>
-                  <input
-                    type="range"
-                    min="500"
-                    max="10000"
-                    step="500"
-                    v-model.number="filters.price"
-                  />
+                  <input type="range" min="500" max="10000" step="500" v-model.number="filters.price" />
                   <div class="price-value">₹{{ filters.price }}</div>
                 </div>
 
@@ -92,13 +80,8 @@
         </div>
       </div>
 
-      <!-- CARS -->
       <div class="row g-4">
-        <div
-          v-for="car in filteredCars"
-          :key="car._id"
-          class="col-xl-3 col-lg-4 col-md-6"
-        >
+        <div v-for="car in filteredCars" :key="car._id" class="col-xl-3 col-lg-4 col-md-6">
           <div class="car-card">
             <div class="car-image">
               <img :src="car.images?.[0]?.url || fallbackImage" />
@@ -122,11 +105,7 @@
                   View
                 </RouterLink>
 
-                <RouterLink
-                  v-if="car.status === 'Available'"
-                  :to="`/car-booking/${car._id}`"
-                  class="btn btn-book"
-                >
+                <RouterLink v-if="car.status === 'Available'" :to="`/car-booking/${car._id}`" class="btn btn-book">
                   Book
                 </RouterLink>
 
@@ -138,10 +117,7 @@
           </div>
         </div>
 
-        <div
-          v-if="!loading && filteredCars.length === 0"
-          class="text-center text-white"
-        >
+        <div v-if="!loading && filteredCars.length === 0" class="text-center text-white">
           No cars found
         </div>
       </div>
@@ -219,20 +195,17 @@ export default {
         this.loading = false;
       }
     },
-
-    // 🔥 APPLY ROUTE FILTER
     applyRouteFilters() {
-  const { category, fuel } = this.$route.query;
+      const { category, fuel } = this.$route.query;
 
-  if (category) this.filters.category = category;
-  if (fuel) this.filters.fuel = fuel;
-  this.showFilters = false
-}
+      if (category) this.filters.category = category;
+      if (fuel) this.filters.fuel = fuel;
+      this.showFilters = false
+    }
 
   },
 
   watch: {
-    // 🔁 React when route query changes
     "$route.query": {
       immediate: true,
       handler() {
@@ -351,7 +324,7 @@ export default {
   color: #fd7e14;
 }
 
-.maintenance{
+.maintenance {
   background: rgba(253, 20, 20, 0.15);
   color: #fd1414;
 }
@@ -394,6 +367,7 @@ export default {
     align-items: flex-start;
   }
 }
+
 .search-actions {
   display: flex;
   gap: 12px;
@@ -461,7 +435,6 @@ export default {
   color: #0d6efd;
 }
 
-/* TRANSITION */
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.25s ease;
@@ -476,7 +449,4 @@ export default {
   opacity: 0;
   transform: translateY(-10px);
 }
-
-
-
 </style>

@@ -2,7 +2,6 @@
   <div class="page-wrapper">
     <div class="container">
 
-      <!-- Header -->
       <div class="page-header">
         <h2>Book Your Ride</h2>
         <p class="text-muted">
@@ -12,7 +11,6 @@
 
       <div class="row booking-card">
 
-        <!-- LEFT : CAR SLIDER -->
         <div class="col-lg-5 p-0 slider-col">
           <div id="carSlider" class="carousel slide car-slider" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -43,7 +41,6 @@
           </div>
         </div>
 
-        <!-- RIGHT : BOOKING FORM -->
         <div class="col-lg-7 form-col">
           <div class="booking-form">
 
@@ -89,7 +86,6 @@
 
               </div>
 
-              <!-- SUMMARY -->
               <div class="summary-box mt-4">
                 Duration <span>{{ totalDays }} Days</span><br />
                 Driver Fee <span>₹{{ driverFee }}</span>
@@ -106,7 +102,6 @@
               </router-link>
 
             </form>
-            <!-- Payment Modal  -->
             <div class="modal fade" id="paymentModal" tabindex="-1">
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content payment-modal">
@@ -206,7 +201,6 @@ export default {
   },
 
   methods: {
-    /* ---------------- FETCH CAR ---------------- */
     async fetchCar() {
       try {
         const res = await api.get(`/getcar/${this.carId}`)
@@ -216,7 +210,6 @@ export default {
       }
     },
 
-    /* ---------------- OPEN PAYMENT MODAL ---------------- */
     openPaymentModal() {
       if (!this.totalDays) {
         alert('Please select valid pickup & return dates')
@@ -229,7 +222,6 @@ export default {
       modal.show()
     },
 
-    /* ---------------- RAZORPAY PAYMENT ---------------- */
     async payNow() {
       try {
         // 1️⃣ Create Razorpay order
@@ -248,12 +240,10 @@ export default {
           handler: async (response) => {
             await this.saveBooking(response)
 
-            // Close modal
             const modalEl = document.getElementById('paymentModal')
             const modal = bootstrap.Modal.getInstance(modalEl)
             modal.hide()
 
-            // alert('Payment Successful ✅')
             this.$router.push(`/car/${this.car._id}`)
           },
 
@@ -275,7 +265,6 @@ export default {
       }
     },
 
-    /* ---------------- SAVE BOOKING AFTER PAYMENT ---------------- */
     async saveBooking(paymentResponse) {
       const payload = {
         userId: this.$store.state.user.id,
@@ -289,7 +278,6 @@ export default {
         totalDays: this.totalDays,
         totalAmount: this.totalAmount,
         pricePerDay: this.car.price,
-
         // 💳 Razorpay data
         paymentId: paymentResponse.razorpay_payment_id,
         orderId: paymentResponse.razorpay_order_id,

@@ -125,8 +125,6 @@
         </div>
       </div>
 
-      <!-- MAINTENANCE MODAL -->
-      <!-- ADD MAINTENANCE MODAL -->
       <div class="modal fade" id="maintenanceModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
@@ -158,7 +156,6 @@
         </div>
       </div>
 
-      <!-- MAINTENANCE LIST MODAL -->
       <div class="modal fade" id="maintenanceListModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
           <div class="modal-content">
@@ -201,7 +198,6 @@
         </div>
       </div>
 
-      <!-- DELETE CAR MODAL -->
       <div class="modal fade" id="deleteCarModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content delete-modal">
@@ -305,7 +301,6 @@ export default {
       try {
         await api.delete(`/deletecar/${this.selectedCarToDelete._id}`);
 
-        // Remove from list instantly
         this.cars = this.cars.filter(
           car => car._id !== this.selectedCarToDelete._id
         );

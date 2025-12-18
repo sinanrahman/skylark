@@ -1,7 +1,6 @@
 <template>
   <div class="container-fluid px-4">
 
-    <!-- Header -->
     <div class="page-header d-flex justify-content-between align-items-center">
       <div>
         <h4>Users</h4>
@@ -9,7 +8,6 @@
       </div>
     </div>
 
-    <!-- Table -->
     <div class="table-box">
       <div class="table-responsive">
         <table class="table table-hover align-middle">
@@ -39,15 +37,6 @@
                 </span>
               </td>
 
-              <!-- <td>
-                <span
-                  class="status"
-                  :class="user.isBlocked ? 'blocked' : 'active'"
-                >
-                  {{ user.isBlocked ? 'Blocked' : 'Active' }}
-                </span>
-              </td> -->
-
               <td class="text-center">
                 <button class="action-btn view" @click="openUserModal(user)">
                   <i class="bi bi-eye"></i>
@@ -73,7 +62,6 @@
       </div>
     </div>
 
-    <!-- USER DETAILS MODAL -->
     <div class="modal fade" id="userDetailsModal" tabindex="-1">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -120,7 +108,6 @@
       </div>
     </div>
 
-    <!-- EDIT USER MODAL -->
     <div class="modal fade" id="editUserModal" tabindex="-1">
       <div class="modal-dialog modal-md modal-dialog-centered">
         <div class="modal-content">
@@ -163,7 +150,6 @@
       </div>
     </div>
 
-    <!-- DELETE CONFIRM MODAL -->
     <div class="modal fade" id="deleteUserModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content delete-modal">
@@ -241,13 +227,7 @@ export default {
       ).show()
     },
 
-    // async updateUser() {
-    //   await api.put(`/users/${this.selectedUser._id}`, this.selectedUser)
-    //   this.fetchAllUsers()
-    //   window.bootstrap.Modal.getInstance(
-    //     document.getElementById('editUserModal')
-    //   ).hide()
-    // },
+
 
     async updateUser() {
       await api.put(`/admin/users/${this.selectedUser._id}`, {
@@ -270,13 +250,6 @@ export default {
       ).hide()
     },
 
-    // async confirmDelete() {
-    //   await api.delete(`/users/${this.selectedUser._id}`)
-    //   this.fetchAllUsers()
-    //   window.bootstrap.Modal.getInstance(
-    //     document.getElementById('deleteUserModal')
-    //   ).hide()
-    // },
 
     formatDate(date) {
       return new Date(date).toLocaleDateString('en-IN')
@@ -317,6 +290,7 @@ export default {
   background: rgba(32, 201, 151, 0.15);
   color: #20c997;
 }
+
 .role.block {
   background: rgba(201, 32, 32, 0.15);
   color: #c92020;

@@ -13,10 +13,9 @@ import axios from "axios";
 
 export default {
   components: { Navbar, FooterComponent },
-  method:{
+  method: {
 
   }
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

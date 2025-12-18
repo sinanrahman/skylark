@@ -7,15 +7,10 @@ exports.AddCarReview = async (req, res) => {
             id: Date.now(),
             userid: req.body.userId,
             rating: req.body.rating,
-            // head:String,
             text: req.body.text,
             carid: req.body.carId,
         });
-        // Optional: prevent multiple reviews by same user
-    // const alreadyReviewed = await CarReview.findOne({ userid, carid });
-    // if (alreadyReviewed) {
-    //   return res.status(400).json({ message: "You already reviewed this car" });
-    // }
+       
         res.status(201).json({ data: review });
     } catch (e) {
         console.log("error while adding review")

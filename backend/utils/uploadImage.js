@@ -10,7 +10,7 @@ const uploadImageToCloudinary = async (file,width,height,folder) => {
                 crop:"fill",
                 gravity:"face"
             });
-        // console.log(result);
+    
         return { url: result.secure_url, public_id: result.public_id };
     } catch (error) {
         throw new Error(`Error uploading image to Cloudinary: ${error.message}`);

@@ -12,6 +12,7 @@ import Contact from '@/pages/home/Contacts.vue'
 import CarBooking from '@/pages/home/CarBooking.vue'
 import CarViewPage from '@/pages/home/CarViewPage.vue'
 import UserProfile from '@/pages/home/UserProfile.vue'
+import Gallery from '@/pages/home/Gallery.vue'
 
 
 import Signup from '@/pages/auth/Signup.vue'
@@ -40,7 +41,7 @@ const routes = [
   {
     path: '/',
     component: MainLayout,
-    meta: { requiresAuth: true},
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',
@@ -83,6 +84,12 @@ const routes = [
         name: 'UserProfile',
         component: UserProfile,
         meta: { requiresAuth: true, showNavbar: true, showFooter: true }
+      },
+      {
+        path: 'gallery',
+        name: 'Gallery',
+        component: Gallery,
+        meta: { requiresAuth: true, showNavbar: true, showFooter: false }
       }
     ]
   },
@@ -107,7 +114,6 @@ const router = createRouter({
   routes
 })
 
-/* ================= ROUTER GUARD ================= */
 
 router.beforeEach(async (to, from, next) => {
   try {
@@ -118,17 +124,14 @@ router.beforeEach(async (to, from, next) => {
       route => route.meta.requiresAdmin
     )
 
-    // restore user on refresh (ONLY if missing)
     if (!store.state.user) {
       await store.dispatch('fetchUser')
     }
 
-    // user not logged in
     if (requiresAuth && !store.getters.isLoggedIn) {
       return next('/auth/login')
     }
 
-    // user logged in but not admin
     if (requiresAdmin && !store.getters.isAdmin) {
       return next('/')
     }
@@ -137,10 +140,8 @@ router.beforeEach(async (to, from, next) => {
   } catch (err) {
     console.error('Router auth error:', err)
 
-    // clear broken auth state
     store.commit('CLEAR_USER')
 
-    // redirect to login
     return next('/auth/login')
   }
 })

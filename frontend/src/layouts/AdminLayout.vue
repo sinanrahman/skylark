@@ -23,56 +23,57 @@ import Navbar from '@/components/admin/Navbar.vue'
 </script>
 
 <style>
-:root{
-  --bg:#f5f7fb;
-  --border:#e5e7eb;
-  --text:#111827;
+:root {
+  --bg: #f5f7fb;
+  --border: #e5e7eb;
+  --text: #111827;
 }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Inter,Segoe UI,sans-serif;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter, Segoe UI, sans-serif;
 }
 
-html, body {
-  height:100%;
+html,
+body {
+  height: 100%;
 }
 
-body{
-  background:var(--bg);
-  color:var(--text);
+body {
+  background: var(--bg);
+  color: var(--text);
 }
 
-.layout{
-  display:flex;
-  height:100vh;
-  width:100%;
-}
-
-
-.sidebar{
-  width:260px;
-  height:100vh;
-}
-
-.content{
-  flex:1;
-  display:flex;
-  flex-direction:column;
+.layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
 }
 
 
-.navbar{
-  height:72px;
-  flex-shrink:0;
-  padding:0;
+.sidebar {
+  width: 260px;
+  height: 100vh;
 }
 
-.main{
-  flex:1;
-  padding:32px;
-  overflow-y:auto;
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.navbar {
+  height: 72px;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.main {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
 }
 </style>

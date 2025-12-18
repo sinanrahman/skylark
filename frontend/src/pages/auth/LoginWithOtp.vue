@@ -37,75 +37,74 @@
 </template>
 
 <script>
-    import api from '@/services/api';
-    export default{
-        data(){
-            return{
-                email:"",
-                otp:"",
-                msg:{
-                    textColor:"text-danger",
-                    message:""
-                },
-                loading:false
-            
+import api from '@/services/api';
+export default {
+    data() {
+        return {
+            email: "",
+            otp: "",
+            msg: {
+                textColor: "text-danger",
+                message: ""
+            },
+            loading: false
+
+        }
+    },
+    methods: {
+        async genOtp() {
+            if (this.email) {
+                this.msg.message = 'Please Wait Generating Otp'
+                this.msg.textColor = "text-warning"
             }
-        },
-        methods:{
-            async genOtp(){
-                    if(this.email){
-                        this.msg.message = 'Please Wait Generating Otp'
-                    this.msg.textColor = "text-warning"
-                    }
-                try{
-                    const res = await api.post('/generateotp',{
-                    email:this.email
+            try {
+                const res = await api.post('/generateotp', {
+                    email: this.email
                 })
                 this.loading = true
-                // console.log(res.data)
                 console.log(this.email)
-                if(!this.email){
+                if (!this.email) {
                     this.msg.message = 'Please Enter Email'
                     this.msg.textColor = "text-danger"
                     return
                 }
-                if(!res.data.status){
+                if (!res.data.status) {
                     this.msg.message = 'Cannot Generate OTP Now '
                     this.msg.textColor = "text-danger"
                     return
                 }
-                if(res.data.status){
+                if (res.data.status) {
                     this.msg.message = 'Otp Send'
                     this.msg.textColor = "text-success"
                     return
                 }
 
-                }catch(err){
-                    this.msg.message = err.response?.data?.message || 'error generating otp'
-                    this.msg.textColor = "text-danger"
-                }finally{
-                    this.loading = false
-                }
-            },
-            async submitOtp(){
-                    try{
-                        const res = await api.post('/loginwithotp',{
-                        email:this.email,
-                        otp:this.otp
-                    })
-                    console.log(res.data)
-                    this.msg.message = 'login success'
-                    this.msg.textColor = "text-success"
-                    this.$store.dispatch('login',res.data.user)
-                    this.$router.push("/")
-                    }catch(err){
-                        this.msg.message = err.response?.data?.message || 'error while submitting otp'
-                        this.msg.textColor = "text-danger"
-                    }finally{
-                        this.loading = false
-                    }
-
+            } catch (err) {
+                this.msg.message = err.response?.data?.message || 'error generating otp'
+                this.msg.textColor = "text-danger"
+            } finally {
+                this.loading = false
             }
+        },
+        async submitOtp() {
+            try {
+                const res = await api.post('/loginwithotp', {
+                    email: this.email,
+                    otp: this.otp
+                })
+                console.log(res.data)
+                this.msg.message = 'login success'
+                this.msg.textColor = "text-success"
+                this.$store.dispatch('login', res.data.user)
+                this.$router.push("/")
+            } catch (err) {
+                this.msg.message = err.response?.data?.message || 'error while submitting otp'
+                this.msg.textColor = "text-danger"
+            } finally {
+                this.loading = false
+            }
+
         }
     }
+}
 </script>

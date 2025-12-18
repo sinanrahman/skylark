@@ -28,33 +28,9 @@ const carSchema = new mongoose.Schema({
 
 },
 {
-    timestamps: true   // ✅ ADD THIS
+    timestamps: true   
   }
 );
 
 module.exports = mongoose.model('Car', carSchema);
 
-
-// {
-//   name: 'wsed',
-//   model: '2222',
-//   seats: '5',
-//   category: 'SUV',
-//   fuel: 'Petrol',
-//   status: 'Available',
-//   price: '888',
-//   safetyRating: '★★★★★ (5)',
-//   transmission: 'manual',
-//   description: 'dfghj',
-//   'features[]': [ 'AC', 'Driver' ],
-//   images: [
-//     {
-//       url: 'https://res.cloudinary.com/ds4orgk3j/image/upload/v1765895223/skylark/cars/w3hpqqim1fr35rmbfevs.jpg',
-//       public_id: 'skylark/cars/w3hpqqim1fr35rmbfevs'
-//     },
-//     {
-//       url: 'https://res.cloudinary.com/ds4orgk3j/image/upload/v1765895224/skylark/cars/huk7dwbzgtwo8cutnugd.jpg',
-//       public_id: 'skylark/cars/huk7dwbzgtwo8cutnugd'
-//     }
-//   ]
-// }
